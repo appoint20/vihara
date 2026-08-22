@@ -59,6 +59,10 @@ enum Theme {
         static let compactTitle = TextSpec(size: 14.5, weight: .semibold, lineHeight: 1.2, relativeTo: .subheadline)
         static let rating = TextSpec(size: 12, weight: .semibold, lineHeight: 1.2, relativeTo: .caption)
         static let navLabel = TextSpec(size: 14, lineHeight: 1.2, relativeTo: .subheadline)
+        /// One step down, for narrow devices where the four nav labels cannot hold
+        /// their designed size. Unlike `minimumScaleFactor` this reports an honestly
+        /// smaller width, so `ViewThatFits` can actually choose it.
+        static let navLabelCompact = TextSpec(size: 13, lineHeight: 1.2, relativeTo: .subheadline)
         static let glyph = TextSpec(size: 15, weight: .semibold, lineHeight: 1.2, relativeTo: .subheadline)
         static let tabActive = TextSpec(size: 16, weight: .semibold, lineHeight: 1.2, relativeTo: .body)
         static let tabInactive = TextSpec(size: 16, lineHeight: 1.2, relativeTo: .body)
@@ -167,6 +171,15 @@ enum Theme {
             ],
             startPoint: .top, endPoint: .bottom
         )
+    }
+
+    // MARK: - Motion
+
+    enum Motion {
+        /// Moving the active pill in the floating nav.
+        static let navPill = Animation.snappy(duration: 0.25)
+        /// Switching category tabs.
+        static let tab = Animation.snappy(duration: 0.20)
     }
 
     // MARK: - Shadow
