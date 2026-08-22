@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "dest_bologna.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
