@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!--
+	  Vihara collects nothing and tracks nobody.
+
+	  That is a real product position, not a placeholder: there is no account, no
+	  login, no analytics SDK and no advertising identifier. Plans are generated
+	  from a brief and stored on the device. When the backend lands, whatever it
+	  receives has to be declared here AND in App Store Connect's privacy answers,
+	  and the two must agree — a mismatch is a rejection.
+	-->
+	<key>NSPrivacyTracking</key>
+	<false/>
+
+	<key>NSPrivacyTrackingDomains</key>
+	<array/>
+
+	<!--
+	  Nothing is collected today. Adding crash reporting or analytics means adding
+	  an entry here first.
+	-->
+	<key>NSPrivacyCollectedDataTypes</key>
+	<array/>
+
+	<key>NSPrivacyAccessedAPITypes</key>
+	<array>
+		<!--
+		  UserDefaults. Used for the traveller's own settings and, in debug builds,
+		  the launch-route argument. CA92.1 is the "same app, per documentation"
+		  reason: the data never leaves the device and is never used for tracking.
+		-->
+		<dict>
+			<key>NSPrivacyAccessedAPIType</key>
+			<string>NSPrivacyAccessedAPICategoryUserDefaults</string>
+			<key>NSPrivacyAccessedAPITypeReasons</key>
+			<array>
+				<string>CA92.1</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>

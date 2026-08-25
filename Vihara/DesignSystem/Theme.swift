@@ -10,26 +10,33 @@ enum Theme {
 
     // MARK: - Colour
 
+    /// Every colour carries both appearances.
+    ///
+    /// Dark mode is required at launch (PRD 5.2), and retrofitting appearance into a
+    /// palette that only ever had one value is the expensive version of this work.
+    /// Defining the pair now costs a second literal and keeps every call site — and
+    /// every preview — unchanged. The dark ramp is the neutral scale inverted, with
+    /// the accents one step brighter so they hold their contrast on a dark ground.
     enum C {
         /// Paper ground — the app background.
-        static let bg = Color(hex: 0xF3F2F2)
+        static let bg = Color(light: 0xF3F2F2, dark: 0x141312)
         /// Cards.
-        static let surface = Color(hex: 0xFFFFFF)
+        static let surface = Color(light: 0xFFFFFF, dark: 0x1F1D1C)
         /// Primary text.
-        static let text = Color(hex: 0x201E1D)
-        static let textMuted = Color(hex: 0x605D5D)
-        static let textFaint = Color(hex: 0x9B9797)
-        static let border = Color(hex: 0xD7D3D3)
+        static let text = Color(light: 0x201E1D, dark: 0xF2F0EF)
+        static let textMuted = Color(light: 0x605D5D, dark: 0xA8A4A3)
+        static let textFaint = Color(light: 0x9B9797, dark: 0x7A7676)
+        static let border = Color(light: 0xD7D3D3, dark: 0x383534)
         /// Interactive only — never body text.
-        static let accent = Color(hex: 0x0088B0)
+        static let accent = Color(light: 0x0088B0, dark: 0x35B4DC)
         /// Accent-coloured body text.
-        static let accentDeep = Color(hex: 0x006786)
-        /// Prices and warnings ONLY.
-        static let price = Color(hex: 0xAA0B56)
+        static let accentDeep = Color(light: 0x006786, dark: 0x6FCBE8)
+        /// Prices and warnings ONLY. Never in the same component as `accent`.
+        static let price = Color(light: 0xAA0B56, dark: 0xE86BA5)
 
         /// Stands in for a photograph that failed to load, so image views degrade
         /// gracefully instead of collapsing to nothing.
-        static let imageFallback = Color(hex: 0x5A6B4E)
+        static let imageFallback = Color(light: 0x5A6B4E, dark: 0x3F4A38)
     }
 
     // MARK: - Typography
@@ -283,14 +290,27 @@ extension View {
 
 /// Deliberately fileprivate: hex literals live here and nowhere else.
 private extension Color {
+    /// A colour that resolves per appearance.
+    ///
+    /// Built through `UIColor`'s dynamic provider rather than a SwiftUI
+    /// `@Environment(\.colorScheme)` lookup, so it also resolves correctly outside a
+    /// view's body — in `UIImage` rendering, in the PDF template preview, and in
+    /// anything drawn through `CALayer`.
+    init(light: UInt32, dark: UInt32) {
+        self.init(uiColor: UIColor { traits in
+            UIColor(rgb: traits.userInterfaceStyle == .dark ? dark : light)
+        })
+    }
+}
+
+private extension UIColor {
     /// `0xRRGGBB`, sRGB.
-    init(hex: UInt32) {
+    convenience init(rgb: UInt32) {
         self.init(
-            .sRGB,
-            red: Double((hex >> 16) & 0xFF) / 255,
-            green: Double((hex >> 8) & 0xFF) / 255,
-            blue: Double(hex & 0xFF) / 255,
-            opacity: 1
+            red: CGFloat((rgb >> 16) & 0xFF) / 255,
+            green: CGFloat((rgb >> 8) & 0xFF) / 255,
+            blue: CGFloat(rgb & 0xFF) / 255,
+            alpha: 1
         )
     }
 }
