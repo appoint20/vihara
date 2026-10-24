@@ -1,0 +1,92 @@
+{
+  "identifier" : "A1B2C3D4-0000-4000-8000-00000000VIHA",
+  "nonRenewingSubscriptions" : [],
+  "products" : [
+    {
+      "displayPrice" : "4.99",
+      "familyShareable" : false,
+      "internalID" : "6001",
+      "localizations" : [
+        {
+          "description" : "Diesen Plan dauerhaft freischalten — ohne Wasserzeichen, als PDF.",
+          "displayName" : "Diesen Plan freischalten",
+          "locale" : "de_DE"
+        },
+        {
+          "description" : "Unlock this plan for good — no watermark, as a PDF.",
+          "displayName" : "Unlock this plan",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.vihara.app.unlock.trip",
+      "referenceName" : "Single trip unlock",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "4.99",
+      "familyShareable" : false,
+      "internalID" : "6002",
+      "localizations" : [
+        {
+          "description" : "Fünf weitere Exporte für diesen Abrechnungszeitraum.",
+          "displayName" : "5 Exporte",
+          "locale" : "de_DE"
+        },
+        {
+          "description" : "Five more exports for this billing period.",
+          "displayName" : "5 exports",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.vihara.app.credits.five",
+      "referenceName" : "Credit bundle (5)",
+      "type" : "Consumable"
+    }
+  ],
+  "settings" : {
+    "_failTransactionsEnabled" : false,
+    "_locale" : "de_DE",
+    "_storefront" : "DEU",
+    "_storeKitErrors" : []
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "20001",
+      "localizations" : [],
+      "name" : "Vihara Plus",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [],
+          "codeOffers" : [],
+          "displayPrice" : "7.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "6003",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Fünf Exporte pro Monat, alle Pläne ohne Wasserzeichen.",
+              "displayName" : "Vihara Plus",
+              "locale" : "de_DE"
+            },
+            {
+              "description" : "Five exports a month, every plan without a watermark.",
+              "displayName" : "Vihara Plus",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.vihara.app.sub.monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Vihara Plus monthly",
+          "subscriptionGroupID" : "20001",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : []
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}
