@@ -3,6 +3,12 @@
 Against **PRD v1.0** (Wayfare), 23 August 2026. The presentation version of this
 document is published as an artifact; this is the copy that lives with the code.
 
+Two companion documents cover the commercial side, which the PRD does not:
+[COMPETITION.md](COMPETITION.md) (what Wanderlog does not do, and which three gaps are
+worth owning) and [MONETISATION.md](MONETISATION.md) (how affiliate revenue actually
+works, what it is worth, and the step-by-step plan to it). Where they disagree with
+the phases below, the disagreement is listed as blocking decision 4.
+
 ## Blocking decisions
 
 Cheap this week, expensive in six. Everything below assumes an answer.
@@ -13,10 +19,21 @@ Cheap this week, expensive in six. Everything below assumes an answer.
 2. **Italy or Spain for the pilot?** The PRD's own open question (§10.3), and it gates
    Phase 0 rather than following it — the POI index is curated once, by hand, and every
    cost estimate is measured against that one region.
-3. **Does the free tier really need a PDF viewer?** §4 promises a watermarked preview
-   in a viewer. That is a viewer, a render path and a watermark, and it appears in no
-   feature ID — currently unestimated and unowned. Cheaper alternative: show day one in
-   full and the rest as titles.
+3. ~~**Does the free tier really need a PDF viewer?**~~ **Answered in the build.** No
+   custom viewer was written: the export hands a PDF to the share sheet, and iOS
+   previews it with Quick Look for free. The preview is both watermarked *and*
+   truncated to day one, with the remaining days named — the cheaper alternative from
+   this entry, adopted on top of the watermark rather than instead of it, because a
+   watermarked *complete* plan is still a complete plan and so is not a paywall. The
+   number of full days is server-set (`previewDaysInFull`). **Confirm the truncation
+   is wanted before launch** — it is a pricing decision, not a technical one.
+4. **Affiliates before the paywall, or after?** The table below follows the PRD:
+   F-09 (paywall) and F-10 (affiliates) both land in Phase 2, applications in Phase 1.
+   [MONETISATION §7](MONETISATION.md#7-the-sequencing-change) argues for swapping them —
+   programme approval has weeks of lead time and may be refused pre-launch, affiliate
+   needs no pricing decision, it carries no 3.1.1 review risk, and measured affiliate
+   ARPU is what tells you how to price the subscription. Answering this also makes
+   decision 3 cheaper. **Until it is answered the phase table below is stale.**
 
 ## Phases
 
@@ -26,7 +43,7 @@ The PRD's phases, kept intact, with what the client does in each.
 |---|---|---|---|
 | **0** | Foundation · 3 wk | **Done.** Architecture, tokens, intake, streaming plan, constraint engine, tests, CI lint. Start drag-and-drop against the stub immediately. | 95 % of POIs pass live validation; decisions 1–3 answered |
 | **1** | Closed alpha · 6 wk | F-05 drag/swap/pin with the accessible menu path built alongside · F-06 reflow · F-14 on-device store · F-15 accounts **early** · F-08 export | 70 % finish a plan; qualitative yes to "would you pay 5 €" |
-| **2** | Public beta · 6 wk | F-09 paywall and RevenueCat · F-07 transfers · F-10 affiliates in `ASWebAuthenticationSession` · F-11 · F-12 · dark-mode audit | Conversion ≥ 6 %, affiliate click rate ≥ 12 % |
+| **2** | Public beta · 6 wk | F-09 paywall and RevenueCat · F-07 transfers · F-10 affiliates in `SFSafariViewController` ([ADR-006](adr/006-affiliate-links-server-authoritative.md)) · F-11 · F-12 · dark-mode audit | Conversion ≥ 6 %, affiliate click rate ≥ 12 % |
 | **3** | Store launch · 4 wk | EN alongside DE · two more curated regions · onboarding, ASO · full accessibility pass | Approval first time; crash-free ≥ 99.5 % |
 | **4** | Growth | F-13 groups · credit bundles · package extraction · Android if deferred | — |
 
@@ -47,18 +64,18 @@ until accounts exist. Build it early in Phase 1, not late.
 
 | ID | Feature | Status |
 |---|---|---|
-| F-01 | Trip intake | Running · local parser stands in for the intake model |
+| F-01 | Trip intake | Running · local parser stands in for the intake model · search covers 285 cities from a bundled corpus |
 | F-02 | AI first draft | Running on a stub · streaming and skeleton states are real |
 | F-03 | Live validation | Backend · client models only validated places, by construction |
 | F-04 | Diet filter | Running · confirmed and likely are visually distinct |
-| F-05 | Block editing | Next |
-| F-06 | AI reflow | Next · local constraint half is done and tested |
+| F-05 | Block editing | **Running** · drag and the accessible menu emit the same `PlanEdit` |
+| F-06 | AI reflow | **Running, locally** · conflicts named and moves proposed; the model half is still backend |
 | F-07 | Transfer check | Modelled · no UI, no partners |
-| F-08 | PDF export | Phase 1 |
-| F-09 | Credits & paywall | Decision logic done and tested; sheet outstanding |
-| F-10 | Affiliate buttons | Phase 2 · apply to programmes in Phase 1 |
-| F-11 | Budget tracking | Phase 2 |
-| F-12 | Packing list | Phase 2 |
+| F-08 | PDF export | **Running** · CoreText, paginated, watermarked preview truncated to day one |
+| F-09 | Credits & paywall | **Running** · both PRD 4.1 variants, StoreKit 2, restore; receipts still unverified |
+| F-10 | Affiliate buttons | **Running on a stub** · surface, disclosure and hand-off built; needs the link service (step 2) and an approved programme · apply **now** |
+| F-11 | Budget tracking | **Running** · composed from the plan, multi-currency on a static rate table |
+| F-12 | Packing list | **Running** · derived from month, party, walking and tickets |
 | F-13 | Group collaboration | Phase 4 |
 | F-14 | Offline mode | Phase 1 · architecture is already offline-first |
 | F-15 | Account & sync | Phase 1, **early** |
@@ -91,5 +108,9 @@ settle now than in review.
 |---|---|---|
 | Accessible drag-and-drop | An alternative to dragging cannot be bolted on; it changes the edit model | Build the "Verschieben nach…" path in the same week as the gesture |
 | Streaming on a flaky network | A dropped SSE mid-generation must not discard a readable partial plan | Handled; needs a real-network test pass in Phase 1 |
-| Export double-charging | A retried export that is not deduplicated costs the traveller money | Idempotency key per `(trip, revision)` is in the request layer already |
+| Export double-charging | A retried export that is not deduplicated costs the traveller money | **Done** · grants are cached per `(trip, revision)`; a preview is deliberately *not* cached, so a purchase takes effect at once |
+| Unverified receipts | StoreKit says "verified", which means Apple signed it — not that the account is entitled | The ledger decides; `InMemoryEntitlementServer` is the faked server and must be deleted when the real one lands |
 | Wire contract drift | Two teams, no shared types, one JSON shape | Client expectations are executable tests, not prose |
+| Affiliate attribution leak | A partner universal link opens the partner's installed app and drops the cookie — losing exactly the highest-intent users | Measure the leak before buying an SDK to close it ([ADR-006](adr/006-affiliate-links-server-authoritative.md)) |
+| Rejection under guideline 4.2.2 | "A collection of links" is the real App Store risk for affiliate surfaces, not IAP | The plan must render completely with offers switched off; pinned by a test |
+| Affiliate approval refused pre-launch | Booking.com now routes small partners through CJ/Awin, which require a property with real traffic | Travelpayouts first (accepts pre-launch), plus a public property in step 0.2 |

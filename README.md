@@ -8,12 +8,17 @@ The plan is the product. Everything else is one tap away from it.
 |---|---|
 | **Platform** | iOS 17+, iPhone, portrait, German |
 | **Dependencies** | none — no packages, no CocoaPods, no SPM graph |
-| **Backend** | none yet; generation runs against a streaming stub, storage is real |
-| **Tests** | 110, Swift Testing, domain, data and interaction logic |
+| **Backend** | the offer service is real ([`services/offers/`](services/offers/)); generation, rates and entitlements are still stubs |
+| **Tests** | 339 Swift in 46 suites, plus 33 for the offer service under `node --test` |
 
 ## Architecture
 
-Five layers in one app target, with the dependency rule pointing inward:
+Three targets. `Vihara` is the app, `ViharaShare` is the share extension, and
+`ViharaShared` is the small folder compiled into **both** — it holds the entire
+contract between them and depends on nothing but Foundation, because an app extension
+links its own binary and gets a fraction of the app's memory.
+
+Five layers in the app target, with the dependency rule pointing inward:
 
 ```
 App/           composition root, routing            everything
@@ -35,7 +40,9 @@ Enforced, not hoped for:
 ```
 
 The decisions behind the structure, including the ones that contradict the PRD, are
-in [`docs/adr/`](docs/adr/):
+in [`docs/adr/`](docs/adr/). The commercial plan — the competitive gaps Vihara targets
+and how it earns — is in [`docs/COMPETITION.md`](docs/COMPETITION.md) and
+[`docs/MONETISATION.md`](docs/MONETISATION.md):
 
 | | |
 |---|---|
@@ -44,6 +51,7 @@ in [`docs/adr/`](docs/adr/):
 | [ADR-003](docs/adr/003-domain-purity.md) | The domain is pure Swift; the wire format stops at the data layer |
 | [ADR-004](docs/adr/004-server-authoritative-entitlements.md) | Entitlements are server-authoritative; the client cannot spend |
 | [ADR-005](docs/adr/005-streaming-and-observation.md) | Streaming in the protocol, `@Observable` in the view models |
+| [ADR-006](docs/adr/006-affiliate-links-server-authoritative.md) | Affiliate links are minted by the server; the client cannot construct a payable URL — **proposed** |
 
 ## What runs today
 
@@ -75,11 +83,190 @@ in [`docs/adr/`](docs/adr/):
   [`PullTrack`](Vihara/DesignSystem/Components/PullTrack.swift) so they are tested
   rather than eyeballed.
 
+- **Search finds 285 cities (F-01).** `Cities.json` is a bundled corpus standing in
+  for Google Places, so the search field works with no key, no network and no
+  per-request bill. Everything in it reports `isPlannable == false`, which is not a
+  limitation of the mock — a city is plannable only once its POI index is curated, so
+  the corpus names Lissabon and honestly refuses to plan it. Regenerate it with
+  `Scripts/generate-cities.py`; do not hand-edit it.
+- **The plan is editable (F-05/F-06).** Drag a stop between half-days, or use
+  *Verschieben nach…* in the context menu — both emit the same `PlanEdit`, so the
+  accessible path cannot drift away from the gesture. Conflicts are **named, never
+  silently corrected**: an overfull block keeps everything in it and offers a move the
+  traveller can take or leave. Pinning is a promise to reflow, not a lock.
+- **Booking offers are live on stubs (F-10).** A stop that `requiresTicket` now
+  carries a GetYourGuide link instead of only a warning. The links carry **no
+  affiliate marker and earn nothing** — they point at public search pages, because
+  inventing a tracking parameter would misrepresent an account we do not hold. The
+  architecture is the point: see
+  [ADR-006](docs/adr/006-affiliate-links-server-authoritative.md) and
+  [`docs/MONETISATION.md`](docs/MONETISATION.md).
+- **Budget and packing compose themselves (F-11/F-12).** Both are one tap from the
+  plan, never beside it. The budget separates what it *knows* (admissions, from
+  provider data) from what it *assumes* (meals), the same way `DietSignal` separates
+  *bestätigt* from *wahrscheinlich*, and names what it had to leave out. The packing
+  list gives every line its reason — "70 Min. zu Fuß an einem Tag" rather than
+  "comfortable shoes".
+
+- **The plan exports as a PDF (F-08).** CoreText, vector text, A4, paginated — not a
+  screenshot, because a plan gets printed at a hotel desk and searched in a mail
+  client. Colours are resolved against **light mode explicitly**: `Theme.C` carries
+  both appearances, and a PDF exported at night would otherwise be near-white ink on
+  white paper. A free account gets a watermarked preview holding day one, with the
+  remaining days named rather than silently dropped.
+- **The paywall is both PRD 4.1 variants (F-09).** Which one appears comes from
+  `Wallet.exportOutlook`, so the traveller sees the sheet they are about to get with
+  no flicker. StoreKit 2, with restore. The sheet never blocks the door — the
+  watermarked preview is shareable from inside it, unbought.
+  **Receipts are not verified**: StoreKit saying *verified* means Apple signed the
+  transaction, not that the account is entitled. That decision belongs to the server,
+  and `InMemoryEntitlementServer` is the server, faked — the same pretence as
+  `StubAuthenticationService`, to be deleted the day a backend exists.
+
+- **Reels and TikToks come in through the share sheet.** Nobody starts a trip in a
+  trip planner; they start in a Reel, and Wanderlog has no way in from one on iOS.
+  Share a post into Vihara and the places named in its caption are waiting on Home.
+  **The extension captures and nothing else** — it writes a link and whatever text
+  came with it to the App Group, and the app does the matching, because that is where
+  the vocabulary and the memory are. See [`ViharaShare/`](ViharaShare/) and
+  [`CaptureInboxViewModel`](Vihara/Features/Home/CaptureInboxViewModel.swift).
+
+  What it can and cannot read is worth knowing before judging it: **TikTok** publishes
+  an unauthenticated oEmbed endpoint that returns the caption, so a bare TikTok link
+  resolves. **Instagram and Reels** have required an access token for oEmbed since
+  2020, so a bare Reel link resolves to nothing and the sheet says so plainly rather
+  than shrugging. Closing that gap needs a backend holding a token, not more client
+  code.
+
+  Matching is vocabulary-based and deliberately has a ceiling: it finds the 285 cities
+  and the curated destinations, including hashtags (`#bologna`) and endonyms
+  (`Firenze` → Florenz), and it refuses to guess. A caption saying "this little place
+  near the market" names a restaurant no vocabulary holds, and inventing one would put
+  a place in a plan that nobody can visit — the exact failure `Place`'s validation gate
+  exists to prevent.
+
 Jump straight to a screen while iterating:
 
 ```bash
 xcrun simctl launch booted com.vihara.app -vihara-route plan
 ```
+
+### Testing purchases without App Store Connect
+
+`Vihara.storekit` sits at the repository root and the shared scheme already points at
+it, so the paywall has real products, real prices and a real purchase sheet in the
+simulator with no account and no configured app.
+
+It lives **outside** `Vihara/` deliberately: that folder is a synchronized group, so
+anything inside it is copied into the app bundle, and a StoreKit test configuration is
+a development artefact that must never ship.
+
+To exercise the states App Review will: **Debug → StoreKit → Manage Transactions**
+while running, where a purchase can be refunded, a subscription expired, or
+ask-to-buy turned on. `_failTransactionsEnabled` in the file forces failures.
+
+**The configuration is attached by the scheme, so it only applies when you run from
+Xcode.** A build launched with `xcrun simctl launch` has no store at all: `prices()`
+returns `[:]` and the paywall says the store is not answering, which is the same path
+a real device takes when the App Store is unreachable. That is worth seeing
+deliberately — it is a state travellers will hit — but do not mistake it for a bug in
+the paywall.
+
+### The App Group, which is a provisioning dependency
+
+The extension and the app hand captures through `group.com.vihara.app`, declared in
+[`Vihara/AppGroup.entitlements`](Vihara/AppGroup.entitlements) and wired for both
+targets. **The simulator works immediately.** A device build needs the group
+registered on both App IDs (`com.vihara.app` and `com.vihara.app.share`) and enabled
+for both targets, or `containerURL(forSecurityApplicationGroupIdentifier:)` returns
+`nil` and every capture is silently lost.
+
+That is the same trap the Sign in with Apple section below describes, so it is handled
+the same way: `SharedInbox.isAvailable` exists and the extension *says* it cannot save
+rather than appearing to succeed.
+
+`AppGroup.entitlements` is deliberately separate from `Vihara.entitlements`. A target
+has one entitlements file, and the latter carries Sign in with Apple, which is not
+wired on purpose — merging them would break device builds for two reasons instead of
+one. When Sign in with Apple is finally switched on, the two should be merged.
+
+To check the container really exists:
+
+```bash
+xcrun simctl get_app_container booted com.vihara.app groups
+```
+
+## Signing in, and the two keys you need
+
+The app is gated: nothing past the Welcome screen is reachable without an account.
+`RootView` resolves **every** route to `AuthView` while signed out, including a deep
+link — a check written into a button would miss exactly that case.
+
+Three ways in. Two of them need configuration you have to supply:
+
+```bash
+cp Vihara/Secrets.example.plist Vihara/Secrets.plist   # git-ignored
+```
+
+| Key | Where it comes from | Without it |
+|---|---|---|
+| `GooglePlacesAPIKey` | Google Cloud → Credentials → API key, with **Places API (New)** enabled | Place search falls back to the curated catalogue |
+| `GoogleOAuthClientID` | Same console → OAuth client ID, type **iOS** | The Google button is disabled and says why |
+
+**Restrict the Places key** to iOS apps and to `com.vihara.app` before it goes near a
+build anyone else can run. A key inside a shipped app is extractable, and Places bills
+per request.
+
+For Google sign-in you must also add the reversed client id as a URL scheme under
+`CFBundleURLTypes` (`com.googleusercontent.apps.…`), or the browser has nowhere to
+hand the authorisation code back to. The flow itself is Authorization Code + PKCE
+through `ASWebAuthenticationSession` — no SDK, so the no-dependencies promise holds.
+
+**Sign in with Apple is not switched on yet, deliberately.** The entitlement file
+exists at `Vihara/Vihara.entitlements`, but nothing references it — wiring it up
+before the capability is enabled on the App ID fails *every device build*:
+
+```
+Provisioning profile "iOS Team Provisioning Profile: com.vihara.app"
+doesn't support the Sign in with Apple capability.
+```
+
+The entitlement and the portal have to be turned on together, and Xcode does both in
+one step: target **Vihara** → **Signing & Capabilities** → **+ Capability** →
+**Sign in with Apple**. That writes `CODE_SIGN_ENTITLEMENTS` and updates the App ID.
+
+Until then the Apple button is visible and reports that it is unavailable rather than
+failing silently — the cancel case and the missing-capability case are told apart in
+`AuthView.handleApple`, because a button that appears to do nothing is worse than
+either.
+
+### Signing in while there is no backend
+
+```
+vihara-app@gmail.com  /  vihara007
+```
+
+Seeded into the credential store on first use rather than special-cased at the
+sign-in call, so it walks the whole path — salt, hash, compare, session, Keychain —
+instead of stepping around it. A wrong password against that address is refused like
+any other. When `POST /v1/auth/*` exists, `seedDemoAccountIfNeeded()` is the only
+thing that has to be deleted.
+
+### What is real, and what is not
+
+Apple and Google authenticate for real. **Nothing verifies their tokens**, because
+verification belongs on a server and there is no server — see
+`StubAuthenticationService`, which is a stub in the same sense `StubTripGenerator` is.
+Email accounts are stored on the device: salted SHA-256 in the Keychain, which is
+enough that a stolen phone does not hand over a plaintext password and nowhere near
+enough for a real account system. That wants a slow KDF and a backend.
+
+Jump past the gate while iterating:
+
+```bash
+xcrun simctl launch booted com.vihara.app -vihara-route home -vihara-signed-in Sanya
+```
+
 
 ## Opening and running
 
