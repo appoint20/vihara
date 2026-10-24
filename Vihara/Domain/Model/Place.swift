@@ -18,6 +18,22 @@ struct Place: Hashable, Sendable, Identifiable {
     let dietSignal: DietSignal
     /// Entry needs to be bought ahead — surfaced as a warning, not a booking button.
     let requiresTicket: Bool
+    /// Entry is refused below this age. Torre degli Asinelli is 12, and a plan that
+    /// puts a family with a seven-year-old at its foot is a plan that wasted their
+    /// afternoon. See ``TravelParty/admits(_:)``.
+    let minimumAge: Int?
+    /// What it costs to get in. `nil` where entry is free, or where we do not know.
+    let admission: Admission?
+    /// Reachable without stairs. `nil` means unchecked, which is not the same as
+    /// `false` — an accessibility claim we have not verified must never read as one
+    /// we have.
+    let isStepFree: Bool?
+    /// When this place last passed the validation gate.
+    ///
+    /// `nil` means never. This is what earns the word *bestätigt*: a claim with a
+    /// source but no check time is a claim about the past, and opening hours from
+    /// last spring are how a traveller ends up outside a locked door.
+    let checkedAt: Date?
 
     init(id: Identifier<Place> = .generate(),
          providerPlaceID: String,
@@ -26,7 +42,11 @@ struct Place: Hashable, Sendable, Identifiable {
          coordinate: Coordinate,
          openingHours: OpeningWindow? = nil,
          dietSignal: DietSignal = .notApplicable,
-         requiresTicket: Bool = false) {
+         requiresTicket: Bool = false,
+         minimumAge: Int? = nil,
+         admission: Admission? = nil,
+         isStepFree: Bool? = nil,
+         checkedAt: Date? = nil) {
         self.id = id
         self.providerPlaceID = providerPlaceID
         self.name = name
@@ -35,6 +55,10 @@ struct Place: Hashable, Sendable, Identifiable {
         self.openingHours = openingHours
         self.dietSignal = dietSignal
         self.requiresTicket = requiresTicket
+        self.minimumAge = minimumAge
+        self.admission = admission
+        self.isStepFree = isStepFree
+        self.checkedAt = checkedAt
     }
 }
 

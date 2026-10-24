@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!--
+	  Sign in with Apple.
+
+	  NOT WIRED INTO THE BUILD YET, deliberately. Referencing this file from
+	  CODE_SIGN_ENTITLEMENTS fails every device build until the capability is
+	  also enabled on the App ID:
+
+	      Provisioning profile "iOS Team Provisioning Profile: com.vihara.app"
+	      doesn't support the Sign in with Apple capability.
+
+	  The entitlement and the portal have to be turned on together. To do both at
+	  once: open Vihara.xcodeproj → target Vihara → Signing & Capabilities →
+	  + Capability → Sign in with Apple. Xcode writes the CODE_SIGN_ENTITLEMENTS
+	  setting and updates the App ID in the same step.
+
+	  Until then the Apple button is visible and reports that it is unavailable
+	  rather than failing silently — see `AuthView.handleApple`.
+	-->
+	<key>com.apple.developer.applesignin</key>
+	<array>
+		<string>Default</string>
+	</array>
+</dict>
+</plist>

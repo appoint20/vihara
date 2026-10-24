@@ -7,11 +7,12 @@ import SwiftUI
 /// line of text does the communicating, and it changes as each day lands — which is
 /// the only movement the screen needs.
 struct DaySkeletonView: View {
+    @Environment(\.locale) private var locale
     let dayNumber: Int
 
     var body: some View {
         VStack(alignment: .leading, spacing: Theme.Plan.S.block) {
-            Text("Tag \(dayNumber) wird geprüft …")
+            Text(localized("plan.skeleton", dayNumber, locale: locale))
                 .viharaText(Theme.Plan.F.dayTitle)
                 .foregroundStyle(Theme.C.textFaint)
 
@@ -25,7 +26,7 @@ struct DaySkeletonView: View {
             }
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Tag \(dayNumber) wird geprüft")
+        .accessibilityLabel(localized("plan.skeleton", dayNumber, locale: locale))
     }
 
     private func bar(widthFraction: CGFloat) -> some View {

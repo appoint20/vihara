@@ -1,51 +1,39 @@
 import Foundation
 
+/// Wording for a brief's enum values.
+///
+/// Keys rather than literals, and functions rather than properties, because the
+/// reader's language is in the environment and a property cannot see it. Every one of
+/// these has both a German and an English string behind it — see the two
+/// `Localizable.strings` files, kept in step by `Scripts/check-localization.sh`.
+
 extension TripBrief.Pace {
-    var label: String {
-        switch self {
-        case .relaxed:  "Entspannt"
-        case .balanced: "Ausgewogen"
-        case .packed:   "Viel sehen"
-        }
-    }
+    var localizationKey: String { "pace.\(rawValue)" }
+    func label(locale: Locale) -> String { localized(localizationKey, locale: locale) }
 }
 
 extension TripBrief.BudgetBand {
-    var label: String {
-        switch self {
-        case .thrifty: "Günstig"
-        case .middle:  "Mittelklasse"
-        case .premium: "Gehoben"
-        }
-    }
+    var localizationKey: String { "budget.\(rawValue)" }
+    func label(locale: Locale) -> String { localized(localizationKey, locale: locale) }
 }
 
 extension TripBrief.DietRequirement {
-    var label: String {
-        switch self {
-        case .none:       "Alles"
-        case .vegetarian: "Vegetarisch"
-        case .vegan:      "Vegan"
-        }
-    }
+    var localizationKey: String { "diet.\(rawValue)" }
+    func label(locale: Locale) -> String { localized(localizationKey, locale: locale) }
 }
 
 extension TripBrief.TravelStyle {
-    var label: String {
-        switch self {
-        case .cityBreak: "Städtereise"
-        case .roundTrip: "Rundreise"
-        }
-    }
+    var localizationKey: String { "style.\(rawValue)" }
+    func label(locale: Locale) -> String { localized(localizationKey, locale: locale) }
 }
 
 extension TripBrief {
-    var nightsLabel: String {
-        nights == 1 ? "1 Nacht" : "\(nights) Nächte"
+    func nightsLabel(locale: Locale) -> String {
+        HomeDisplay.nights(nights, locale: locale)
     }
 
     /// "Sa, 12. Sep." — short enough for a chip, unambiguous enough to trust.
-    var startDateLabel: String {
-        startDate.formatted(.dateTime.weekday(.abbreviated).day().month(.abbreviated))
+    func startDateLabel(locale: Locale) -> String {
+        startDate.formatted(.dateTime.weekday(.abbreviated).day().month(.abbreviated).locale(locale))
     }
 }

@@ -34,13 +34,16 @@ final class SavedTripsViewModel {
 
 extension Trip {
     /// "3 Nächte · ab Di, 14. Apr." — enough to tell two Bologna trips apart.
-    var summaryLabel: String {
-        [brief.nightsLabel, "ab \(brief.startDateLabel)"].joined(separator: " · ")
+    func summaryLabel(locale: Locale) -> String {
+        [brief.nightsLabel(locale: locale),
+         localized("trips.from", brief.startDateLabel(locale: locale), locale: locale)]
+            .joined(separator: " · ")
     }
 
     /// "12 Bausteine" — what the plan actually contains, which is the thing a
     /// traveller scanning a list of saved plans is looking for.
-    var sizeLabel: String {
-        itemCount == 1 ? "1 Baustein" : "\(itemCount) Bausteine"
+    func sizeLabel(locale: Locale) -> String {
+        itemCount == 1 ? localized("trips.blocks.one", locale: locale)
+                       : localized("trips.blocks", itemCount, locale: locale)
     }
 }

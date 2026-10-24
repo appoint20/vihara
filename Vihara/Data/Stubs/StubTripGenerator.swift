@@ -54,9 +54,7 @@ struct StubTripGenerator: TripGenerating {
                         continuation.yield(.dayReady(TripDay(
                             date: date,
                             city: template.city,
-                            blocks: SampleItineraries.blocks(from: template,
-                                                             diet: brief.diet,
-                                                             pace: brief.pace),
+                            blocks: SampleItineraries.blocks(from: template, brief: brief),
                             // The first day is an arrival, not a transfer between stops.
                             arrivalTransfer: offset == 0 ? nil : template.arrivalTransfer
                         )))

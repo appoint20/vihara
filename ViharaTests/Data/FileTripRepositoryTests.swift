@@ -26,6 +26,9 @@ struct FileTripRepositoryTests {
                               pace: .relaxed,
                               budget: .premium,
                               diet: .vegan,
+                              party: TravelParty(adults: 2,
+                                                 childAges: [4, 9],
+                                                 accommodations: [.middaySleep, .pushchair]),
                               sourceText: "\(nights + 1) Tage \(destination), vegan")
         let day = TripDay(
             date: Fixture.date(2026, 4, 14),
@@ -35,7 +38,11 @@ struct FileTripRepositoryTests {
                     ItineraryItem(place: Fixture.place("Santo Stefano",
                                                        opens: (8, 30),
                                                        closes: (18, 0),
-                                                       requiresTicket: true),
+                                                       requiresTicket: true,
+                                                       minimumAge: 12,
+                                                       admission: Admission(adultPrice: Money(5),
+                                                                            freeUnderAge: 6),
+                                                       isStepFree: false),
                                   kind: .sight,
                                   startsAt: MinuteOfDay(hour: 9, minute: 15),
                                   durationMinutes: 75,
@@ -77,11 +84,17 @@ struct FileTripRepositoryTests {
         #expect(loaded.createdAt == original.createdAt)
         #expect(loaded.brief == original.brief)
         #expect(loaded.brief.sourceText == "3 Tage Bologna, vegan")
+        #expect(loaded.brief.party.adults == 2)
+        #expect(loaded.brief.party.childAges == [4, 9])
+        #expect(loaded.brief.party.accommodations == [.middaySleep, .pushchair])
 
         let item = try #require(loaded.days.first?[.morning]?.items.first)
         #expect(item.place.name == "Santo Stefano")
         #expect(item.place.openingHours?.opensAt == MinuteOfDay(hour: 8, minute: 30))
         #expect(item.place.requiresTicket)
+        #expect(item.place.minimumAge == 12)
+        #expect(item.place.admission == Admission(adultPrice: Money(5), freeUnderAge: 6))
+        #expect(item.place.isStepFree == false)
         #expect(item.startsAt == MinuteOfDay(hour: 9, minute: 15))
         #expect(item.durationMinutes == 75)
         #expect(item.isPinned)
@@ -175,6 +188,7 @@ struct FileTripRepositoryTests {
                                                                    pace: record.brief.pace,
                                                                    budget: record.brief.budget,
                                                                    diet: record.brief.diet,
+                                                                   party: record.brief.party,
                                                                    sourceText: nil),
                                         days: record.days,
                                         revision: record.revision,

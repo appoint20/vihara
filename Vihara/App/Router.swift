@@ -10,6 +10,9 @@ import SwiftUI
 /// screen everything it needs, so there is no shared mutable state between screens
 /// and deep links are a matter of constructing a value.
 enum Route: Hashable {
+    /// The authentication surface — Login, Registration, Password Reset.
+    case auth
+    /// The home surface — ``HomeView``, where the interview now lives.
     case discover
     /// Intake, optionally opened from a destination card.
     case intake(destination: Destination?)
@@ -36,7 +39,7 @@ final class Router {
     ///
     /// The plan is not lost by going back: it is on disk, and "Meine Reisen" is one
     /// tap away.
-    func popToDiscover() {
+    func popToHome() {
         path = path.first == .discover ? [.discover] : []
     }
 
@@ -61,7 +64,7 @@ extension Router {
         else { return }
 
         switch raw {
-        case "discover":
+        case "home", "discover":
             path = [.discover]
         case "intake":
             path = [.discover, .intake(destination: nil)]

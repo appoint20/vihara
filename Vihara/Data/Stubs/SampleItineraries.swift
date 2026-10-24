@@ -39,27 +39,67 @@ enum SampleItineraries {
 
     /// Composes a day for a brief.
     ///
-    /// The meal is the first candidate satisfying the stated diet, which is how the
-    /// diet filter (F-04) shows up in the stub. Blocks are then trimmed to the pace's
-    /// allowance, because a day that breaks the composition rules should never reach
-    /// the traveller — the validation gate would have rejected it, and so does this.
-    static func blocks(from template: DayTemplate,
-                       diet: TripBrief.DietRequirement,
-                       pace: TripBrief.Pace) -> [DayBlock] {
-        let meal = template.eveningMeals.first { $0.place.dietSignal.satisfies(diet) }
-            ?? template.eveningMeals.first
+    /// Four rules, applied in this order, each of them an answer the traveller gave:
+    ///
+    /// 1. **The party filters candidates.** A place with an age limit nobody in the
+    ///    party clears is gone before anything else runs — there is no point pacing a
+    ///    day around a tower a seven-year-old cannot climb.
+    /// 2. **A nap holds the afternoon.** Anything starting inside the window comes
+    ///    out, rather than being quietly rescheduled on top of it.
+    /// 3. **The diet picks the meal**, which is how F-04 shows up in the stub.
+    /// 4. **The pace trims the blocks**, because a day breaking the composition rules
+    ///    should never reach the traveller — the validation gate would reject it, and
+    ///    so does this.
+    static func blocks(from template: DayTemplate, brief: TripBrief) -> [DayBlock] {
+        let party = brief.party
+
+        let morning = party.admissible(template.morning)
+        var afternoon = party.admissible(template.afternoon)
+        if let nap = party.napWindow {
+            afternoon = afternoon.filter { item in
+                guard let startsAt = item.startsAt else { return true }
+                return !nap.contains(startsAt)
+            }
+        }
+
+        let mealCandidates = party.admissible(template.eveningMeals)
+        var meal = mealCandidates.first { $0.place.dietSignal.satisfies(brief.diet) }
+            ?? mealCandidates.first
+        // Children eat earlier. The plan says so rather than booking a table nobody
+        // in the party will enjoy sitting at.
+        meal?.startsAt = party.eveningMealStart
+
+        let evening = [meal].compactMap { $0 } + party.admissible(template.eveningExtras)
+
         return [
-            DayBlock(slot: .morning, items: fit(template.morning, to: pace)),
-            DayBlock(slot: .afternoon, items: fit(template.afternoon, to: pace)),
-            DayBlock(slot: .evening,
-                     items: fit([meal].compactMap { $0 } + template.eveningExtras, to: pace)),
+            DayBlock(slot: .morning, items: fit(morning, to: brief.maxItemsPerBlock)),
+            DayBlock(slot: .afternoon, items: fit(afternoon, to: brief.maxItemsPerBlock)),
+            DayBlock(slot: .evening, items: fit(evening, to: brief.maxItemsPerBlock)),
         ]
     }
 
+    /// Every place a day could hold, for the region a brief names.
+    ///
+    /// The interview's "Was sich damit ändert" panel needs the candidates *before*
+    /// the party filters them — the interesting half is what gets dropped.
+    static func candidatePlaces(for destination: Identifier<Destination>) -> [Place] {
+        templates(for: destination)
+            .flatMap { $0.morning + $0.afternoon + $0.eveningMeals + $0.eveningExtras }
+            .map(\.place)
+            .reduce(into: [Place]()) { unique, place in
+                if !unique.contains(where: { $0.providerPlaceID == place.providerPlaceID }) {
+                    unique.append(place)
+                }
+            }
+    }
+
     /// Keeps what the pace allows, and at most one headline sight per block.
-    private static func fit(_ items: [ItineraryItem], to pace: TripBrief.Pace) -> [ItineraryItem] {
+    ///
+    /// Takes the limit rather than the pace, so a traveller's own numbers reach
+    /// composition the same way a bucket does.
+    private static func fit(_ items: [ItineraryItem], to limit: Int) -> [ItineraryItem] {
         var kept: [ItineraryItem] = []
-        for item in items where kept.count < pace.maxItemsPerBlock {
+        for item in items where kept.count < limit {
             if item.isHeadline, kept.contains(where: \.isHeadline) { continue }
             kept.append(item)
         }
@@ -79,16 +119,16 @@ enum SampleItineraries {
             city: "Bologna",
             arrivalTransfer: nil,
             morning: [
-                item(sanPetronio, .sight, at: (8, 30), for: 75),
-                item(quadrilatero, .activity, at: (10, 15), for: 60, from: .init(mode: .walk, minutes: 7)),
+                item(sanPetronio, .sight, at: (8, 30), for: 75, because: "sanPetronio"),
+                item(quadrilatero, .activity, at: (10, 15), for: 60, from: .init(mode: .walk, minutes: 7), because: "quadrilatero"),
             ],
             afternoon: [
-                item(asinelli, .sight, at: (15, 0), for: 60),
+                item(asinelli, .sight, at: (15, 0), for: 60, because: "asinelli"),
             ],
             eveningMeals: [
-                item(botanica, .meal, at: (19, 30), for: 90),
-                item(daGianni, .meal, at: (19, 30), for: 90),
-                item(dellOrsa, .meal, at: (19, 30), for: 90),
+                item(botanica, .meal, at: (19, 30), for: 90, because: "botanica"),
+                item(daGianni, .meal, at: (19, 30), for: 90, because: "daGianni"),
+                item(dellOrsa, .meal, at: (19, 30), for: 90, because: "dellOrsa"),
             ],
             eveningExtras: []
         )
@@ -99,15 +139,15 @@ enum SampleItineraries {
             city: "Bologna",
             arrivalTransfer: nil,
             morning: [
-                item(sanLuca, .sight, at: (9, 0), for: 150),
+                item(sanLuca, .sight, at: (9, 0), for: 150, because: "sanLuca"),
             ],
             afternoon: [
-                item(archiginnasio, .sight, at: (14, 30), for: 60),
-                item(mercatoErbe, .meal, at: (16, 0), for: 45, from: .init(mode: .walk, minutes: 9)),
+                item(archiginnasio, .sight, at: (14, 30), for: 60, because: "archiginnasio"),
+                item(mercatoErbe, .meal, at: (16, 0), for: 45, from: .init(mode: .walk, minutes: 9), because: "mercatoErbe"),
             ],
             eveningMeals: [
-                item(dellOrsa, .meal, at: (20, 0), for: 90),
-                item(botanica, .meal, at: (20, 0), for: 90),
+                item(dellOrsa, .meal, at: (20, 0), for: 90, because: "dellOrsa"),
+                item(botanica, .meal, at: (20, 0), for: 90, because: "botanica"),
             ],
             eveningExtras: []
         )
@@ -118,14 +158,14 @@ enum SampleItineraries {
             city: "Modena",
             arrivalTransfer: bolognaToModena,
             morning: [
-                item(modenaDuomo, .sight, at: (9, 45), for: 60),
-                item(albinelli, .sight, at: (11, 0), for: 60, from: .init(mode: .walk, minutes: 5)),
+                item(modenaDuomo, .sight, at: (9, 45), for: 60, because: "modenaDuomo"),
+                item(albinelli, .sight, at: (11, 0), for: 60, from: .init(mode: .walk, minutes: 5), because: "albinelli"),
             ],
             afternoon: [
-                item(ferrariMuseum, .activity, at: (14, 30), for: 105),
+                item(ferrariMuseum, .activity, at: (14, 30), for: 105, because: "ferrariMuseum"),
             ],
             eveningMeals: [
-                item(aldina, .meal, at: (19, 0), for: 90),
+                item(aldina, .meal, at: (19, 0), for: 90, because: "aldina"),
             ],
             eveningExtras: []
         )
@@ -136,14 +176,14 @@ enum SampleItineraries {
             city: "Ravenna",
             arrivalTransfer: bolognaToRavenna,
             morning: [
-                item(sanVitale, .sight, at: (9, 30), for: 90),
-                item(gallaPlacidia, .sight, at: (11, 15), for: 30, from: .init(mode: .walk, minutes: 2)),
+                item(sanVitale, .sight, at: (9, 30), for: 90, because: "sanVitale"),
+                item(gallaPlacidia, .sight, at: (11, 15), for: 30, from: .init(mode: .walk, minutes: 2), because: "gallaPlacidia"),
             ],
             afternoon: [
-                item(apollinareNuovo, .sight, at: (14, 30), for: 60),
+                item(apollinareNuovo, .sight, at: (14, 30), for: 60, because: "apollinareNuovo"),
             ],
             eveningMeals: [
-                item(caDeVen, .meal, at: (19, 30), for: 90),
+                item(caDeVen, .meal, at: (19, 30), for: 90, because: "caDeVen"),
             ],
             eveningExtras: []
         )
@@ -185,11 +225,14 @@ enum SampleItineraries {
 
     private static let asinelli = place(
         "Torre degli Asinelli", "Piazza di Porta Ravegnana, 40126 Bologna",
-        44.4938, 11.3467, opens: (10, 0), closes: (19, 0), ticket: true)
+        44.4938, 11.3467, opens: (10, 0), closes: (19, 0), ticket: true,
+        // 498 steps and a hard minimum age. This is the candidate a family loses.
+        minimumAge: 12, admission: euros(5), stepFree: false)
 
     private static let archiginnasio = place(
         "Archiginnasio & Teatro Anatomico", "Piazza Galvani 1, 40124 Bologna",
-        44.4919, 11.3437, opens: (10, 0), closes: (18, 0), ticket: true)
+        44.4919, 11.3437, opens: (10, 0), closes: (18, 0), ticket: true,
+        admission: euros(3, freeUnder: 6))
 
     private static let sanLuca = place(
         "Santuario della Madonna di San Luca", "Via di San Luca 36, 40135 Bologna",
@@ -233,7 +276,8 @@ enum SampleItineraries {
 
     private static let ferrariMuseum = place(
         "Museo Enzo Ferrari", "Via Paolo Ferrari 85, 41121 Modena",
-        44.6487, 10.9169, opens: (9, 30), closes: (19, 0), ticket: true)
+        44.6487, 10.9169, opens: (9, 30), closes: (19, 0), ticket: true,
+        admission: euros(22, freeUnder: 6), stepFree: true)
 
     private static let aldina = place(
         "Trattoria Aldina", "Via Luigi Albinelli 40, 41121 Modena",
@@ -242,7 +286,8 @@ enum SampleItineraries {
 
     private static let sanVitale = place(
         "Basilica di San Vitale", "Via San Vitale 17, 48121 Ravenna",
-        44.4208, 12.1959, opens: (9, 0), closes: (19, 0), ticket: true)
+        44.4208, 12.1959, opens: (9, 0), closes: (19, 0), ticket: true,
+        admission: euros(12.50, freeUnder: 11), stepFree: true)
 
     private static let gallaPlacidia = place(
         "Mausoleo di Galla Placidia", "Via San Vitale 17, 48121 Ravenna",
@@ -266,7 +311,10 @@ enum SampleItineraries {
                               opens: (Int, Int)? = nil,
                               closes: (Int, Int)? = nil,
                               diet: DietSignal = .notApplicable,
-                              ticket: Bool = false) -> Place {
+                              ticket: Bool = false,
+                              minimumAge: Int? = nil,
+                              admission: Admission? = nil,
+                              stepFree: Bool? = nil) -> Place {
         var hours: OpeningWindow?
         if let opens, let closes {
             hours = OpeningWindow(opensAt: MinuteOfDay(hour: opens.0, minute: opens.1),
@@ -278,18 +326,35 @@ enum SampleItineraries {
                      coordinate: Coordinate(latitude: latitude, longitude: longitude),
                      openingHours: hours,
                      dietSignal: diet,
-                     requiresTicket: ticket)
+                     requiresTicket: ticket,
+                     minimumAge: minimumAge,
+                     admission: admission,
+                     isStepFree: stepFree)
     }
 
+    /// Prices and age limits are stub values alongside the rest of this file. They
+    /// are plausible rather than checked, and the plan says as much — see
+    /// ``PlanView``'s footnote. The age limit on the Asinelli is the one number here
+    /// that genuinely matters, because it is what removes the tower from a family's
+    /// plan.
+    private static func euros(_ amount: Decimal, freeUnder: Int? = nil) -> Admission {
+        Admission(adultPrice: Money(amount), freeUnderAge: freeUnder)
+    }
+
+    /// The reason key is derived from the place's own name, so a stop cannot end up
+    /// wearing another stop's justification. In production the composing model writes
+    /// free text into the same field.
     private static func item(_ place: Place,
                              _ kind: ItineraryItem.Kind,
                              at time: (Int, Int),
                              for minutes: Int,
-                             from leg: TravelLeg? = nil) -> ItineraryItem {
+                             from leg: TravelLeg? = nil,
+                             because reason: String) -> ItineraryItem {
         ItineraryItem(place: place,
                       kind: kind,
                       startsAt: MinuteOfDay(hour: time.0, minute: time.1),
                       durationMinutes: minutes,
-                      travelFromPrevious: leg)
+                      travelFromPrevious: leg,
+                      reason: "reason.\(reason)")
     }
 }

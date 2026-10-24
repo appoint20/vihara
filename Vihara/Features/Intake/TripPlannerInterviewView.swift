@@ -1,12 +1,13 @@
 import SwiftUI
 
-/// Wanderlog-style interactive trip planner interview flow.
+/// The guided interview, six steps deep.
 ///
-/// Guides the traveller through structured steps (Destination, Dates, Style, Budget/Diet)
-/// while compiling a valid ``TripBrief`` for instant itinerary generation.
+/// It opens where the home surface left off rather than at question one, and every
+/// step it passes writes a draft — so closing this sheet costs nothing but the sheet.
 struct TripPlannerInterviewView: View {
     @Environment(Router.self) private var router
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.locale) private var locale
     @State private var model: TripPlannerInterviewViewModel
 
     init(model: TripPlannerInterviewViewModel) {
@@ -33,20 +34,16 @@ struct TripPlannerInterviewView: View {
         }
         .background(Theme.C.bg.ignoresSafeArea())
         .toolbar(.hidden, for: .navigationBar)
-        .task {
-            await model.load()
-        }
+        .task { await model.load() }
     }
 
-    // MARK: - Navigation & Progress
+    // MARK: - Navigation & progress
 
     private var topNavigation: some View {
         HStack {
             if model.currentStep > .destination {
                 BackControl {
-                    withAnimation(Theme.Plan.Motion.standard) {
-                        model.previousStep()
-                    }
+                    withAnimation(Theme.Plan.Motion.standard) { model.previousStep() }
                 }
             } else {
                 Button {
@@ -58,12 +55,15 @@ struct TripPlannerInterviewView: View {
                         .frame(width: Theme.S.tapTarget, height: Theme.S.tapTarget)
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("Schließen")
+                .accessibilityLabel(Text("interview.close"))
             }
 
             Spacer()
 
-            Text("Schritt \(model.currentStep.rawValue + 1) von \(TripPlannerInterviewViewModel.Step.allCases.count)")
+            Text(localized("interview.progress",
+                           model.currentStep.rawValue + 1,
+                           model.stepCount,
+                           locale: locale))
                 .viharaText(Theme.Plan.F.blockLabel)
                 .foregroundStyle(Theme.C.textFaint)
         }
@@ -73,207 +73,108 @@ struct TripPlannerInterviewView: View {
 
     private var progressBar: some View {
         GeometryReader { proxy in
-            let totalSteps = CGFloat(TripPlannerInterviewViewModel.Step.allCases.count)
+            let total = CGFloat(model.stepCount)
             let current = CGFloat(model.currentStep.rawValue + 1)
-            let progressWidth = (proxy.size.width * (current / totalSteps))
 
             ZStack(alignment: .leading) {
-                Rectangle()
-                    .fill(Theme.C.border)
-                    .frame(height: 3)
-
+                Rectangle().fill(Theme.C.border)
                 Rectangle()
                     .fill(Theme.C.accent)
-                    .frame(width: progressWidth, height: 3)
+                    .frame(width: proxy.size.width * (current / total))
             }
         }
-        .frame(height: 3)
+        .frame(height: Theme.Size.progressBar)
         .padding(.top, Theme.S.s2)
         .animation(Theme.Plan.Motion.standard, value: model.currentStep)
     }
 
-    // MARK: - Step Header
-
     private var stepHeader: some View {
         VStack(alignment: .leading, spacing: Theme.S.s1) {
-            Text(model.currentStep.title)
+            Text(LocalizedStringKey(model.currentStep.titleKey))
                 .viharaText(Theme.Plan.F.dayTitle)
                 .foregroundStyle(Theme.C.text)
 
-            Text(model.currentStep.subtitle)
+            Text(LocalizedStringKey(model.currentStep.subtitleKey))
                 .viharaText(Theme.Plan.F.meta)
                 .foregroundStyle(Theme.C.textMuted)
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
-
-    // MARK: - Dynamic Step Content
 
     @ViewBuilder
     private var stepContent: some View {
         switch model.currentStep {
-        case .destination:
-            destinationStep
-        case .datesAndDuration:
-            datesAndDurationStep
-        case .styleAndPace:
-            styleAndPaceStep
-        case .budgetAndDiet:
-            budgetAndDietStep
-        case .summary:
-            summaryStep
+        case .destination:      destinationStep
+        case .datesAndDuration: datesStep
+        case .styleAndPace:     paceStep
+        case .travelParty:      TravelPartyStepView(model: model)
+        case .budgetAndDiet:    budgetStep
+        case .summary:          summaryStep
         }
     }
 
-    // MARK: - Step 1: Destination
+    // MARK: - 1 · Destination
 
     private var destinationStep: some View {
         VStack(alignment: .leading, spacing: Theme.S.s4) {
             CitySearchField(text: $model.searchQuery,
-                            placeholder: "Stadt eingeben (z.B. Bologna, Rom...)") {
+                            placeholder: localized("home.sentence.placeholder", locale: locale)) {
                 Task { await model.updateSearch() }
             } onClear: {
                 Task { await model.updateSearch() }
             }
             .onChange(of: model.searchQuery) { _, newValue in
-                if !newValue.isEmpty {
-                    model.applyCustomDestination(newValue)
-                }
+                if !newValue.isEmpty { model.applyCustomDestination(newValue) }
                 Task { await model.updateSearch() }
             }
 
-            if !model.destinationName.isEmpty {
-                HStack(spacing: Theme.S.s2) {
-                    Text("Ausgewählt:")
-                        .viharaText(Theme.Plan.F.blockLabel)
-                        .foregroundStyle(Theme.C.textFaint)
-
-                    Text(model.destinationName)
-                        .viharaText(Theme.F.compactTitle)
-                        .foregroundStyle(Theme.C.accentDeep)
-                }
-                .padding(.horizontal, Theme.S.s2)
-            }
-
-            Text("Kuratierte Regionen")
+            Text("home.rail.title")
                 .viharaText(Theme.Plan.F.blockLabel)
                 .foregroundStyle(Theme.C.textFaint)
-                .padding(.top, Theme.S.s2)
 
             VStack(spacing: Theme.S.s2) {
-                ForEach(model.searchResults) { dest in
-                    let isSelected = model.destinationName == dest.name
-                    Button {
+                ForEach(model.searchResults) { destination in
+                    InterviewOptionCard(title: LocalizedStringKey(destination.name),
+                                        subtitle: LocalizedStringKey(destination.region),
+                                        iconName: "building.2",
+                                        isSelected: model.destinationName == destination.name) {
                         withAnimation(Theme.Plan.Motion.standard) {
-                            model.selectDestination(dest)
-                        }
-                    } label: {
-                        HStack(spacing: Theme.S.s3) {
-                            RoundedRectangle(cornerRadius: Theme.R.compactThumb, style: .continuous)
-                                .fill(Theme.C.imageFallback)
-                                .frame(width: 44, height: 44)
-                                .overlay {
-                                    Image(systemName: "building.2")
-                                        .foregroundStyle(.white.opacity(0.8))
-                                }
-
-                            VStack(alignment: .leading, spacing: Theme.S.s05) {
-                                Text(dest.name)
-                                    .viharaText(Theme.F.cardTitle)
-                                    .foregroundStyle(Theme.C.text)
-
-                                Text(dest.region)
-                                    .viharaText(Theme.Plan.F.meta)
-                                    .foregroundStyle(Theme.C.textMuted)
-                            }
-
-                            Spacer()
-
-                            Text("★ \(dest.formattedRating)")
-                                .viharaText(Theme.F.rating)
-                                .foregroundStyle(Theme.C.textMuted)
-
-                            Circle()
-                                .strokeBorder(isSelected ? Theme.C.accent : Theme.C.border, lineWidth: isSelected ? 4 : 1)
-                                .frame(width: 18, height: 18)
-                        }
-                        .padding(Theme.S.s3)
-                        .background {
-                            RoundedRectangle(cornerRadius: Theme.R.compactCard, style: .continuous)
-                                .fill(isSelected ? Theme.C.surface : Theme.C.surface.opacity(0.8))
-                                .overlay {
-                                    RoundedRectangle(cornerRadius: Theme.R.compactCard, style: .continuous)
-                                        .strokeBorder(isSelected ? Theme.C.accent : Theme.C.border, lineWidth: isSelected ? 1.5 : Theme.Size.hairline)
-                                }
+                            model.selectDestination(destination)
                         }
                     }
-                    .buttonStyle(.plain)
                 }
             }
         }
     }
 
-    // MARK: - Step 2: Dates & Duration
+    // MARK: - 2 · Dates
 
-    private var datesAndDurationStep: some View {
+    private var datesStep: some View {
         VStack(alignment: .leading, spacing: Theme.S.s5) {
-            // Quick Date Presets
-            VStack(alignment: .leading, spacing: Theme.S.s2) {
-                Text("Startdatum")
-                    .viharaText(Theme.Plan.F.blockLabel)
-                    .foregroundStyle(Theme.C.textFaint)
-
-                HStack(spacing: Theme.S.s2) {
-                    quickDateChip("Nächstes WE", days: 7)
-                    quickDateChip("In 2 Wochen", days: 14)
-                    quickDateChip("In 1 Monat", days: 30)
-                }
-
-                DatePicker("Abreisedatum",
-                           selection: $model.startDate,
-                           in: model.earliestStartDate...,
-                           displayedComponents: .date)
-                    .datePickerStyle(.compact)
-                    .tint(Theme.C.accent)
-                    .padding(Theme.S.s3)
-                    .background {
+            DatePicker(selection: $model.startDate,
+                       in: model.earliestStartDate...,
+                       displayedComponents: .date) {
+                Text("slot.dates")
+                    .viharaText(Theme.Plan.F.meta)
+                    .foregroundStyle(Theme.C.textMuted)
+            }
+            .datePickerStyle(.compact)
+            .tint(Theme.C.accent)
+            .padding(Theme.S.s3)
+            .background {
+                RoundedRectangle(cornerRadius: Theme.R.compactCard, style: .continuous)
+                    .fill(Theme.C.surface)
+                    .overlay {
                         RoundedRectangle(cornerRadius: Theme.R.compactCard, style: .continuous)
-                            .fill(Theme.C.surface)
-                            .overlay {
-                                RoundedRectangle(cornerRadius: Theme.R.compactCard, style: .continuous)
-                                    .strokeBorder(Theme.C.border, lineWidth: Theme.Size.hairline)
-                            }
+                            .strokeBorder(Theme.C.border, lineWidth: Theme.Size.hairline)
                     }
             }
 
-            // Duration Stepper & Presets
-            VStack(alignment: .leading, spacing: Theme.S.s2) {
-                Text("Dauer der Reise")
-                    .viharaText(Theme.Plan.F.blockLabel)
-                    .foregroundStyle(Theme.C.textFaint)
-
-                HStack {
-                    VStack(alignment: .leading, spacing: Theme.S.s05) {
-                        Text("\(model.nights) Nächte")
-                            .viharaText(Theme.Plan.F.dayTitle)
-                            .foregroundStyle(Theme.C.text)
-
-                        Text("entspricht \(model.nights + 1) Reisetagen")
-                            .viharaText(Theme.Plan.F.meta)
-                            .foregroundStyle(Theme.C.textMuted)
-                    }
-
-                    Spacer()
-
-                    HStack(spacing: Theme.S.s2) {
-                        durationButton(symbol: "minus", label: "Weniger") {
-                            model.adjustNights(by: -1)
-                        }
-
-                        durationButton(symbol: "plus", label: "Mehr") {
-                            model.adjustNights(by: 1)
-                        }
-                    }
-                }
+            StepperControl(title: "slot.nights",
+                           value: HomeDisplay.nights(model.nights, locale: locale),
+                           range: 1...30,
+                           count: Binding(get: { model.nights },
+                                          set: { model.setNights($0) }))
                 .padding(Theme.S.s4)
                 .background {
                     RoundedRectangle(cornerRadius: Theme.R.compactCard, style: .continuous)
@@ -284,207 +185,173 @@ struct TripPlannerInterviewView: View {
                         }
                 }
 
-                HStack(spacing: Theme.S.s2) {
-                    durationPresetChip("Wochenende (2 N)", nights: 2)
-                    durationPresetChip("Kurztrip (3 N)", nights: 3)
-                    durationPresetChip("1 Woche (6 N)", nights: 6)
-                }
+            NotePanel {
+                Text(localized("days.count", model.nights + 1, locale: locale))
+                    .viharaText(Theme.Plan.F.meta)
+                    .foregroundStyle(Theme.C.accentDeep)
             }
         }
     }
 
-    private func quickDateChip(_ label: String, days: Int) -> some View {
-        Button {
-            withAnimation(Theme.Plan.Motion.standard) {
-                model.setQuickDate(daysFromNow: days)
-            }
-        } label: {
-            Text(label)
-                .viharaText(Theme.Plan.F.meta)
-                .foregroundStyle(Theme.C.text)
-                .padding(.horizontal, Theme.S.s3)
-                .padding(.vertical, Theme.S.s2)
-                .background {
-                    RoundedRectangle(cornerRadius: Theme.R.pill, style: .continuous)
-                        .strokeBorder(Theme.C.border, lineWidth: Theme.Size.hairline)
-                }
-        }
-        .buttonStyle(.plain)
-    }
+    // MARK: - 3 · Style and pace
 
-    private func durationPresetChip(_ label: String, nights: Int) -> some View {
-        let isSelected = model.nights == nights
-        return Button {
-            withAnimation(Theme.Plan.Motion.standard) {
-                model.setNights(nights)
-            }
-        } label: {
-            Text(label)
-                .viharaText(Theme.Plan.F.meta)
-                .foregroundStyle(isSelected ? Theme.C.accentDeep : Theme.C.text)
-                .padding(.horizontal, Theme.S.s3)
-                .padding(.vertical, Theme.S.s2)
-                .background {
-                    RoundedRectangle(cornerRadius: Theme.R.pill, style: .continuous)
-                        .fill(isSelected ? Theme.C.surface : Theme.C.surface.opacity(0.6))
-                        .overlay {
-                            RoundedRectangle(cornerRadius: Theme.R.pill, style: .continuous)
-                                .strokeBorder(isSelected ? Theme.C.accent : Theme.C.border,
-                                              lineWidth: isSelected ? 1.5 : Theme.Size.hairline)
-                        }
-                }
-        }
-        .buttonStyle(.plain)
-    }
-
-    private func durationButton(symbol: String, label: String, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            Image(systemName: symbol)
-                .viharaText(Theme.F.glyph)
-                .foregroundStyle(Theme.C.accentDeep)
-                .frame(width: Theme.S.tapTarget, height: Theme.S.tapTarget)
-                .background {
-                    Circle()
-                        .strokeBorder(Theme.C.border, lineWidth: Theme.Size.hairline)
-                }
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel(label)
-    }
-
-    // MARK: - Step 3: Style & Pace
-
-    private var styleAndPaceStep: some View {
+    private var paceStep: some View {
         VStack(alignment: .leading, spacing: Theme.S.s5) {
-            VStack(alignment: .leading, spacing: Theme.S.s2) {
-                Text("Reiseart")
-                    .viharaText(Theme.Plan.F.blockLabel)
-                    .foregroundStyle(Theme.C.textFaint)
-
-                VStack(spacing: Theme.S.s2) {
-                    InterviewOptionCard(title: "Städtereise",
-                                        subtitle: "Fokus auf eine Stadt, Kultur, Genuss & Viertel",
-                                        iconName: "building.2",
-                                        isSelected: model.travelStyle == .cityBreak) {
-                        model.travelStyle = .cityBreak
-                    }
-
-                    InterviewOptionCard(title: "Rundreise",
-                                        subtitle: "Mehrere Etappen, Tagesausflüge & Region",
-                                        iconName: "map",
-                                        isSelected: model.travelStyle == .roundTrip) {
-                        model.travelStyle = .roundTrip
-                    }
+            VStack(spacing: Theme.S.s2) {
+                InterviewOptionCard(title: "style.cityBreak",
+                                    subtitle: "style.cityBreak.detail",
+                                    iconName: "building.2",
+                                    isSelected: model.travelStyle == .cityBreak) {
+                    model.travelStyle = .cityBreak
+                }
+                InterviewOptionCard(title: "style.roundTrip",
+                                    subtitle: "style.roundTrip.detail",
+                                    iconName: "map",
+                                    isSelected: model.travelStyle == .roundTrip) {
+                    model.travelStyle = .roundTrip
                 }
             }
 
-            VStack(alignment: .leading, spacing: Theme.S.s2) {
-                Text("Tages-Tempo")
-                    .viharaText(Theme.Plan.F.blockLabel)
-                    .foregroundStyle(Theme.C.textFaint)
-
-                VStack(spacing: Theme.S.s2) {
-                    InterviewOptionCard(title: "Entspannt",
-                                        subtitle: "1 Highlight pro Block · Viel Zeit zum Treibenlassen",
-                                        iconName: "cup.and.saucer",
-                                        isSelected: model.pace == .relaxed) {
-                        model.pace = .relaxed
+            VStack(spacing: Theme.S.s2) {
+                ForEach(TripBrief.Pace.allCases, id: \.self) { pace in
+                    InterviewOptionCard(title: LocalizedStringKey("pace.\(pace.rawValue)"),
+                                        subtitle: LocalizedStringKey("pace.\(pace.rawValue).detail"),
+                                        iconName: symbol(for: pace),
+                                        isSelected: !model.isCustomPace && model.pace == pace) {
+                        withAnimation(Theme.Plan.Motion.standard) { model.selectPace(pace) }
                     }
+                }
 
-                    InterviewOptionCard(title: "Ausgewogen",
-                                        subtitle: "2 Highlights pro Block · Die goldene Mitte",
-                                        iconName: "figure.walk",
-                                        isSelected: model.pace == .balanced) {
-                        model.pace = .balanced
-                    }
-
-                    InterviewOptionCard(title: "Intensiv",
-                                        subtitle: "3 Highlights pro Block · Maximal viel entdecken",
-                                        iconName: "bolt",
-                                        isSelected: model.pace == .packed) {
-                        model.pace = .packed
-                    }
+                // The last card of the step is always the traveller's own numbers.
+                InterviewOptionCard(title: "interview.custom",
+                                    subtitle: "interview.custom.subtitle",
+                                    iconName: "slider.horizontal.3",
+                                    isSelected: model.isCustomPace,
+                                    footnote: paceFootnote,
+                                    action: {
+                    withAnimation(Theme.Plan.Motion.standard) { model.selectCustomPace() }
+                }) {
+                    customPaceControls
                 }
             }
         }
     }
 
-    // MARK: - Step 4: Budget & Diet
+    @ViewBuilder
+    private var customPaceControls: some View {
+        if model.paceOverride != nil {
+            let override = Binding(get: { model.paceOverride ?? .init() },
+                                   set: { model.paceOverride = $0 })
 
-    private var budgetAndDietStep: some View {
+            StepperControl(title: "interview.control.perBlock",
+                           value: "\(override.wrappedValue.itemsPerBlock)",
+                           range: 1...3,
+                           count: Binding(get: { override.wrappedValue.itemsPerBlock },
+                                          set: { override.wrappedValue.itemsPerBlock = $0 }))
+
+            SegmentedChips(title: "interview.control.startTime",
+                           options: [7, 8, 9, 10, 11].map { hour in
+                               .init(id: "\(hour)",
+                                     value: hour,
+                                     label: MinuteOfDay(hour: hour).label)
+                           },
+                           selection: Binding(get: { override.wrappedValue.dayStartsAt.hour },
+                                              set: { override.wrappedValue.dayStartsAt = MinuteOfDay(hour: $0) }))
+
+            AccentSlider(title: "interview.control.walking",
+                         value: walkingLabel(override.wrappedValue.walkingMetres),
+                         range: 500...3000,
+                         step: 100,
+                         amount: Binding(get: { Double(override.wrappedValue.walkingMetres) },
+                                         set: { override.wrappedValue.walkingMetres = Int($0) }))
+        }
+    }
+
+    /// What the current numbers produce. The reason the card is worth expanding.
+    private var paceFootnote: String {
+        let brief = model.brief
+        let blocks = localized("interview.footnote.blocks",
+                               brief.estimatedBlockCount,
+                               brief.dayCount,
+                               locale: locale)
+        let meal = localized("interview.footnote.meal",
+                             brief.party.eveningMealStart.label,
+                             locale: locale)
+        return "\(blocks) \(meal)"
+    }
+
+    /// Metres are how composition thinks; minutes are how a traveller does. Roughly
+    /// 80 m a minute at a strolling pace.
+    private func walkingLabel(_ metres: Int) -> String {
+        localized("interview.footnote.walking", max(1, metres / 80), locale: locale)
+    }
+
+    private func symbol(for pace: TripBrief.Pace) -> String {
+        switch pace {
+        case .relaxed:  "cup.and.saucer"
+        case .balanced: "figure.walk"
+        case .packed:   "bolt"
+        }
+    }
+
+    // MARK: - 5 · Budget and diet
+
+    private var budgetStep: some View {
         VStack(alignment: .leading, spacing: Theme.S.s5) {
-            VStack(alignment: .leading, spacing: Theme.S.s2) {
-                Text("Budget-Rahmen")
-                    .viharaText(Theme.Plan.F.blockLabel)
-                    .foregroundStyle(Theme.C.textFaint)
-
-                VStack(spacing: Theme.S.s2) {
-                    InterviewOptionCard(title: "Günstig",
-                                        subtitle: "Fokus auf kostenlose Kultur & Street Food",
-                                        iconName: "tag",
-                                        isSelected: model.budget == .thrifty) {
-                        model.budget = .thrifty
-                    }
-
-                    InterviewOptionCard(title: "Mittel",
-                                        subtitle: "Gute Trattorien, Museen & ausgewählte Erlebnisse",
-                                        iconName: "creditcard",
-                                        isSelected: model.budget == .middle) {
-                        model.budget = .middle
-                    }
-
-                    InterviewOptionCard(title: "Gehoben",
-                                        subtitle: "Besondere Restaurants, Führungen & Premium-Spots",
-                                        iconName: "sparkles",
-                                        isSelected: model.budget == .premium) {
-                        model.budget = .premium
+            VStack(spacing: Theme.S.s2) {
+                ForEach(TripBrief.BudgetBand.allCases, id: \.self) { band in
+                    InterviewOptionCard(title: LocalizedStringKey("budget.\(band.rawValue)"),
+                                        subtitle: LocalizedStringKey("budget.\(band.rawValue).detail"),
+                                        iconName: budgetSymbol(band),
+                                        isSelected: model.budget == band) {
+                        model.budget = band
                     }
                 }
             }
 
-            VStack(alignment: .leading, spacing: Theme.S.s2) {
-                Text("Ernährung & Präferenzen")
-                    .viharaText(Theme.Plan.F.blockLabel)
-                    .foregroundStyle(Theme.C.textFaint)
-
-                VStack(spacing: Theme.S.s2) {
-                    InterviewOptionCard(title: "Keine Einschränkung",
-                                        subtitle: "Volle Auswahl aller lokalen Spezialitäten",
-                                        iconName: "fork.knife",
-                                        isSelected: model.diet == .none) {
-                        model.diet = .none
-                    }
-
-                    InterviewOptionCard(title: "Vegetarisch",
-                                        subtitle: "Geprüfte fleischlose Gerichte & Optionen",
-                                        iconName: "leaf",
-                                        isSelected: model.diet == .vegetarian) {
-                        model.diet = .vegetarian
-                    }
-
-                    InterviewOptionCard(title: "Vegan",
-                                        subtitle: "Rein pflanzliche Restaurantempfehlungen",
-                                        iconName: "carrot",
-                                        isSelected: model.diet == .vegan) {
-                        model.diet = .vegan
+            VStack(spacing: Theme.S.s2) {
+                ForEach(TripBrief.DietRequirement.allCases, id: \.self) { diet in
+                    InterviewOptionCard(title: LocalizedStringKey("diet.\(diet.rawValue)"),
+                                        subtitle: LocalizedStringKey("diet.\(diet.rawValue).detail"),
+                                        iconName: dietSymbol(diet),
+                                        isSelected: model.diet == diet) {
+                        model.diet = diet
                     }
                 }
             }
         }
     }
 
-    // MARK: - Step 5: Summary
+    private func budgetSymbol(_ band: TripBrief.BudgetBand) -> String {
+        switch band {
+        case .thrifty: "tag"
+        case .middle:  "creditcard"
+        case .premium: "sparkles"
+        }
+    }
+
+    private func dietSymbol(_ diet: TripBrief.DietRequirement) -> String {
+        switch diet {
+        case .none:       "fork.knife"
+        case .vegetarian: "leaf"
+        case .vegan:      "carrot"
+        }
+    }
+
+    // MARK: - 6 · Summary
 
     private var summaryStep: some View {
         VStack(alignment: .leading, spacing: Theme.S.s4) {
             VStack(alignment: .leading, spacing: Theme.S.s3) {
-                summaryRow(title: "Zielort", value: model.destinationName)
-                summaryRow(title: "Abreise", value: model.formattedStartDate)
-                summaryRow(title: "Dauer", value: "\(model.nights) Nächte (\(model.nights + 1) Tage)")
-                summaryRow(title: "Reiseart", value: model.travelStyle.label)
-                summaryRow(title: "Tempo", value: model.pace.label)
-                summaryRow(title: "Budget", value: model.budget.label)
-                summaryRow(title: "Ernährung", value: model.diet.label)
+                summaryRow("slot.destination", model.destinationName)
+                summaryRow("slot.dates", model.startDate.formatted(
+                    .dateTime.weekday(.abbreviated).day().month(.wide).locale(locale)))
+                summaryRow("slot.nights", HomeDisplay.nights(model.nights, locale: locale))
+                summaryRow("style.cityBreak", localized("style.\(model.travelStyle.rawValue)",
+                                                        locale: locale))
+                summaryRow("slot.pace", paceSummary)
+                summaryRow("slot.party", HomeDisplay.partyLabel(model.party, locale: locale))
+                summaryRow("slot.diet", localized("diet.\(model.diet.rawValue)", locale: locale))
             }
             .padding(Theme.S.s4)
             .background {
@@ -497,47 +364,51 @@ struct TripPlannerInterviewView: View {
                     .viharaShadow(Theme.Shadow.card)
             }
 
-            VStack(alignment: .leading, spacing: Theme.S.s1) {
-                Text("Zusammenfassung")
-                    .viharaText(Theme.Plan.F.blockLabel)
-                    .foregroundStyle(Theme.C.textFaint)
-
-                Text("„\(model.synthesizedSentence)“")
+            NotePanel {
+                Text(paceFootnote)
                     .viharaText(Theme.Plan.F.meta)
                     .foregroundStyle(Theme.C.accentDeep)
+                    .fixedSize(horizontal: false, vertical: true)
             }
-            .padding(.horizontal, Theme.S.s2)
         }
     }
 
-    private func summaryRow(title: String, value: String) -> some View {
-        HStack {
+    private var paceSummary: String {
+        model.isCustomPace
+            ? localized("interview.custom", locale: locale)
+            : localized("pace.\(model.pace.rawValue)", locale: locale)
+    }
+
+    private func summaryRow(_ title: LocalizedStringKey, _ value: String) -> some View {
+        HStack(alignment: .firstTextBaseline) {
             Text(title)
                 .viharaText(Theme.Plan.F.meta)
                 .foregroundStyle(Theme.C.textMuted)
 
-            Spacer()
+            Spacer(minLength: Theme.S.s3)
 
             Text(value)
                 .viharaText(Theme.F.compactTitle)
                 .foregroundStyle(Theme.C.text)
+                .multilineTextAlignment(.trailing)
         }
     }
 
-    // MARK: - Bottom Action Bar
+    // MARK: - Bottom bar
 
     private var bottomActionBar: some View {
         VStack(spacing: Theme.S.s2) {
             if model.isLastStep {
-                PrimaryAction(title: "Plan erstellen", isEnabled: model.canProceed) {
+                PrimaryAction(title: localized("interview.create", locale: locale),
+                              isEnabled: model.canProceed) {
+                    model.clearDraft()
                     dismiss()
                     router.push(.plan(brief: model.brief))
                 }
             } else {
-                PrimaryAction(title: "Weiter", isEnabled: model.canProceed) {
-                    withAnimation(Theme.Plan.Motion.standard) {
-                        model.nextStep()
-                    }
+                PrimaryAction(title: localized("interview.next", locale: locale),
+                              isEnabled: model.canProceed) {
+                    withAnimation(Theme.Plan.Motion.standard) { model.nextStep() }
                 }
             }
         }
@@ -547,8 +418,22 @@ struct TripPlannerInterviewView: View {
     }
 }
 
-#Preview {
+#Preview("Interview · Deutsch") {
     let dependencies = AppDependencies.stubbed()
-    return TripPlannerInterviewView(model: TripPlannerInterviewViewModel(catalogue: dependencies.destinations))
-        .environment(Router())
+    return TripPlannerInterviewView(
+        model: TripPlannerInterviewViewModel(catalogue: dependencies.destinations,
+                                             drafts: dependencies.interviewDrafts)
+    )
+    .environment(Router())
+    .environment(\.locale, Locale(identifier: "de"))
+}
+
+#Preview("Interview · English") {
+    let dependencies = AppDependencies.stubbed()
+    return TripPlannerInterviewView(
+        model: TripPlannerInterviewViewModel(catalogue: dependencies.destinations,
+                                             drafts: dependencies.interviewDrafts)
+    )
+    .environment(Router())
+    .environment(\.locale, Locale(identifier: "en"))
 }

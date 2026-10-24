@@ -45,7 +45,7 @@ struct CitySearchField: View {
                         .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel("Suche löschen")
+                .accessibilityLabel(Text("control.clearSearch"))
             }
         }
         .padding(.horizontal, Theme.S.s4)

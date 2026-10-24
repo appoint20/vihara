@@ -1,9 +1,11 @@
 import Foundation
-import SwiftUI
 
-/// Manages the state and step-by-step interview flow for the Wanderlog-style Trip Planner.
+/// The interview, six steps deep.
 ///
-/// Converts a structured interview into a valid ``TripBrief`` ready for plan generation.
+/// It no longer starts from nothing: the home surface has already taken a sentence, a
+/// route and a date range, so this picks up at whatever is still outstanding. Every
+/// step writes a draft on the way through, so closing it four questions in does not
+/// throw four questions away.
 @MainActor
 @Observable
 final class TripPlannerInterviewViewModel {
@@ -12,46 +14,53 @@ final class TripPlannerInterviewViewModel {
         case destination = 0
         case datesAndDuration = 1
         case styleAndPace = 2
-        case budgetAndDiet = 3
-        case summary = 4
+        /// Inserted before budget, because it changes more than budget does — an age
+        /// limit removes a stop, and a nap removes a window.
+        case travelParty = 3
+        case budgetAndDiet = 4
+        case summary = 5
 
         var id: Int { rawValue }
 
-        var title: String {
+        var titleKey: String {
             switch self {
-            case .destination:      return "Wohin möchtest du?"
-            case .datesAndDuration: return "Wann & wie lange?"
-            case .styleAndPace:     return "Reisestil & Tempo"
-            case .budgetAndDiet:    return "Budget & Ernährung"
-            case .summary:          return "Dein Reise-Setup"
+            case .destination:      "interview.step.destination.title"
+            case .datesAndDuration: "interview.step.dates.title"
+            case .styleAndPace:     "interview.step.pace.title"
+            case .travelParty:      "interview.step.party.title"
+            case .budgetAndDiet:    "interview.step.budget.title"
+            case .summary:          "interview.step.summary.title"
             }
         }
 
-        var subtitle: String {
+        var subtitleKey: String {
             switch self {
-            case .destination:      return "Wähle eine kuratierte Region oder gib deine Wunschstadt ein."
-            case .datesAndDuration: return "Reisedatum und Dauer für deine maßgeschneiderte Route."
-            case .styleAndPace:     return "Wie viele Stationen und Highlights möchtest du pro Tag?"
-            case .budgetAndDiet:    return "Passgenaue Empfehlungen für Restaurants und Aktivitäten."
-            case .summary:          return "Alles bereit. Wir erstellen deinen Tagesplan in Echtzeit."
+            case .destination:      "interview.step.destination.subtitle"
+            case .datesAndDuration: "interview.step.dates.subtitle"
+            case .styleAndPace:     "interview.step.pace.subtitle"
+            case .travelParty:      "interview.step.party.subtitle"
+            case .budgetAndDiet:    "interview.step.budget.subtitle"
+            case .summary:          "interview.step.summary.subtitle"
             }
         }
 
-        static func < (lhs: Step, rhs: Step) -> Bool {
-            lhs.rawValue < rhs.rawValue
-        }
+        static func < (lhs: Step, rhs: Step) -> Bool { lhs.rawValue < rhs.rawValue }
     }
 
     private let catalogue: any DestinationCatalogue
+    private let drafts: (any InterviewDraftStore)?
     private let calendar: Calendar
 
     // MARK: - State
 
-    var currentStep: Step = .destination
+    var currentStep: Step = .destination {
+        didSet { saveDraft() }
+    }
     var searchQuery: String = ""
     private(set) var searchResults: [Destination] = []
     private(set) var popularDestinations: [Destination] = []
     private(set) var isLoadingDestinations: Bool = false
+    private(set) var candidatePlaces: [Place] = []
 
     // Brief values
     var destinationName: String = ""
@@ -59,28 +68,64 @@ final class TripPlannerInterviewViewModel {
     var startDate: Date
     var nights: Int = 3
     var travelStyle: TripBrief.TravelStyle = .cityBreak
-    var pace: TripBrief.Pace = .balanced
     var budget: TripBrief.BudgetBand = .middle
     var diet: TripBrief.DietRequirement = .none
+    var party: TravelParty = .couple
+
+    /// Pace as a bucket, or the traveller's own numbers.
+    ///
+    /// One choice with two shapes, mirroring the card stack: the three preset cards
+    /// set `pace` and clear the override, and the "Eigene Werte" card sets the
+    /// override. Whichever is live is what composition reads.
+    var pace: TripBrief.Pace = .balanced
+    var paceOverride: TripBrief.PaceOverride?
+
+    var isCustomPace: Bool { paceOverride != nil }
 
     init(catalogue: any DestinationCatalogue,
+         drafts: (any InterviewDraftStore)? = nil,
          preselectedDestination: Destination? = nil,
          initialCity: String? = nil,
+         seed: TripBrief? = nil,
+         resumingAt step: Int? = nil,
          calendar: Calendar = .current) {
         self.catalogue = catalogue
+        self.drafts = drafts
         self.calendar = calendar
 
         let defaultStart = calendar.date(byAdding: .day, value: 21, to: calendar.startOfDay(for: .now)) ?? .now
         self.startDate = defaultStart
 
+        // Everything the home surface already knows, so the interview asks only what
+        // is left. A question already answered and asked again reads as not listening.
+        if let seed {
+            if !seed.destination.isEmpty { destinationName = seed.destination }
+            startDate = seed.startDate
+            nights = seed.nights
+            travelStyle = seed.travelStyle
+            pace = seed.pace
+            budget = seed.budget
+            diet = seed.diet
+            party = seed.party
+            paceOverride = seed.paceOverride
+            searchQuery = seed.destination
+        }
+
         if let preselectedDestination {
-            self.selectedDestination = preselectedDestination
-            self.destinationName = preselectedDestination.name
-            self.nights = preselectedDestination.suggestedNights
-            self.currentStep = .datesAndDuration
+            selectedDestination = preselectedDestination
+            destinationName = preselectedDestination.name
+            nights = preselectedDestination.suggestedNights
+            currentStep = .datesAndDuration
         } else if let initialCity, !initialCity.isEmpty {
-            self.destinationName = initialCity
-            self.searchQuery = initialCity
+            destinationName = initialCity
+            searchQuery = initialCity
+        }
+
+        if let step, let resumed = Step(rawValue: step) {
+            currentStep = resumed
+        } else if seed?.destination.isEmpty == false, currentStep == .destination {
+            // A destination arrived with the seed, so that question is answered.
+            currentStep = .datesAndDuration
         }
     }
 
@@ -91,9 +136,10 @@ final class TripPlannerInterviewViewModel {
         defer { isLoadingDestinations = false }
 
         if let popular = try? await catalogue.popular() {
-            self.popularDestinations = popular
+            popularDestinations = popular
         }
         await updateSearch()
+        await loadCandidates()
     }
 
     func updateSearch() async {
@@ -101,115 +147,165 @@ final class TripPlannerInterviewViewModel {
             searchResults = popularDestinations
             return
         }
+        searchResults = (try? await catalogue.search(query: searchQuery)) ?? []
+    }
 
-        if let results = try? await catalogue.search(query: searchQuery) {
-            self.searchResults = results
-        } else {
-            self.searchResults = []
+    /// The places a plan for this destination could hold.
+    ///
+    /// Needed by the travel-party step, which cannot say what a party changes without
+    /// knowing what it is changing.
+    private func loadCandidates() async {
+        guard let destination = try? await catalogue.destination(matching: destinationName) else {
+            candidatePlaces = []
+            return
         }
+        candidatePlaces = (try? await catalogue.candidatePlaces(for: destination.id)) ?? []
     }
 
     func selectDestination(_ destination: Destination) {
-        self.selectedDestination = destination
-        self.destinationName = destination.name
-        self.searchQuery = destination.name
-        self.nights = destination.suggestedNights
+        selectedDestination = destination
+        destinationName = destination.name
+        searchQuery = destination.name
+        nights = destination.suggestedNights
+        Task { await loadCandidates() }
     }
 
     func applyCustomDestination(_ name: String) {
         let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
-        self.selectedDestination = nil
-        self.destinationName = trimmed
+        selectedDestination = nil
+        destinationName = trimmed
     }
 
-    // MARK: - Dates & Duration
+    // MARK: - Dates & duration
 
-    var earliestStartDate: Date {
-        calendar.startOfDay(for: .now)
-    }
+    var earliestStartDate: Date { calendar.startOfDay(for: .now) }
 
     func setQuickDate(daysFromNow: Int) {
         let today = calendar.startOfDay(for: .now)
         if let newDate = calendar.date(byAdding: .day, value: daysFromNow, to: today) {
-            self.startDate = newDate
+            startDate = newDate
         }
     }
 
-    func setNights(_ count: Int) {
-        self.nights = max(1, min(count, 30))
+    func setNights(_ count: Int) { nights = max(1, min(count, 30)) }
+    func adjustNights(by delta: Int) { setNights(nights + delta) }
+
+    // MARK: - Pace
+
+    func selectPace(_ value: TripBrief.Pace) {
+        pace = value
+        paceOverride = nil
     }
 
-    func adjustNights(by delta: Int) {
-        setNights(nights + delta)
+    /// Switching to the custom card seeds it from whichever bucket was live, so the
+    /// first thing the traveller sees is what they already had — not a reset.
+    func selectCustomPace() {
+        guard paceOverride == nil else { return }
+        paceOverride = TripBrief.PaceOverride(itemsPerBlock: pace.maxItemsPerBlock,
+                                              walkingMetres: pace.maxWalkingDistanceInBlock,
+                                              dayStartsAt: MinuteOfDay(hour: 9))
     }
+
+    // MARK: - Party
+
+    func applyPreset(_ preset: TravelParty) {
+        party = preset
+    }
+
+    func setAdults(_ count: Int) { party.adults = max(1, min(count, 9)) }
+
+    /// Adding a child appends a default age rather than opening a picker straight
+    /// away: a stepper that popped a modal on every tap would be unusable, and the
+    /// age chip beneath is right there.
+    func setChildren(_ count: Int) {
+        let count = max(0, min(count, 6))
+        if count > party.childAges.count {
+            party.childAges.append(contentsOf: Array(repeating: Self.defaultChildAge,
+                                                     count: count - party.childAges.count))
+        } else if count < party.childAges.count {
+            party.childAges.removeLast(party.childAges.count - count)
+        }
+    }
+
+    func setAge(_ age: Int, forChildAt index: Int) {
+        guard party.childAges.indices.contains(index) else { return }
+        party.childAges[index] = max(0, min(age, 17))
+    }
+
+    func toggle(_ accommodation: TravelParty.Accommodation) {
+        if party.accommodations.contains(accommodation) {
+            party.accommodations.remove(accommodation)
+        } else {
+            party.accommodations.insert(accommodation)
+        }
+    }
+
+    /// What the party changes, computed from the same values composition uses.
+    var partyEffects: [TravelPartyEffect] {
+        TravelPartyEffects(party: party).summary(against: candidatePlaces)
+    }
+
+    private static let defaultChildAge = 7
 
     // MARK: - Navigation
 
     var canProceed: Bool {
         switch currentStep {
         case .destination:
-            return !destinationName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-        case .datesAndDuration, .styleAndPace, .budgetAndDiet, .summary:
-            return true
+            !destinationName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        case .datesAndDuration, .styleAndPace, .travelParty, .budgetAndDiet, .summary:
+            true
         }
     }
 
-    var isLastStep: Bool {
-        currentStep == .summary
-    }
+    var isLastStep: Bool { currentStep == .summary }
+    var stepCount: Int { Step.allCases.count }
 
     func nextStep() {
-        guard canProceed else { return }
-        if let next = Step(rawValue: currentStep.rawValue + 1) {
-            currentStep = next
-        }
+        guard canProceed, let next = Step(rawValue: currentStep.rawValue + 1) else { return }
+        currentStep = next
+        if next == .travelParty { Task { await loadCandidates() } }
     }
 
     func previousStep() {
-        if let prev = Step(rawValue: currentStep.rawValue - 1) {
-            currentStep = prev
-        }
+        guard let previous = Step(rawValue: currentStep.rawValue - 1) else { return }
+        currentStep = previous
     }
 
-    func goTo(step: Step) {
-        currentStep = step
+    func goTo(step: Step) { currentStep = step }
+
+    // MARK: - Drafts
+
+    private func saveDraft() {
+        guard let drafts, !destinationName.isEmpty, !isLastStep else { return }
+        let draft = InterviewDraft(destination: destinationName,
+                                   step: currentStep.rawValue,
+                                   totalSteps: stepCount,
+                                   nights: nights)
+        Task { await drafts.save(draft) }
     }
 
-    // MARK: - Brief Synthesis
+    /// Called once the plan is generated: a draft for a trip that now exists is
+    /// clutter offering to redo work already done.
+    func clearDraft() {
+        guard let drafts, !destinationName.isEmpty else { return }
+        let id = destinationName.lowercased()
+        Task { await drafts.delete(id: id) }
+    }
+
+    // MARK: - Brief
 
     var brief: TripBrief {
-        TripBrief(
-            destination: destinationName.trimmingCharacters(in: .whitespacesAndNewlines),
-            startDate: startDate,
-            nights: nights,
-            travelStyle: travelStyle,
-            pace: pace,
-            budget: budget,
-            diet: diet,
-            sourceText: synthesizedSentence
-        )
-    }
-
-    var formattedStartDate: String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "de_DE")
-        formatter.dateFormat = "d. MMMM yyyy"
-        return formatter.string(from: startDate)
-    }
-
-    var synthesizedSentence: String {
-        var parts: [String] = []
-        let days = nights + 1
-        parts.append("\(days) Tage \(destinationName.isEmpty ? "Reise" : destinationName)")
-
-        if diet != .none {
-            parts.append(diet.label.lowercased())
-        }
-        parts.append("\(pace.label.lowercased())es Tempo")
-        if travelStyle == .roundTrip {
-            parts.append("Rundreise")
-        }
-        return parts.joined(separator: ", ")
+        TripBrief(destination: destinationName.trimmingCharacters(in: .whitespacesAndNewlines),
+                  startDate: startDate,
+                  nights: nights,
+                  travelStyle: travelStyle,
+                  pace: pace,
+                  budget: budget,
+                  diet: diet,
+                  party: party,
+                  paceOverride: paceOverride,
+                  sourceText: nil)
     }
 }

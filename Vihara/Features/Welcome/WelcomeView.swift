@@ -18,21 +18,27 @@ struct WelcomeView: View {
         .toolbar(.hidden, for: .navigationBar)
     }
 
-    /// The clip never touches the device edges — it sits inside a rounded container
-    /// with a consistent margin all the way round, exactly as the still did.
+    /// Full-screen edge-to-edge video backdrop with editorial gradient scrim.
     private var backdrop: some View {
         VideoBackground(resource: "welcome_loop", poster: "welcome_bg")
             .overlay { Theme.G.welcomeScrim }
-            .clipShape(RoundedRectangle(cornerRadius: Theme.R.welcome, style: .continuous))
-            .padding(Theme.S.welcomeInset)
             .ignoresSafeArea()
     }
 
     private var content: some View {
         VStack(spacing: 0) {
-            Text("Vihara")
-                .viharaText(Theme.F.brand)
-                .foregroundStyle(.white.opacity(Theme.O.brandMark))
+            HStack(spacing: Theme.S.s2) {
+                Image("vihara_logo_white")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(height: 22)
+                    .opacity(Theme.O.brandMark)
+
+                Text("Vihara")
+                    .viharaText(Theme.F.brand)
+                    .foregroundStyle(.white.opacity(Theme.O.brandMark))
+            }
+            .padding(.top, Theme.S.s3)
 
             Spacer(minLength: Theme.S.s6)
 
@@ -49,8 +55,8 @@ struct WelcomeView: View {
                     .frame(maxWidth: measure)
             }
 
-            PullUpControl(title: "Los", label: "Los — Reise entdecken") {
-                router.push(.discover)
+            PullUpControl(title: "Los", label: "Los — Anmelden & Reise entdecken") {
+                router.push(.auth)
             }
             .padding(.top, Theme.S.s7)
         }

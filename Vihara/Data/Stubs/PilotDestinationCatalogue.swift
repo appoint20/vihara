@@ -101,6 +101,10 @@ struct PilotDestinationCatalogue: DestinationCatalogue {
         }
     }
 
+    func candidatePlaces(for destination: Identifier<Destination>) async throws -> [Place] {
+        SampleItineraries.candidatePlaces(for: destination)
+    }
+
     static func fold(_ text: String) -> String {
         text.folding(options: [.diacriticInsensitive, .caseInsensitive], locale: Locale(identifier: "de_DE"))
             .trimmingCharacters(in: .whitespacesAndNewlines)

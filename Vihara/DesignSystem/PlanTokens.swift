@@ -19,19 +19,18 @@ extension Theme {
         /// Three sizes on the main screen, and no more (PRD 5.2).
         enum F {
             /// "Dienstag · 14. April · Bologna"
-            static let dayTitle = TextSpec(size: 22, weight: .semibold, lineHeight: 1.2,
+            static let dayTitle = TextSpec(family: .serif, size: 22, weight: .semibold, lineHeight: 1.2,
                                            relativeTo: .title2)
             /// A *Baustein* — the name of the place.
-            static let item = TextSpec(size: 17, lineHeight: 1.3, relativeTo: .body)
+            static let item = TextSpec(family: .sans, size: 16.5, lineHeight: 1.3, relativeTo: .body)
             /// Times, walking minutes, addresses, badges.
-            static let meta = TextSpec(size: 13, lineHeight: 1.35, relativeTo: .footnote)
-            /// VORMITTAG · NACHMITTAG · ABEND. Tracking is the specified +0.1em,
-            /// which at 11pt is 1.1pt.
-            static let blockLabel = TextSpec(size: 11, weight: .semibold, lineHeight: 1.2,
-                                             tracking: 1.1, uppercase: true, relativeTo: .caption2)
+            static let meta = TextSpec(family: .sans, size: 13, lineHeight: 1.35, relativeTo: .footnote)
+            /// VORMITTAG · NACHMITTAG · ABEND.
+            static let blockLabel = TextSpec(family: .sans, size: 11, weight: .semibold, lineHeight: 1.2,
+                                             tracking: 1.4, uppercase: true, relativeTo: .caption2)
             /// The one primary action a plan screen is allowed.
-            static let action = TextSpec(size: 17, weight: .semibold, lineHeight: 1.2,
-                                         relativeTo: .body)
+            static let action = TextSpec(family: .sans, size: 16, weight: .semibold, lineHeight: 1.2,
+                                         tracking: 0.8, relativeTo: .body)
         }
 
         /// 5pt base grid. Density is not adjustable — that is the point.

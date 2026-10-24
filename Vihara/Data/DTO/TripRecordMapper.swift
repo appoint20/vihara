@@ -38,6 +38,13 @@ struct TripRecordMapper: Sendable {
             pace: brief.pace.rawValue,
             budget: brief.budget.rawValue,
             diet: brief.diet.rawValue,
+            party: TripRecordDTO.Party(
+                adults: brief.party.adults,
+                childAges: brief.party.childAges,
+                // Sorted so a record is byte-stable across saves; a Set has no order
+                // of its own and an unstable file makes every diff noise.
+                accommodations: brief.party.accommodations.map(\.rawValue).sorted()
+            ),
             sourceText: brief.sourceText
         )
     }
@@ -68,6 +75,7 @@ struct TripRecordMapper: Sendable {
             travelFromPrevious: item.travelFromPrevious.map {
                 TripRecordDTO.Travel(mode: $0.mode.rawValue, minutes: $0.minutes)
             },
+            reason: item.reason,
             place: record(from: item.place)
         )
     }
@@ -83,7 +91,13 @@ struct TripRecordMapper: Sendable {
             opensAt: place.openingHours.map { Self.time(from: $0.opensAt) },
             closesAt: place.openingHours.map { Self.time(from: $0.closesAt) },
             requiresTicket: place.requiresTicket,
-            diet: record(from: place.dietSignal)
+            diet: record(from: place.dietSignal),
+            minimumAge: place.minimumAge,
+            admissionPrice: place.admission?.adultPrice.amount,
+            admissionCurrency: place.admission?.adultPrice.currency.rawValue,
+            admissionFreeUnderAge: place.admission?.freeUnderAge,
+            isStepFree: place.isStepFree,
+            checkedAt: place.checkedAt?.timeIntervalSince1970
         )
     }
 
@@ -145,6 +159,18 @@ struct TripRecordMapper: Sendable {
               let diet = TripBrief.DietRequirement(rawValue: dto.diet)
         else { throw DomainError.unexpectedResponse }
 
+        // An accommodation we do not recognise is a contract break like any other
+        // enum on the wire — it would silently drop a consideration the traveller
+        // asked for, and a plan that quietly stops respecting a nap is worse than one
+        // that refuses to open.
+        var accommodations: Set<TravelParty.Accommodation> = []
+        for raw in dto.party.accommodations {
+            guard let mapped = TravelParty.Accommodation(rawValue: raw) else {
+                throw DomainError.unexpectedResponse
+            }
+            accommodations.insert(mapped)
+        }
+
         return TripBrief(destination: dto.destination,
                          startDate: startDate,
                          nights: dto.nights,
@@ -152,6 +178,9 @@ struct TripRecordMapper: Sendable {
                          pace: pace,
                          budget: budget,
                          diet: diet,
+                         party: TravelParty(adults: dto.party.adults,
+                                            childAges: dto.party.childAges,
+                                            accommodations: accommodations),
                          sourceText: dto.sourceText)
     }
 
@@ -200,7 +229,8 @@ struct TripRecordMapper: Sendable {
                              startsAt: startsAt,
                              durationMinutes: dto.durationMinutes,
                              isPinned: dto.pinned,
-                             travelFromPrevious: travel)
+                             travelFromPrevious: travel,
+                             reason: dto.reason)
     }
 
     private func place(from dto: TripRecordDTO.Place) throws -> Place {
@@ -211,6 +241,15 @@ struct TripRecordMapper: Sendable {
             else { throw DomainError.unexpectedResponse }
             hours = OpeningWindow(opensAt: from, closesAt: to)
         }
+        var admission: Admission?
+        if let price = dto.admissionPrice {
+            guard let currency = dto.admissionCurrency.flatMap(Money.Currency.init(rawValue:)) else {
+                throw DomainError.unexpectedResponse
+            }
+            admission = Admission(adultPrice: Money(price, currency),
+                                  freeUnderAge: dto.admissionFreeUnderAge)
+        }
+
         return Place(id: Identifier(dto.id),
                      providerPlaceID: dto.providerPlaceId,
                      name: dto.name,
@@ -218,7 +257,11 @@ struct TripRecordMapper: Sendable {
                      coordinate: Coordinate(latitude: dto.lat, longitude: dto.lng),
                      openingHours: hours,
                      dietSignal: dietSignal(from: dto.diet),
-                     requiresTicket: dto.requiresTicket)
+                     requiresTicket: dto.requiresTicket,
+                     minimumAge: dto.minimumAge,
+                     admission: admission,
+                     isStepFree: dto.isStepFree,
+                     checkedAt: dto.checkedAt.map(Date.init(timeIntervalSince1970:)))
     }
 
     /// Degrades toward less confidence, never more. Same rule as the wire mapper, and

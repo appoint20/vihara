@@ -37,43 +37,114 @@ enum Theme {
         /// Stands in for a photograph that failed to load, so image views degrade
         /// gracefully instead of collapsing to nothing.
         static let imageFallback = Color(light: 0x5A6B4E, dark: 0x3F4A38)
+
+        /// A control that is present but not yet actionable, on the sign-in card.
+        static let disabledFill = Color(light: 0xE7E4E4, dark: 0x2A2726)
     }
 
     // MARK: - Typography
     //
-    // Everything is a serif. `.system(design: .serif)` resolves to New York on iOS,
-    // and — unlike `Font.custom("NewYorkMedium-Regular")` — it picks up the correct
-    // optical size and stays available on every device. Never a sans-serif, including
-    // chrome.
+    // Editorial Luxury combination:
+    // Headings (Serif): Cormorant Garamond
+    // Body & UI (Sans-Serif): Plus Jakarta Sans
+
+    enum FontFamily: Sendable {
+        case serif // Cormorant Garamond
+        case sans  // Plus Jakarta Sans
+
+        func customFontName(weight: Font.Weight) -> String {
+            switch self {
+            case .serif:
+                switch weight {
+                case .bold, .heavy, .black:
+                    return "CormorantGaramond-Bold"
+                case .semibold:
+                    return "CormorantGaramond-SemiBold"
+                case .medium:
+                    return "CormorantGaramond-Medium"
+                default:
+                    return "CormorantGaramond-Regular"
+                }
+            case .sans:
+                switch weight {
+                case .bold, .heavy, .black:
+                    return "PlusJakartaSans-Bold"
+                case .semibold:
+                    return "PlusJakartaSans-SemiBold"
+                case .medium:
+                    return "PlusJakartaSans-Medium"
+                default:
+                    return "PlusJakartaSans-Regular"
+                }
+            }
+        }
+
+        var systemDesign: Font.Design {
+            switch self {
+            case .serif: return .serif
+            case .sans: return .default
+            }
+        }
+    }
 
     enum F {
         // Core scale.
-        static let h1 = TextSpec(size: 34, weight: .semibold, lineHeight: 1.1, relativeTo: .largeTitle)
-        static let h2 = TextSpec(size: 28, weight: .semibold, lineHeight: 1.1, relativeTo: .title)
-        static let h3 = TextSpec(size: 20, weight: .semibold, lineHeight: 1.2, relativeTo: .title3)
-        static let body = TextSpec(size: 16, lineHeight: 1.5, relativeTo: .body)
-        static let small = TextSpec(size: 13, lineHeight: 1.35, relativeTo: .footnote)
-        static let label = TextSpec(size: 11, weight: .semibold, lineHeight: 1.2,
-                                    tracking: 1.4, uppercase: true, relativeTo: .caption2)
+        /// App-Titel / H1 ("Wohin möchten Sie reisen?", "Finde deine schönste Reise")
+        static let h1 = TextSpec(family: .serif, size: 34, weight: .semibold, lineHeight: 1.15, relativeTo: .largeTitle)
+        static let h2 = TextSpec(family: .serif, size: 28, weight: .semibold, lineHeight: 1.15, relativeTo: .title)
+        /// Card-Titel & Sektions-Überschriften (z. B. "Amalfiküste", "Ubud, Bali")
+        static let h3 = TextSpec(family: .serif, size: 20, weight: .medium, lineHeight: 1.2, relativeTo: .title3)
+        /// Body text
+        static let body = TextSpec(family: .sans, size: 15.5, weight: .regular, lineHeight: 1.45, relativeTo: .body)
+        /// Subtitles & Platzhaltertext ("z.B. Bali, Italien, Kyoto...")
+        static let small = TextSpec(family: .sans, size: 13, weight: .regular, lineHeight: 1.35, relativeTo: .footnote)
+        /// Section tags & uppercase headers
+        static let label = TextSpec(family: .sans, size: 11, weight: .semibold, lineHeight: 1.2,
+                                    tracking: 1.6, uppercase: true, relativeTo: .caption2)
 
         // Component steps derived from the scale.
-        /// Screen 1 wordmark — `label` opened up.
-        static let brand = TextSpec(size: 11, weight: .semibold, lineHeight: 1.2,
-                                    tracking: 2.8, uppercase: true, relativeTo: .caption2)
-        /// The `Los` call to action.
-        static let cta = TextSpec(size: 21, weight: .semibold, lineHeight: 1.2, relativeTo: .title3)
-        static let cardTitle = TextSpec(size: 16, weight: .semibold, lineHeight: 1.2, relativeTo: .body)
-        static let compactTitle = TextSpec(size: 14.5, weight: .semibold, lineHeight: 1.2, relativeTo: .subheadline)
-        static let rating = TextSpec(size: 12, weight: .semibold, lineHeight: 1.2, relativeTo: .caption)
-        static let navLabel = TextSpec(size: 14, lineHeight: 1.2, relativeTo: .subheadline)
-        /// One step down, for narrow devices where the four nav labels cannot hold
-        /// their designed size. Unlike `minimumScaleFactor` this reports an honestly
-        /// smaller width, so `ViewThatFits` can actually choose it.
-        static let navLabelCompact = TextSpec(size: 13, lineHeight: 1.2, relativeTo: .subheadline)
-        static let glyph = TextSpec(size: 15, weight: .semibold, lineHeight: 1.2, relativeTo: .subheadline)
-        static let tabActive = TextSpec(size: 16, weight: .semibold, lineHeight: 1.2, relativeTo: .body)
-        static let tabInactive = TextSpec(size: 16, lineHeight: 1.2, relativeTo: .body)
-        static let chevron = TextSpec(size: 15, weight: .semibold, lineHeight: 1.2, relativeTo: .subheadline)
+        /// Brand wordmark ("VIHARA")
+        static let brand = TextSpec(family: .sans, size: 11.5, weight: .semibold, lineHeight: 1.2,
+                                    tracking: 3.0, uppercase: true, relativeTo: .caption2)
+        /// The `Los` call to action
+        static let cta = TextSpec(family: .sans, size: 20, weight: .semibold, lineHeight: 1.2,
+                                  tracking: 1.0, uppercase: false, relativeTo: .title3)
+        static let cardTitle = TextSpec(family: .serif, size: 17, weight: .semibold, lineHeight: 1.2, relativeTo: .body)
+        static let compactTitle = TextSpec(family: .serif, size: 15, weight: .medium, lineHeight: 1.2, relativeTo: .subheadline)
+        /// Metadaten & Tags (z. B. "Wellness & Yoga • 5 ★")
+        static let rating = TextSpec(family: .sans, size: 12, weight: .medium, lineHeight: 1.2, relativeTo: .caption)
+        static let navLabel = TextSpec(family: .sans, size: 11, weight: .semibold, lineHeight: 1.1,
+                                       tracking: 0.8, uppercase: true, relativeTo: .caption2)
+        static let navLabelCompact = TextSpec(family: .sans, size: 10, weight: .semibold, lineHeight: 1.1,
+                                              tracking: 0.6, uppercase: true, relativeTo: .caption2)
+        static let glyph = TextSpec(family: .sans, size: 15, weight: .semibold, lineHeight: 1.2, relativeTo: .subheadline)
+        static let tabActive = TextSpec(family: .sans, size: 15, weight: .semibold, lineHeight: 1.2, relativeTo: .body)
+        static let tabInactive = TextSpec(family: .sans, size: 15, weight: .regular, lineHeight: 1.2, relativeTo: .body)
+        static let chevron = TextSpec(family: .sans, size: 14, weight: .semibold, lineHeight: 1.2, relativeTo: .subheadline)
+
+        // Home surface & inputs.
+        /// "Guten Morgen, Sanya."
+        static let greeting = TextSpec(family: .serif, size: 23, weight: .semibold, lineHeight: 1.25, relativeTo: .title2)
+        /// The sentence input field
+        static let sentence = TextSpec(family: .sans, size: 16.5, weight: .regular, lineHeight: 1.35, relativeTo: .body)
+        /// Text inside a form field. A step below `sentence`, which is sized for
+        /// prose the traveller writes rather than for a credential they type once.
+        static let field = TextSpec(family: .sans, size: 15, weight: .regular, lineHeight: 1.3, relativeTo: .subheadline)
+        /// Chips: destination tokens, recognised slots, moods
+        static let chip = TextSpec(family: .sans, size: 13, weight: .medium, lineHeight: 1.2, relativeTo: .footnote)
+        /// Calendar day number
+        static let dayNumber = TextSpec(family: .sans, size: 16.5, weight: .semibold, lineHeight: 1.2, relativeTo: .body)
+        static let stepperGlyph = TextSpec(family: .sans, size: 17, weight: .semibold, lineHeight: 1.0, relativeTo: .body)
+        /// Tab bar label
+        static let tabLabel = TextSpec(family: .sans, size: 11, weight: .semibold, lineHeight: 1.1,
+                                       tracking: 0.8, uppercase: true, relativeTo: .caption2)
+        /// The label under a provider tile — Apple, Google.
+        static let providerTile = TextSpec(family: .sans, size: 13, weight: .semibold,
+                                           lineHeight: 1.2, relativeTo: .footnote)
+        /// The small uppercase caption at the head of a credential row.
+        static let fieldLabel = TextSpec(family: .sans, size: 10.5, weight: .semibold,
+                                         lineHeight: 1.2, tracking: 0.9, uppercase: true,
+                                         relativeTo: .caption2)
     }
 
     // MARK: - Radius
@@ -91,6 +162,18 @@ enum Theme {
         static let destInner: CGFloat = 18
         static let compactCard: CGFloat = 20
         static let compactThumb: CGFloat = 15
+
+        /// The sentence field. Deliberately the roundest control on the home surface —
+        /// it is the one that behaves like a text field rather than a card.
+        static let sentenceField: CGFloat = 26
+        /// A calendar day cell.
+        static let dayCell: CGFloat = 14
+        /// An expanded interview card, which is large enough that `compactCard` reads
+        /// tight on it.
+        static let expandedCard: CGFloat = 24
+        /// Fields, buttons and tabs on the sign-in card. Square-shouldered — enough
+        /// of a corner not to look cut, nowhere near a capsule.
+        static let control: CGFloat = 8
     }
 
     // MARK: - Spacing (4pt base)
@@ -139,8 +222,49 @@ enum Theme {
         static let headerDot: CGFloat = 6
         static let tabUnderline = CGSize(width: 26, height: 2.5)
         static let hairline: CGFloat = 1
+        /// The border of anything currently selected. Heavier than a hairline so
+        /// selection survives a glance, lighter than 2pt so it does not read as a
+        /// second surface.
+        static let selectedBorder: CGFloat = 1.5
         /// Caps Screen 1's supporting copy at roughly 26 characters per line.
         static let heroMeasure: CGFloat = 200
+
+        // Home surface and interview.
+
+        /// A day in the calendar strip and in the month sheet.
+        static let dayCell: CGFloat = 52
+        /// The `−`/`+` circles inside an expanded interview card.
+        static let stepper: CGFloat = 34
+        /// The icon leading an interview option card.
+        static let optionIcon: CGFloat = 28
+        /// The selection dot trailing one.
+        static let radioDot: CGFloat = 18
+        /// The interview's progress rule.
+        static let progressBar: CGFloat = 3
+        /// A leading glyph inside a field or a list row.
+        static let inlineIcon: CGFloat = 20
+        /// A tab-bar symbol.
+        static let tabIcon: CGFloat = 17
+        /// A provider tile on the sign-in screen — Apple, Google.
+        static let providerTile: CGFloat = 68
+        /// The caption column at the head of a credential row. Wide enough for
+        /// "WIEDERHOLEN", which is the longest of them in German.
+        static let fieldLabel: CGFloat = 96
+        /// One segment of the password-strength indicator.
+        static let strengthBar: CGFloat = 14
+        /// The −/+ circles beside a ``NumberField``. Smaller than the interview's
+        /// steppers because they sit inside a field rather than owning a row; the
+        /// hit target is still 44pt.
+        static let miniStepper: CGFloat = 26
+        /// The route map above the first day of a plan.
+        static let mapStrip: CGFloat = 170
+        /// A numbered stop on that map.
+        static let mapPin: CGFloat = 26
+
+        /// The dash pattern for anything not yet filled in — an empty destination
+        /// slot, a recognition chip still waiting for its value. A dashed outline
+        /// reads as an invitation; a solid one reads as a thing that already exists.
+        static let dash: [CGFloat] = [4, 3]
     }
 
     // MARK: - Opacity
@@ -153,6 +277,9 @@ enum Theme {
         static let destInnerCard: Double = 0.95
         static let glassFill: Double = 0.16
         static let glassStroke: Double = 0.28
+        /// A control that is present but cannot be used yet. Dimmed rather than
+        /// hidden, so the screen does not change shape when it becomes available.
+        static let disabled: Double = 0.35
     }
 
     // MARK: - Scrims
@@ -201,23 +328,26 @@ enum Theme {
 
 extension Theme {
 
-    /// A point-accurate type step that still honours Dynamic Type.
-    struct TextSpec {
+    /// A point-accurate type step that honours custom Google Fonts & Dynamic Type.
+    struct TextSpec: Sendable {
+        let family: FontFamily
         let size: CGFloat
         let weight: Font.Weight
-        /// Multiple of `size`, as in the design spec (34/1.1 → `lineHeight` 1.1).
+        /// Multiple of `size`, as in the design spec (34/1.15 → `lineHeight` 1.15).
         let lineHeight: CGFloat
         let tracking: CGFloat
         let uppercase: Bool
         /// The built-in style this step scales alongside.
         let relativeTo: Font.TextStyle
 
-        init(size: CGFloat,
+        init(family: FontFamily = .sans,
+             size: CGFloat,
              weight: Font.Weight = .regular,
              lineHeight: CGFloat,
              tracking: CGFloat = 0,
              uppercase: Bool = false,
              relativeTo: Font.TextStyle) {
+            self.family = family
             self.size = size
             self.weight = weight
             self.lineHeight = lineHeight
@@ -228,6 +358,14 @@ extension Theme {
 
         /// The extra leading SwiftUI must add to reach the designed line height.
         var lineSpacing: CGFloat { size * (lineHeight - 1) }
+
+        var font: Font {
+            let customName = family.customFontName(weight: weight)
+            if UIFont(name: customName, size: size) != nil {
+                return .custom(customName, size: size, relativeTo: relativeTo)
+            }
+            return .system(size: size, weight: weight, design: family.systemDesign)
+        }
     }
 
     struct ShadowSpec {
@@ -251,8 +389,16 @@ private struct ViharaTextModifier: ViewModifier {
     }
 
     func body(content: Content) -> some View {
+        let customName = spec.family.customFontName(weight: spec.weight)
+        let resolvedFont: Font = {
+            if UIFont(name: customName, size: size) != nil {
+                return .custom(customName, size: size)
+            }
+            return .system(size: size, weight: spec.weight, design: spec.family.systemDesign)
+        }()
+
         content
-            .font(.system(size: size, weight: spec.weight, design: .serif))
+            .font(resolvedFont)
             .tracking(spec.tracking)
             .lineSpacing(lineSpacing)
             .textCase(spec.uppercase ? .uppercase : nil)
@@ -260,7 +406,7 @@ private struct ViharaTextModifier: ViewModifier {
 }
 
 extension View {
-    /// Applies a Vihara type step: serif face, exact point size, designed line height
+    /// Applies a Vihara type step: custom Google Font face, exact point size, designed line height
     /// and tracking — all scaling with the reader's Dynamic Type setting.
     func viharaText(_ spec: Theme.TextSpec) -> some View {
         modifier(ViharaTextModifier(spec))

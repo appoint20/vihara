@@ -24,23 +24,44 @@ struct HeuristicTripBriefParser: TripBriefParsing {
         self.defaultLeadDays = defaultLeadDays
     }
 
-    func parse(_ sentence: String, relativeTo today: Date) async throws -> TripBrief {
+    func recognise(_ sentence: String, relativeTo today: Date) async throws -> ParsedBrief {
         let tokens = Self.tokenise(sentence)
         let destination = try await catalogue.destination(matching: sentence)
 
-        return TripBrief(
+        // Each scanner returns an optional, and the optional *is* the recognition:
+        // `nil` means the sentence did not say, so the brief takes a default and the
+        // chip stays dashed. Working it out any other way — comparing the result
+        // against the default — would call "3 Nächte" unrecognised whenever the
+        // default happened to be three.
+        let nights = Self.nights(tokens: tokens)
+        let pace = Self.pace(tokens: tokens)
+        let diet = Self.diet(tokens: tokens)
+        let party = Self.party(tokens: tokens)
+        let explicitDate = Self.explicitStartDate(tokens: tokens, today: today, calendar: calendar)
+
+        var recognised: Set<BriefSlot> = []
+        if destination != nil { recognised.insert(.destination) }
+        if explicitDate != nil { recognised.insert(.dates) }
+        if nights != nil { recognised.insert(.nights) }
+        if pace != nil { recognised.insert(.pace) }
+        if diet != nil { recognised.insert(.diet) }
+        if party != nil { recognised.insert(.party) }
+
+        let brief = TripBrief(
             destination: destination?.name ?? "",
-            startDate: Self.startDate(tokens: tokens,
-                                      today: today,
-                                      calendar: calendar,
-                                      fallbackLeadDays: defaultLeadDays),
-            nights: Self.nights(tokens: tokens) ?? destination?.suggestedNights ?? 3,
+            startDate: explicitDate ?? calendar.date(byAdding: .day,
+                                                     value: defaultLeadDays,
+                                                     to: calendar.startOfDay(for: today))
+                ?? calendar.startOfDay(for: today),
+            nights: nights ?? destination?.suggestedNights ?? 3,
             travelStyle: tokens.contains("rundreise") ? .roundTrip : .cityBreak,
-            pace: Self.pace(tokens: tokens),
+            pace: pace ?? .balanced,
             budget: Self.budget(tokens: tokens),
-            diet: Self.diet(tokens: tokens),
+            diet: diet ?? .none,
+            party: party ?? .couple,
             sourceText: sentence
         )
+        return ParsedBrief(brief: brief, recognised: recognised)
     }
 
     // MARK: - Scanning
@@ -70,12 +91,17 @@ struct HeuristicTripBriefParser: TripBriefParsing {
         return nil
     }
 
-    static func pace(tokens: [String]) -> TripBrief.Pace {
-        let relaxed = ["entspannt", "entspanntes", "gemutlich", "gemutliches", "ruhig", "langsam"]
-        let packed  = ["intensiv", "kompakt", "straff", "vollgepackt", "viel"]
+    /// `nil` when the sentence says nothing about pace — which is not the same as
+    /// saying "balanced", and the recognition chips depend on the difference.
+    static func pace(tokens: [String]) -> TripBrief.Pace? {
+        let relaxed = ["entspannt", "entspanntes", "gemutlich", "gemutliches", "ruhig", "langsam",
+                       "relaxed", "slow", "easy"]
+        let balanced = ["ausgewogen", "mittel", "balanced"]
+        let packed  = ["intensiv", "kompakt", "straff", "vollgepackt", "viel", "packed"]
         if tokens.contains(where: relaxed.contains) { return .relaxed }
         if tokens.contains(where: packed.contains)  { return .packed }
-        return .balanced
+        if tokens.contains(where: balanced.contains) { return .balanced }
+        return nil
     }
 
     static func budget(tokens: [String]) -> TripBrief.BudgetBand {
@@ -86,16 +112,50 @@ struct HeuristicTripBriefParser: TripBriefParsing {
         return .middle
     }
 
-    static func diet(tokens: [String]) -> TripBrief.DietRequirement {
-        if tokens.contains(where: { $0.hasPrefix("vegan") })      { return .vegan }
-        if tokens.contains(where: { $0.hasPrefix("vegetarisch") }) { return .vegetarian }
-        return .none
+    static func diet(tokens: [String]) -> TripBrief.DietRequirement? {
+        if tokens.contains(where: { $0.hasPrefix("vegan") }) { return .vegan }
+        if tokens.contains(where: { $0.hasPrefix("vegetarisch") || $0.hasPrefix("vegetarian") }) {
+            return .vegetarian
+        }
+        return nil
+    }
+
+    /// Who is coming, when the sentence bothers to say.
+    ///
+    /// Deliberately shallow: it catches the four phrasings people actually type and
+    /// leaves everything else to the interview, which can ask properly. A parser that
+    /// guessed at family shape from a sentence would get it wrong in the direction
+    /// that costs somebody a stop.
+    static func party(tokens: [String]) -> TravelParty? {
+        if tokens.contains(where: ["alleine", "allein", "solo"].contains) { return .solo }
+
+        // "mit 2 Kindern" — a number immediately before the word.
+        for (index, token) in tokens.enumerated() where token.hasPrefix("kind") || token.hasPrefix("child") {
+            if let count = tokens[safe: index - 1].flatMap(Int.init), (1...6).contains(count) {
+                return TravelParty(adults: 2, childAges: Array(repeating: 7, count: count))
+            }
+            return .family
+        }
+
+        if tokens.contains("familie") || tokens.contains("family") { return .family }
+        if tokens.contains("zweit") || tokens.contains("paar") || tokens.contains("couple") {
+            return .couple
+        }
+        return nil
     }
 
     static func startDate(tokens: [String],
                           today: Date,
                           calendar: Calendar,
                           fallbackLeadDays: Int) -> Date {
+        explicitStartDate(tokens: tokens, today: today, calendar: calendar)
+            ?? calendar.date(byAdding: .day, value: fallbackLeadDays,
+                             to: calendar.startOfDay(for: today))
+            ?? calendar.startOfDay(for: today)
+    }
+
+    /// The date the sentence actually names, or `nil` when it names none.
+    static func explicitStartDate(tokens: [String], today: Date, calendar: Calendar) -> Date? {
         let base = calendar.startOfDay(for: today)
 
         if tokens.contains("ubermorgen") {
@@ -107,10 +167,7 @@ struct HeuristicTripBriefParser: TripBriefParsing {
         if tokens.contains("nachste"), tokens.contains("woche") {
             return calendar.date(byAdding: .day, value: 7, to: base) ?? base
         }
-        if let explicit = explicitDate(tokens: tokens, today: base, calendar: calendar) {
-            return explicit
-        }
-        return calendar.date(byAdding: .day, value: fallbackLeadDays, to: base) ?? base
+        return explicitDate(tokens: tokens, today: base, calendar: calendar)
     }
 
     /// "ab 14. April" — a day number followed by a month name. A month on its own

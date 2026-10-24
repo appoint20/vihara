@@ -26,5 +26,19 @@ enum TripGenerationEvent: Hashable, Sendable {
 /// Server-side in production — the intake model runs behind `POST /v1/trips` and the
 /// key never reaches the device.
 protocol TripBriefParsing: Sendable {
-    func parse(_ sentence: String, relativeTo today: Date) async throws -> TripBrief
+    /// Reads the sentence, and reports which slots it genuinely filled.
+    ///
+    /// The recognition half exists because the home screen shows it back live: chips
+    /// land as the traveller types, and the ones still dashed are exactly what the
+    /// interview will otherwise have to ask about. A parser that only returned a
+    /// finished ``TripBrief`` could not tell "you said three nights" apart from "we
+    /// assumed three nights".
+    func recognise(_ sentence: String, relativeTo today: Date) async throws -> ParsedBrief
+}
+
+extension TripBriefParsing {
+    /// Just the brief, for callers that do not care what was assumed.
+    func parse(_ sentence: String, relativeTo today: Date) async throws -> TripBrief {
+        try await recognise(sentence, relativeTo: today).brief
+    }
 }

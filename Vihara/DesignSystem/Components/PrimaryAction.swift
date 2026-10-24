@@ -38,13 +38,13 @@ struct BackControl: View {
             HStack(spacing: Theme.Plan.S.s1) {
                 Image(systemName: "chevron.left")
                     .viharaText(Theme.Plan.F.meta)
-                Text("Zurück")
+                Text("control.back")
                     .viharaText(Theme.Plan.F.meta)
             }
             .foregroundStyle(Theme.C.textMuted)
             .viharaHitTarget()
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("Zurück")
+        .accessibilityLabel(Text("control.back"))
     }
 }

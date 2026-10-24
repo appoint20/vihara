@@ -38,7 +38,16 @@ enum TripRecordDTO {
         let pace: String
         let budget: String
         let diet: String
+        let party: Party
         let sourceText: String?
+    }
+
+    struct Party: Codable {
+        let adults: Int
+        let childAges: [Int]
+        /// Raw values of ``TravelParty/Accommodation``. An array on disk because a
+        /// JSON object has no set; order is not meaningful.
+        let accommodations: [String]
     }
 
     struct Day: Codable {
@@ -64,6 +73,7 @@ enum TripRecordDTO {
         let durationMinutes: Int
         let pinned: Bool
         let travelFromPrevious: Travel?
+        let reason: String?
         let place: Place
     }
 
@@ -83,6 +93,13 @@ enum TripRecordDTO {
         let closesAt: String?
         let requiresTicket: Bool
         let diet: Diet?
+        let minimumAge: Int?
+        let admissionPrice: Decimal?
+        let admissionCurrency: String?
+        let admissionFreeUnderAge: Int?
+        let isStepFree: Bool?
+        /// Seconds since 1970, or `nil` for never checked.
+        let checkedAt: Double?
     }
 
     struct Diet: Codable {

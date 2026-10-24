@@ -15,5 +15,13 @@ protocol DestinationCatalogue: Sendable {
 
     /// Searches destinations matching the given query for autocomplete suggestions.
     func search(query: String) async throws -> [Destination]
+
+    /// Every place a plan for this destination could draw on.
+    ///
+    /// The travel-party step needs these *before* composition runs: it cannot say
+    /// what a party changes without knowing what it is changing, and "Torre degli
+    /// Asinelli fällt raus" is only sayable if the tower was a candidate in the first
+    /// place.
+    func candidatePlaces(for destination: Identifier<Destination>) async throws -> [Place]
 }
 

@@ -6,6 +6,7 @@ import SwiftUI
 /// Regenerating would spend a free generation and could quietly return something
 /// other than what the traveller saved.
 struct SavedTripsView: View {
+    @Environment(\.locale) private var locale
     @Environment(Router.self) private var router
     @State private var model: SavedTripsViewModel
 
@@ -29,10 +30,10 @@ struct SavedTripsView: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: Theme.S.s1) {
-            Text("Gespeichert auf diesem Gerät")
+            Text("trips.subtitle")
                 .viharaText(Theme.F.small)
                 .foregroundStyle(Theme.C.textMuted)
-            Text("Meine Reisen")
+            Text("trips.title")
                 .viharaText(Theme.F.h2)
                 .foregroundStyle(Theme.C.text)
         }
@@ -41,7 +42,7 @@ struct SavedTripsView: View {
     }
 
     private var empty: some View {
-        Text("Noch keine Reise gespeichert. Erstelle einen Plan — er bleibt danach hier, auch offline.")
+        Text("trips.empty")
             .viharaText(Theme.F.body)
             .foregroundStyle(Theme.C.textMuted)
             .fixedSize(horizontal: false, vertical: true)
@@ -58,12 +59,12 @@ struct SavedTripsView: View {
                     row(for: trip)
                 }
                 .buttonStyle(.plain)
-                .accessibilityHint("Plan für \(trip.brief.destination) öffnen")
+                .accessibilityHint(Text(localized("trips.open", trip.brief.destination, locale: locale)))
                 .contextMenu {
                     Button(role: .destructive) {
                         Task { await model.delete(trip) }
                     } label: {
-                        Label("Löschen", systemImage: "trash")
+                        Label { Text("trips.delete") } icon: { Image(systemName: "trash") }
                     }
                 }
             }
@@ -79,11 +80,11 @@ struct SavedTripsView: View {
                     .viharaText(Theme.F.cardTitle)
                     .foregroundStyle(Theme.C.text)
 
-                Text(trip.summaryLabel)
+                Text(trip.summaryLabel(locale: locale))
                     .viharaText(Theme.Plan.F.meta)
                     .foregroundStyle(Theme.C.textMuted)
 
-                Text(trip.sizeLabel)
+                Text(trip.sizeLabel(locale: locale))
                     .viharaText(Theme.Plan.F.meta)
                     .foregroundStyle(Theme.C.textFaint)
             }

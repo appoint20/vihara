@@ -17,11 +17,15 @@ enum PlanTextExport {
     /// - Parameters:
     ///   - brief: what the traveller asked for, rendered as the header line.
     ///   - days: the days validated so far. A partial plan shares as a partial plan.
-    static func text(brief: TripBrief, days: [TripDay]) -> String {
+    static func text(brief: TripBrief, days: [TripDay], locale: Locale = .current) -> String {
         var lines: [String] = []
 
-        lines.append(brief.destination.isEmpty ? "Dein Plan" : brief.destination)
-        lines.append([brief.nightsLabel, brief.pace.label, brief.startDateLabel]
+        lines.append(brief.destination.isEmpty
+                     ? localized("plan.untitled", locale: locale)
+                     : brief.destination)
+        lines.append([brief.nightsLabel(locale: locale),
+                      brief.pace.label(locale: locale),
+                      brief.startDateLabel(locale: locale)]
             .joined(separator: " · "))
 
         for day in days {
@@ -38,7 +42,7 @@ enum PlanTextExport {
         }
 
         lines.append("")
-        lines.append(disclaimer)
+        lines.append(localized("plan.share.disclaimer", locale: locale))
         return lines.joined(separator: "\n")
     }
 
@@ -55,7 +59,7 @@ enum PlanTextExport {
             notes.append(badge.text)
         }
         if item.place.requiresTicket {
-            notes.append("Ticket vorab nötig")
+            notes.append(localized("plan.stop.ticket", locale: .current))
         }
         if let travel = item.travelFromPrevious {
             notes.append(travel.label)
@@ -70,8 +74,7 @@ enum PlanTextExport {
     /// to be part of the text — otherwise the one place the disclaimer matters most,
     /// where somebody else is reading it secondhand, is the one place it is missing.
     /// Kept in step with ``PlanView``'s footnote.
-    static let disclaimer = """
-        Automatisch erstellt mit Vihara. Öffnungszeiten und Adressen sind noch nicht \
-        gegen Live-Daten geprüft — bitte kurz vor Ort bestätigen.
-        """
+    static func disclaimer(locale: Locale = .current) -> String {
+        localized("plan.share.disclaimer", locale: locale)
+    }
 }

@@ -107,7 +107,7 @@ extension PlanWarning {
         case .competingHeadlines:
             "Zwei große Sehenswürdigkeiten in einem Halbtag."
         case let .mealNotVerifiedForDiet(place, diet):
-            "\(place): \(diet.label.lowercased()) nicht belegt."
+            "\(place): \(diet.label(locale: .current).lowercased()) nicht belegt."
         case .missingMeal:
             "Noch kein Essen eingeplant."
         case let .excessiveWalking(minutes, limit):

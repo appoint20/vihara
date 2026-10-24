@@ -57,9 +57,10 @@ struct SavedTripsTests {
     @Test("A row says which trip it is and how big the plan is")
     func rowLabels() {
         let plan = trip("Bologna", createdAt: Fixture.date(2026, 4, 1))
+        let locale = Locale(identifier: "de")
 
-        #expect(plan.summaryLabel.hasPrefix("2 Nächte · ab "))
-        #expect(plan.sizeLabel == "1 Baustein")
+        #expect(plan.summaryLabel(locale: locale).hasPrefix("2 Nächte · ab "))
+        #expect(plan.sizeLabel(locale: locale) == "1 Baustein")
     }
 
     /// Opening a plan the traveller already has must not compose a second one: that
@@ -89,6 +90,6 @@ struct SavedTripsTests {
     @MainActor
     func storedPlanShares() {
         let model = PlanViewModel(trip: trip("Bologna", createdAt: Fixture.date(2026, 4, 1)))
-        #expect(model.shareText.contains("Santo Stefano"))
+        #expect(model.shareText(locale: Locale(identifier: "de")).contains("Santo Stefano"))
     }
 }

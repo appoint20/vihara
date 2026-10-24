@@ -47,7 +47,7 @@ struct PullUpControl: View {
             .task { startHint() }
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(label)
-            .accessibilityHint("Nach oben ziehen oder doppeltippen")
+            .accessibilityHint(Text("control.pullUp"))
             .accessibilityAddTraits(.isButton)
             .accessibilityAction { commit() }
     }

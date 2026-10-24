@@ -6,6 +6,7 @@ import SwiftUI
 /// mirrored back as chips. Everything the sentence did not say already has a value,
 /// so the traveller corrects rather than fills in.
 struct IntakeView: View {
+    @Environment(\.locale) private var locale
     @Environment(Router.self) private var router
     @Environment(\.dismiss) private var dismiss
     @State private var model: IntakeViewModel
@@ -64,7 +65,7 @@ struct IntakeView: View {
     private var prompt: some View {
         VStack(alignment: .leading, spacing: Theme.Plan.S.s2) {
             HStack(alignment: .top) {
-                Text("Worauf hast du Lust?")
+                Text("intake.title")
                     .viharaText(Theme.Plan.F.dayTitle)
                     .foregroundStyle(Theme.C.text)
 
@@ -75,7 +76,7 @@ struct IntakeView: View {
                 } label: {
                     HStack(spacing: Theme.S.s1) {
                         Image(systemName: "sparkles")
-                        Text("Interview-Modus")
+                        Text("intake.mode")
                     }
                     .viharaText(Theme.Plan.F.meta)
                     .foregroundStyle(Theme.C.accentDeep)
@@ -84,7 +85,7 @@ struct IntakeView: View {
                 .buttonStyle(.plain)
             }
 
-            Text("Ein Satz genügt. Was du offen lässt, schlagen wir vor — und du änderst es unten mit einem Tap.")
+            Text("intake.hint")
                 .viharaText(Theme.Plan.F.meta)
                 .foregroundStyle(Theme.C.textMuted)
         }
@@ -121,7 +122,7 @@ struct IntakeView: View {
                 .disabled(model.sentence.isEmpty || model.isInterpreting)
 
                 if let unmatched = model.unrecognisedDestination {
-                    Text("„\(unmatched)“ planen wir noch nicht.")
+                    Text(localized("intake.unmatched", unmatched, locale: locale))
                         .viharaText(Theme.Plan.F.meta)
                         .foregroundStyle(Theme.C.price)
                         .fixedSize(horizontal: false, vertical: true)
@@ -134,7 +135,7 @@ struct IntakeView: View {
 
     private var chips: some View {
         VStack(alignment: .leading, spacing: Theme.Plan.S.s3) {
-            Text("Dein Plan in Stichworten")
+            Text("intake.summary")
                 .viharaText(Theme.Plan.F.blockLabel)
                 .foregroundStyle(Theme.C.textFaint)
 
@@ -144,14 +145,14 @@ struct IntakeView: View {
                          isUnset: model.brief.destination.isEmpty) {
                     model.cycleDestination()
                 }
-                PlanChip(caption: "Ab", value: model.brief.startDateLabel) {
+                PlanChip(caption: "Ab", value: model.brief.startDateLabel(locale: locale)) {
                     isEditingDate = true
                 }
                 nightsChip
-                PlanChip(caption: "Art", value: model.brief.travelStyle.label) { model.cycleStyle() }
-                PlanChip(caption: "Tempo", value: model.brief.pace.label) { model.cyclePace() }
-                PlanChip(caption: "Budget", value: model.brief.budget.label) { model.cycleBudget() }
-                PlanChip(caption: "Ernährung", value: model.brief.diet.label) { model.cycleDiet() }
+                PlanChip(caption: "Art", value: model.brief.travelStyle.label(locale: locale)) { model.cycleStyle() }
+                PlanChip(caption: "Tempo", value: model.brief.pace.label(locale: locale)) { model.cyclePace() }
+                PlanChip(caption: "Budget", value: model.brief.budget.label(locale: locale)) { model.cycleBudget() }
+                PlanChip(caption: "Ernährung", value: model.brief.diet.label(locale: locale)) { model.cycleDiet() }
             }
         }
     }
@@ -163,10 +164,10 @@ struct IntakeView: View {
             stepper("minus", label: "Eine Nacht weniger") { model.adjustNights(by: -1) }
 
             VStack(alignment: .leading, spacing: Theme.S.s05) {
-                Text("Dauer")
+                Text("intake.duration")
                     .viharaText(Theme.Plan.F.blockLabel)
                     .foregroundStyle(Theme.C.textFaint)
-                Text(model.brief.nightsLabel)
+                Text(model.brief.nightsLabel(locale: locale))
                     .viharaText(Theme.Plan.F.meta)
                     .foregroundStyle(Theme.C.text)
             }

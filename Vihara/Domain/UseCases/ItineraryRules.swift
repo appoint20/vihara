@@ -62,9 +62,9 @@ struct ItineraryRules: Sendable {
     func warnings(for block: DayBlock) -> [PlanWarning] {
         var found: [PlanWarning] = []
 
-        if block.items.count > brief.pace.maxItemsPerBlock {
+        if block.items.count > brief.maxItemsPerBlock {
             found.append(PlanWarning(slot: block.slot,
-                                     kind: .blockOverfull(limit: brief.pace.maxItemsPerBlock)))
+                                     kind: .blockOverfull(limit: brief.maxItemsPerBlock)))
         }
 
         if block.items.filter(\.isHeadline).count > 1 {
@@ -107,13 +107,13 @@ struct ItineraryRules: Sendable {
     /// Whether an item may move into a block without creating a hard conflict.
     /// Drives whether a drop target lights up (F-05) before the drop happens.
     func canAccept(_ item: ItineraryItem, into block: DayBlock) -> Bool {
-        guard block.items.count < brief.pace.maxItemsPerBlock else { return false }
+        guard block.items.count < brief.maxItemsPerBlock else { return false }
         if item.isHeadline, block.items.contains(where: \.isHeadline) { return false }
         return true
     }
 
     /// The pace's walking allowance expressed in minutes, at a normal 80 m/min.
     private var walkingMinuteLimit: Int {
-        brief.pace.maxWalkingDistanceInBlock / 80
+        brief.maxWalkingDistanceInBlock / 80
     }
 }

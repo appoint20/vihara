@@ -7,7 +7,7 @@ import SwiftUI
 /// the value are separate: the caption stays put while the value changes, so the eye
 /// does not have to re-find the control it just used.
 struct PlanChip: View {
-    let caption: String
+    let caption: LocalizedStringKey
     let value: String
     /// A chip we could not fill in reads as an invitation, not as an error.
     var isUnset: Bool = false
@@ -35,8 +35,8 @@ struct PlanChip: View {
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(caption): \(value)")
-        .accessibilityHint("Zum Ändern antippen")
+        .accessibilityLabel(Text(value))
+        .accessibilityHint(Text("control.tapToChange"))
     }
 }
 
