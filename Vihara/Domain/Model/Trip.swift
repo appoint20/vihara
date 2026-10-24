@@ -121,6 +121,12 @@ struct ItineraryItem: Hashable, Sendable, Identifiable {
     /// How the traveller gets here from the item before it. Rendered as an aside
     /// between items, never as a row of its own (PRD 3.2).
     var travelFromPrevious: TravelLeg?
+    /// One line on why the planner put this here, revealed behind "Warum hier?".
+    ///
+    /// Free text in production — the composing model writes it. The stub stores
+    /// localization keys instead, which works because an unmatched key renders as
+    /// itself: production prose passes straight through the same lookup untouched.
+    var reason: String?
 
     init(id: Identifier<ItineraryItem> = .generate(),
          place: Place,
@@ -128,7 +134,8 @@ struct ItineraryItem: Hashable, Sendable, Identifiable {
          startsAt: MinuteOfDay? = nil,
          durationMinutes: Int = 60,
          isPinned: Bool = false,
-         travelFromPrevious: TravelLeg? = nil) {
+         travelFromPrevious: TravelLeg? = nil,
+         reason: String? = nil) {
         self.id = id
         self.place = place
         self.kind = kind
@@ -136,6 +143,7 @@ struct ItineraryItem: Hashable, Sendable, Identifiable {
         self.durationMinutes = durationMinutes
         self.isPinned = isPinned
         self.travelFromPrevious = travelFromPrevious
+        self.reason = reason
     }
 
     enum Kind: String, CaseIterable, Hashable, Sendable {
@@ -200,11 +208,4 @@ struct Transfer: Hashable, Sendable {
         case coach
         case ferry
     }
-}
-
-enum AffiliatePartner: String, Hashable, Sendable {
-    case booking
-    case discoverCars
-    case trainline
-    case getYourGuide
 }

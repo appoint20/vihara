@@ -1,0 +1,536 @@
+/* Vihara — English.
+
+   Every key in de.lproj has one here. `Scripts/check-localization.sh` fails the build
+   if the two files drift apart, because a missing key does not crash — it silently
+   ships a German sentence to an English reader. */
+
+// MARK: - Tab bar
+
+"tab.plan"                      = "Plan";
+"tab.trips"                     = "Trips";
+"tab.saved"                     = "Saved";
+"tab.settings"                  = "Settings";
+
+// MARK: - Home · wordmark and greeting
+
+"home.settings.open"            = "Open settings";
+
+"home.greeting.morning"         = "Good morning, %@";
+"home.greeting.afternoon"       = "Good afternoon, %@";
+"home.greeting.evening"         = "Good evening, %@";
+"home.greeting.night"           = "Still up, %@?";
+
+"home.greeting.morning.anon"    = "Good morning";
+"home.greeting.afternoon.anon"  = "Good afternoon";
+"home.greeting.evening.anon"    = "Good evening";
+"home.greeting.night.anon"      = "Still up?";
+
+/* %1$@ destination, %2$@ season. */
+"home.greeting.body"            = "%1$@ in %2$@ is a good call — short distances, long evenings. Tell us in a sentence what you have in mind and we'll build the rest.";
+"home.greeting.body.nowhere"    = "Tell us in one sentence where and how long — we'll build the rest. Emilia-Romagna sits well in %@.";
+
+"home.name.change"              = "Not %@? Change name";
+"home.name.set"                 = "What should we call you?";
+"home.name.field"               = "Your name";
+"home.name.save"                = "Save";
+
+"season.spring"                 = "spring";
+"season.summer"                 = "summer";
+"season.autumn"                 = "autumn";
+"season.winter"                 = "winter";
+
+// MARK: - Home · destinations
+
+"home.stops.title"              = "Your route";
+"home.stops.add"                = "Add a stop";
+"home.stops.caption"            = "The order is the route. Drag to rearrange.";
+"home.stops.nights"             = "%d nights";
+"home.stops.nights.one"         = "1 night";
+"home.stops.remove"             = "Remove %@";
+"home.stops.move"               = "Reorder";
+"home.stops.empty"              = "No stop chosen yet.";
+
+// MARK: - Home · sentence field
+
+"home.sentence.placeholder"     = "5 days in Bologna in May, vegetarian, relaxed pace …";
+"home.sentence.label"           = "Describe your trip";
+/* %1$d recognised, %2$d total. */
+"home.sentence.recognised"      = "Picked up as you type · %1$d of %2$d";
+
+"slot.destination"              = "Where";
+"slot.dates"                    = "Dates";
+"slot.nights"                   = "Length";
+"slot.pace"                     = "Pace";
+"slot.diet"                     = "Diet";
+"slot.party"                    = "Who";
+
+// MARK: - Home · calendar strip
+
+"home.calendar.whole"           = "Full calendar";
+"home.calendar.open"            = "Choose a month";
+/* %1$@ range, %2$@ nights. */
+"home.calendar.caption"         = "%1$@ · %2$@";
+"home.calendar.caption.empty"   = "No dates chosen yet.";
+
+// MARK: - Home · the two ways on
+
+"home.cta.continue"             = "Continue the interview · %d questions";
+"home.cta.continue.done"        = "Build the plan";
+"home.cta.surprise"             = "Surprise me";
+"home.cta.caption"              = "The interview asks who's coming, how fast you want to move and what you'll spend — that's what makes a plan fit. “Surprise me” fills the rest from our defaults and starts now.";
+
+// MARK: - Home · below the fold
+
+"home.mood.title"               = "What are you after?";
+"mood.food"                     = "Food";
+"mood.art"                      = "Art";
+"mood.walking"                  = "On foot";
+"mood.slow"                     = "Slow";
+"mood.markets"                  = "Markets";
+"mood.architecture"             = "Architecture";
+
+"home.rail.title"               = "Curated regions";
+"home.rail.empty"               = "We have no vetted region for %@ yet. We're curating.";
+"home.rail.plan"                = "Plan a trip to %@";
+
+"home.resume.title"             = "Picked up where you left off";
+"home.resume.step"              = "Step %1$d of %2$d";
+"home.resume.empty"             = "Nothing started yet.";
+
+// MARK: - Home · search and preferences
+
+"home.party.children.placeholder" = "0";
+
+"home.party.adults.placeholder"   = "2";
+
+"home.search.placeholder"       = "Search a place — city or region";
+"home.search.searching"         = "Searching …";
+"home.search.none"              = "Nothing found.";
+"home.search.failed"            = "Search is unavailable right now. Curated regions still work.";
+"home.search.notYet"            = "not plannable yet";
+"home.stops.unplannable"        = "We have no vetted index for one stop on this route — the interview explains what that means.";
+
+"home.preferences.title"        = "Your travel style";
+"home.preferences.unset"        = "Not set";
+"slot.budget"                   = "Budget";
+
+"home.cta.quick"                = "Quick start";
+
+// MARK: - Destination categories
+
+"category.food"               = "Food";
+"category.coast"              = "Coast";
+"category.mountains"          = "Mountains";
+"category.cities"             = "Cities";
+"category.nature"             = "Nature";
+
+// MARK: - Calendar sheet
+
+"calendar.title"                = "Choose your dates";
+"calendar.apply"                = "Use these dates";
+"calendar.close"                = "Close";
+"calendar.previousMonth"        = "Previous month";
+"calendar.nextMonth"            = "Next month";
+"calendar.hint"                 = "Tap the day you arrive, then the day you leave.";
+/* %1$@ range, %2$@ nights. */
+"calendar.note.range"           = "%1$@ · %2$@";
+"calendar.note.closure"         = "Many museums close on Mondays — %@ falls on one.";
+"calendar.note.start"           = "Arriving %@. Now pick the day you leave.";
+
+"nights.count"                  = "%d nights";
+"nights.one"                    = "1 night";
+"days.count"                    = "%d days";
+
+// MARK: - Interview
+
+"interview.close"               = "Close";
+"interview.back"                = "Back";
+"interview.next"                = "Next";
+"interview.create"              = "Build the plan";
+/* %1$d current, %2$d total. */
+"interview.progress"            = "Step %1$d of %2$d";
+"interview.custom"              = "Your own numbers";
+"interview.custom.subtitle"     = "Set it yourself instead of taking a preset";
+
+"interview.step.destination.title"      = "Where do you want to go?";
+"interview.step.destination.subtitle"   = "Pick a curated region, or type the city you have in mind.";
+"interview.step.dates.title"            = "When, and how long?";
+"interview.step.dates.subtitle"         = "Dates and length, so the route fits the days you have.";
+"interview.step.pace.title"             = "Style and pace";
+"interview.step.pace.subtitle"          = "How many stops and highlights do you want in a day?";
+"interview.step.party.title"            = "Who's coming?";
+"interview.step.party.subtitle"         = "This changes the plan more than anything else we ask.";
+"interview.step.budget.title"           = "Budget and food";
+"interview.step.budget.subtitle"        = "So the restaurants and activities actually suit you.";
+"interview.step.summary.title"          = "Your trip, set up";
+"interview.step.summary.subtitle"       = "Ready. We'll build the day-by-day plan as it validates.";
+
+/* %1$d building blocks, %2$d days. */
+"interview.footnote.blocks"     = "Makes %1$d building blocks across %2$d days.";
+"interview.footnote.walking"    = "About %d min on foot per half-day.";
+"interview.footnote.meal"       = "Dinner at %@.";
+
+"interview.control.perBlock"    = "Stops per half-day";
+"interview.control.startTime"   = "Day starts at";
+"interview.control.walking"     = "How far on foot?";
+"interview.decrease"            = "Fewer";
+"interview.increase"            = "More";
+
+"style.cityBreak"               = "City break";
+"style.cityBreak.detail"        = "One city — culture, food and neighbourhoods";
+"style.roundTrip"               = "Round trip";
+"style.roundTrip.detail"        = "Several stops, day trips, the wider region";
+
+"pace.relaxed"                  = "Relaxed";
+"pace.relaxed.detail"           = "One highlight per half-day, plenty of room to drift";
+"pace.balanced"                 = "Balanced";
+"pace.balanced.detail"          = "Two highlights per half-day, the middle road";
+"pace.packed"                   = "See a lot";
+"pace.packed.detail"            = "Three highlights per half-day, as much as fits";
+
+"budget.thrifty"                = "Thrifty";
+"budget.thrifty.detail"         = "Free culture and street food";
+"budget.middle"                 = "Middle";
+"budget.middle.detail"          = "Good trattorias, museums, a few paid experiences";
+"budget.premium"                = "Generous";
+"budget.premium.detail"         = "Notable restaurants, guided visits, premium spots";
+
+"diet.none"                     = "Anything";
+"diet.none.detail"              = "The full run of local specialities";
+"diet.vegetarian"               = "Vegetarian";
+"diet.vegetarian.detail"        = "Checked meat-free dishes and options";
+"diet.vegan"                    = "Vegan";
+"diet.vegan.detail"             = "Fully plant-based recommendations";
+
+// MARK: - Travel party
+
+"party.preset.solo"             = "On my own";
+"party.preset.solo.detail"      = "Every call is yours to make";
+"party.preset.couple"           = "Two of us";
+"party.preset.couple.detail"    = "Two adults, no compromises";
+"party.preset.family"           = "Family";
+"party.preset.family.detail"    = "With children — age limits and breaks count";
+
+"party.adults"                  = "Adults";
+"party.children"                = "Children";
+"party.child.age"               = "Child %1$d · %2$d years";
+"party.child.age.one"           = "Child %d · 1 year";
+"party.child.pick"              = "Age of child %d";
+"party.child.years"             = "%d years";
+
+"party.accommodations.title"    = "Plan around";
+"accommodation.middaySleep"     = "Afternoon nap";
+"accommodation.pushchair"       = "Pushchair";
+"accommodation.stepFree"        = "Step-free";
+"accommodation.noLongStanding"  = "No long standing";
+
+"party.effects.title"           = "What this changes";
+"party.effects.none"            = "Nothing — the plan stays as it is.";
+/* %1$@ place, %2$d minimum age, %3$d the child's age. */
+"party.effect.dropped"          = "%1$@ drops out: %2$d and over only, and your youngest is %3$d.";
+"party.effect.nap"              = "%@ stays clear for the nap.";
+"party.effect.dinner"           = "Dinner moves up to %@.";
+"party.effect.free"             = "%1$d child(ren) get into %2$@ free.";
+/* %1$@ place, %2$@ total, %3$d heads. */
+"party.effect.admission"        = "%1$@: %2$@ for %3$d people.";
+"party.effect.stepFree"         = "Step-free routes and entrances only.";
+"party.effect.standing"         = "Nothing with a long queue.";
+
+// MARK: - Plan
+
+"plan.untitled"                 = "Your plan";
+"plan.share.disclaimer"         = "Generated automatically with Vihara. Opening hours and addresses are not yet checked against live data — please confirm before you set off.";
+"plan.share"                    = "Share the plan";
+"plan.retry"                    = "Try again";
+"plan.skeleton"                 = "Putting day %d together …";
+"plan.footnote"                 = "This plan was generated automatically. Opening hours and addresses are not yet checked against live data — please confirm before you set off.";
+
+"plan.map.walking"              = "%@ on foot today";
+"plan.map.openInMaps"           = "Open in Google Maps";
+"plan.map.label"                = "The day's route";
+"plan.stop.route"               = "Route";
+"plan.stop.why"                 = "Why here?";
+"plan.stop.why.hide"            = "Less";
+"plan.stop.ticket"              = "Buy a ticket ahead";
+"plan.stop.minimumAge"          = "%d and over only";
+"plan.stop.admission"           = "%@ entry";
+/* %1$@ source, %2$@ time. */
+"plan.stop.checked"             = "Source: %1$@ · checked %2$@";
+"plan.stop.unchecked"           = "Not yet checked against live data";
+
+// MARK: - Plan · blocks and evidence
+
+"plan.block.free"               = "Free";
+"plan.transfer.from"            = "Arriving from %@";
+"source.providerAttribute"      = "Provider listing";
+"source.venueMenu"              = "The venue's own menu";
+
+// MARK: - Why this stop (stub reasons)
+
+"reason.sanPetronio"            = "Right on Piazza Maggiore, quietest in the morning, and no ticket needed.";
+"reason.quadrilatero"           = "Five minutes on, and before noon the market is working rather than scenery.";
+"reason.asinelli"               = "498 steps, but the only view across the whole old town.";
+"reason.sanLuca"                = "Up the long arcade — in shade through the morning.";
+"reason.archiginnasio"          = "Short and worth it, and it sits on the way back into the centre.";
+"reason.mercatoErbe"            = "Not a restaurant but a hall: good for a late, light meal.";
+"reason.botanica"               = "Fully plant-based and walkable from the afternoon stop.";
+"reason.daGianni"               = "A classic trattoria — small menu, reliable at lunch and dinner.";
+"reason.dellOrsa"               = "Crowded and loud, but the best tagliatelle in the neighbourhood.";
+"reason.modenaDuomo"            = "World Heritage, and right beside the market you visit next.";
+"reason.albinelli"              = "A covered market from 1931 — the best place to buy lunch.";
+"reason.ferrariMuseum"          = "Emptiest in the afternoon, and indoors if it rains.";
+"reason.aldina"                 = "First floor, no sign, tortellini in brodo like someone's grandmother makes.";
+"reason.sanVitale"              = "The mosaics need daylight — which is why this is early, not late.";
+"reason.gallaPlacidia"          = "Only a few minutes allowed inside, but it is next door.";
+"reason.apollinareNuovo"        = "The third mosaic church, and the only one with afternoon light.";
+"reason.caDeVen"                = "A wine house in a Renaissance palace — unfussy and local.";
+
+// MARK: - Shared controls
+
+"control.back"                  = "Back";
+"control.clearSearch"           = "Clear search";
+"control.tapToChange"           = "Tap to change";
+"control.pullUp"                = "Pull up, or double-tap";
+
+// MARK: - Intake (legacy one-sentence screen)
+
+"intake.title"                  = "What are you in the mood for?";
+"intake.mode"                   = "Interview mode";
+"intake.hint"                   = "One sentence is enough. Anything you leave out we'll suggest — change it below with a tap.";
+"intake.unmatched"              = "We don't plan “%@” yet.";
+"intake.summary"                = "Your plan in short";
+"intake.duration"               = "Length";
+
+// MARK: - Saved trips
+
+"trips.title"                   = "My trips";
+"trips.subtitle"                = "Saved on this device";
+"trips.empty"                   = "No trip saved yet. Build a plan — it stays here afterwards, offline too.";
+"trips.open"                    = "Open the plan for %@";
+"trips.delete"                  = "Delete";
+"trips.blocks"                  = "%d building blocks";
+"trips.blocks.one"              = "1 building block";
+"trips.from"                    = "from %@";
+
+// MARK: - Saved places
+
+"saved.title"                   = "Saved";
+"saved.subtitle"                = "Places you've kept";
+"saved.empty"                   = "Nothing saved yet. Tap the bookmark on a region to keep it here.";
+"saved.add"                     = "Save %@";
+"saved.remove"                  = "Remove %@ from saved";
+
+// MARK: - Authentication
+
+"auth.or"                       = "or";
+
+"auth.google.short"             = "Google";
+
+"auth.apple.short"              = "Apple";
+
+"auth.password.hide"            = "Hide password";
+
+"auth.password.show"            = "Show password";
+
+"auth.terms.suffix"            = "";
+
+"auth.terms.link"              = "Terms of Use.";
+
+"auth.terms.prefix"             = "By signing in you agree to the";
+
+"auth.helper.ready"             = "Password is strong enough. All set.";
+
+"auth.helper.almost"            = "Almost. One field still to go.";
+
+"auth.helper.tooShort"          = "A little short — at least 8 characters.";
+
+"auth.register.subtitle"        = "Name, email, password — after that Vihara only asks about the trip.";
+
+"auth.signIn.subtitle"          = "Sign in and your plans are on every device — and your saved list comes with them.";
+
+"auth.error.mismatch"           = "Those passwords don't match.";
+
+"auth.field.confirm.placeholder" = "Repeat password";
+
+"auth.field.confirm"           = "Repeat";
+
+"auth.field.name.placeholder"   = "Max Mustermann";
+
+"auth.field.name"               = "Name";
+
+"auth.apple"                    = "Sign in with Apple";
+"auth.google"                   = "Sign in with Google";
+
+"auth.tab.signIn"               = "Sign in";
+"auth.tab.register"             = "Register";
+"auth.signIn.title"             = "Welcome back";
+"auth.register.title"           = "Start travelling";
+"auth.signIn.submit"            = "Sign in";
+"auth.register.submit"          = "Create account";
+"auth.switch.toRegister"        = "No account yet? Register";
+"auth.switch.toSignIn"          = "Already have an account? Sign in";
+
+
+"auth.field.email"              = "Email";
+"auth.field.email.placeholder"  = "max@mustermann.de";
+"auth.field.password"           = "Password";
+"auth.field.password.placeholder" = "Password";
+"auth.forgotPassword"           = "Forgot password?";
+
+"auth.error.invalid"            = "That email and password don't match.";
+"auth.error.taken"              = "There's already an account for this email.";
+"auth.error.weakPassword"       = "Passwords need at least 8 characters.";
+"auth.error.network"            = "No connection. Please try again.";
+"auth.error.notConfigured"      = "This sign-in route isn't configured in this build. For Apple, the App ID is missing the Sign in with Apple capability.";
+"auth.error.unexpected"         = "Something got in the way.";
+
+
+"settings.signOut"              = "Sign out";
+"settings.account"              = "Account";
+"settings.account.provider.apple"  = "Signed in with Apple";
+"settings.account.provider.google" = "Signed in with Google";
+"settings.account.provider.email"  = "Signed in with email";
+
+// MARK: - Settings
+
+"settings.title"                = "Settings";
+"settings.done"                 = "Done";
+
+"settings.language"             = "Language";
+"settings.language.de"          = "Deutsch";
+"settings.language.en"          = "English";
+
+"settings.traveller"            = "Traveller";
+"settings.traveller.name"       = "Name";
+"settings.traveller.placeholder" = "Your name";
+"settings.traveller.footer"     = "Only used to say hello. Stays on the device.";
+
+"settings.navigation"           = "Navigation";
+"settings.navigation.apple"     = "Apple Maps";
+"settings.navigation.google"    = "Google Maps";
+"settings.navigation.footer"    = "What “Route” opens in the plan.";
+
+"settings.units"                = "Distances";
+"settings.units.metric"         = "Kilometres";
+"settings.units.imperial"       = "Miles";
+
+"settings.about"                = "About Vihara";
+"settings.about.body"           = "Vihara builds day plans from a sentence. Places, addresses and opening hours come from a hand-curated index for the Emilia-Romagna pilot region; live checking against mapping services is not switched on yet. Where something is unchecked, the plan says so.";
+"settings.about.noAccount"      = "No account, no login, no analytics. Your plans live on this device and are never uploaded.";
+"settings.version"              = "Version %1$@ (%2$@)";
+
+/* Offers — F-10. The disclosure is required, not decorative. */
+"offer.kind.ticket" = "Ticket";
+"offer.kind.activity" = "Experience";
+"offer.kind.lodging" = "Stay";
+"offer.kind.transfer" = "Transfer";
+"offer.kind.rail" = "Train";
+"offer.kind.esim" = "eSIM";
+"offer.kind.insurance" = "Travel insurance";
+"offer.disclosure" = "Ad";
+
+/* Editing and reflow — F-05 / F-06. */
+"plan.edit.moveTo" = "Move to…";
+"plan.edit.pin" = "Pin";
+"plan.edit.unpin" = "Unpin";
+"plan.edit.remove" = "Remove";
+"plan.stop.pinned" = "pinned";
+"plan.reflow.suggestion" = "%1$@ would have more room in the %2$@.";
+"plan.reflow.accept" = "Move it";
+"plan.reflow.keep" = "Leave it";
+"plan.edit.refused" = "There is no room for that in this half-day.";
+
+/* Budget and packing — F-11 / F-12. */
+"common.done" = "Done";
+"budget.title" = "Budget";
+"budget.open" = "Budget";
+"budget.empty" = "Nothing to add up yet.";
+"budget.line.admissions" = "Admissions";
+"budget.line.meals" = "Food";
+"budget.line.transfers" = "Transfers";
+"budget.total" = "Together";
+"budget.estimated" = "estimated";
+"budget.from" = "from %@";
+"budget.caveat.estimate" = "Parts of this are estimated, not looked up.";
+"budget.caveat.unpriced" = "%d stop(s) charge admission we do not know.";
+"budget.caveat.lodging" = "Accommodation is not included.";
+"packing.title" = "Packing list";
+"packing.open" = "Packing list";
+"packing.section.documents" = "Documents";
+"packing.section.clothing" = "Clothing";
+"packing.section.gear" = "Gear";
+"packing.section.health" = "Health";
+"packing.item.id" = "ID";
+"packing.item.card" = "Bank card";
+"packing.item.tickets" = "Tickets saved offline";
+"packing.item.childID" = "Child ID";
+"packing.item.sunHat" = "Hat and sun cream";
+"packing.item.lightLayers" = "Light layers";
+"packing.item.warmCoat" = "Warm coat";
+"packing.item.rainJacket" = "Rain jacket";
+"packing.item.walkingShoes" = "Broken-in shoes";
+"packing.item.laundryBag" = "Laundry bag";
+"packing.item.charger" = "Charger";
+"packing.item.powerBank" = "Power bank";
+"packing.item.snacks" = "Snacks for the road";
+"packing.item.stepFreeNote" = "Step-free access measurements noted";
+"packing.item.medication" = "Medication";
+"packing.item.dietSnacks" = "Your own snacks";
+"packing.why.tickets" = "There is often no signal at the door.";
+"packing.why.childID" = "Proof of age for discounts and entry.";
+"packing.why.summer" = "The sun is high at midday.";
+"packing.why.winter" = "It will be cold.";
+"packing.why.shoulder" = "Rain is likely this time of year.";
+"packing.why.walking" = "%@ min on foot in one day.";
+"packing.why.powerBank" = "The plan gets read on a battery that has been navigating.";
+"packing.why.snacks" = "There is time between the blocks.";
+"packing.why.stepFree" = "Step-free access is not verified everywhere.";
+"packing.why.dietSnacks" = "On travel days verified options run out.";
+
+/* Export and paywall — F-08 / F-09. */
+"export.action" = "Export as PDF";
+"export.preparing" = "Preparing…";
+"export.share" = "Share PDF";
+"export.share.preview" = "Share the preview";
+"export.share.text" = "Share as text";
+"export.watermark" = "Preview";
+"export.preview.heading" = "More days";
+"export.preview.footer" = "These days are not included in the preview.";
+"export.failed.empty" = "No plan to export yet.";
+"export.failed.generic" = "The export did not work.";
+"export.failed.notEntitled" = "Your balance does not cover that.";
+"export.failed.offline" = "No connection. Your plan stays readable.";
+"paywall.title" = "Export";
+"paywall.notNow" = "Not now";
+"paywall.headline.purchase" = "This plan without a watermark";
+"paywall.headline.topUp" = "Spent for this period";
+"paywall.body.purchase" = "The preview holds the first day and carries a watermark. Unlocked, you get every day as a clean PDF.";
+"paywall.body.topUp" = "Your exports for this period are spent.";
+"paywall.body.topUp.refills" = "Your exports are spent. New ones arrive on %@.";
+"paywall.product.singleTripUnlock" = "Unlock this plan";
+"paywall.detail.singleTripUnlock" = "One-off, yours to keep";
+"paywall.product.subscription" = "Vihara Plus";
+"paywall.detail.subscription" = "5 exports a month";
+"paywall.product.creditBundle" = "5 exports";
+"paywall.detail.creditBundle" = "They do not expire";
+"paywall.restore" = "Restore purchases";
+"paywall.preview.note" = "You can share the preview right now.";
+"paywall.unavailable" = "The store is not responding right now.";
+"paywall.pending" = "The purchase is awaiting approval. We will unlock it once it clears.";
+"paywall.failed" = "The purchase did not go through. Nothing was charged.";
+"export.summary.one" = "%d day, as a PDF.";
+"export.summary.many" = "%d days, as a PDF.";
+
+/* Shared posts from the share extension — COMPETITION.md wedge 3. */
+"inbox.title" = "Shared posts";
+"inbox.waiting" = "Review %d shared posts";
+"inbox.empty" = "Nothing here right now.";
+"inbox.add" = "Add to route";
+"inbox.remove" = "Discard";
+"inbox.notPlannable" = "not plannable yet";
+"inbox.nothingFound" = "We found no place in this post.";
+"inbox.instagramNote" = "Instagram does not hand out captions. Share the text along with the link and we will find the place.";
+"inbox.source.tiktok" = "TikTok";
+"inbox.source.instagram" = "Instagram";
+"inbox.source.youtube" = "YouTube";
+"inbox.source.unknown" = "Shared link";

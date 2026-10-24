@@ -24,3 +24,10 @@ Carthage/Build/
 
 # macOS
 .DS_Store
+
+# Local API keys and OAuth client ids — see Vihara/Secrets.example.plist
+Vihara/Secrets.plist
+
+# The offer service keeps its markers out of git.
+services/offers/.dev.vars
+services/offers/node_modules/

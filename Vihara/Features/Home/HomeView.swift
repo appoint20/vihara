@@ -1,392 +1,523 @@
 import SwiftUI
 
-/// Screen 2 — Discover Home surface with destination rails, centered city search,
-/// and the Wanderlog-style Trip Planner interview intake section under the cards.
-struct DiscoverView: View {
+/// The home surface. One screenful, top to bottom, and it does not scroll.
+///
+/// Greeting, route, dates, preferences, the two ways on — and then nothing. The rails
+/// and mood chips that used to sit below the fold are gone, because a screen that
+/// does not scroll has no below-the-fold to hide things in. Anything that will not
+/// fit does not belong here.
+///
+/// The one exception is accessibility text sizes, where "fits" stops being true at
+/// any layout: `ViewThatFits` tries the fixed arrangement first and falls back to a
+/// scrolling one. A reader who asked for larger type gets larger type rather than a
+/// truncated screen.
+struct HomeView: View {
     @Environment(Router.self) private var router
-    @State private var model: DiscoverViewModel
+    @Environment(Session.self) private var session
+    @Environment(\.locale) private var locale
+    @Environment(\.calendar) private var calendar
+
+    @AppStorage("travellerName") private var travellerName = ""
+
+    @State private var model: HomeViewModel
+    @State private var inbox: CaptureInboxViewModel
+    @State private var isInboxPresented = false
     @State private var savedTrips: SavedTripsViewModel
     @State private var selectedNav = 0
+    /// The search text lives here, not in the model — see ``HomeViewModel/query``.
+    @State private var searchText = ""
     @FocusState private var isSearchFocused: Bool
 
-    /// Two items, because two screens exist.
-    ///
-    /// This was four — "Merkliste" and "Profil" had no feature behind them and no
-    /// destination wired to them, so three of the four tabs did nothing. Inert
-    /// primary navigation reads as a broken app and is a routine App Review
-    /// rejection. The roadmap already asks whether Merkliste is a real feature; until
-    /// somebody answers, the navigation shows what the app can actually do.
-    private let navItems = ["Entdecken", "Meine Reisen"]
-
-    init(model: DiscoverViewModel, savedTrips: SavedTripsViewModel) {
+    init(model: HomeViewModel, inbox: CaptureInboxViewModel, savedTrips: SavedTripsViewModel) {
         _model = State(wrappedValue: model)
+        _inbox = State(wrappedValue: inbox)
         _savedTrips = State(wrappedValue: savedTrips)
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 0) {
-                if selectedNav == 0 {
-                    header
-                    categoryTabs
-                    destinationRail
-                    sectionHead
-                    compactRail
-                    plannerSearchSection
-                } else {
-                    SavedTripsView(model: savedTrips)
-                }
+        Group {
+            switch selectedNav {
+            case 0: planSurface
+            case 1: scrolling { SavedTripsView(model: savedTrips) }
+            case 2: scrolling { SavedPlacesView(catalogue: model.catalogue) }
+            default: scrolling { SettingsView() }
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.bottom, Theme.S.s8 + Theme.S.navBottom + Theme.S.tapTarget)
         }
-        .scrollDismissesKeyboard(.interactively)
         .background(Theme.C.bg.ignoresSafeArea())
         .safeAreaInset(edge: .bottom, spacing: 0) {
-            BottomNav(items: navItems, selected: $selectedNav)
+            BottomNav(items: NavItem.all, selected: $selectedNav)
                 .padding(.horizontal, Theme.S.screen)
                 .padding(.bottom, Theme.S.navBottom)
+                // The nav belongs to the device, not to the content: riding up on
+                // the keyboard made it look like part of the form. It stays put and
+                // the keyboard covers it, which is what every other iOS tab bar does.
+                .ignoresSafeArea(.keyboard, edges: .bottom)
         }
         .toolbar(.hidden, for: .navigationBar)
         .task { await model.load() }
-        .sheet(isPresented: $model.isInterviewPresented) {
+        // The inbox is read on every appearance, not once: the traveller may have
+        // shared three Reels while the app sat in the background.
+        .task { await inbox.load() }
+        .sheet(isPresented: $isInboxPresented) {
+            CaptureInboxSheet(model: inbox) { suggestion in
+                model.add(suggestion)
+                isInboxPresented = false
+            }
+        }
+        .sheet(isPresented: $model.isCalendarPresented) {
+            CalendarSheet(initial: model.selection) { model.applyDateRange($0) }
+        }
+        .sheet(isPresented: $model.isSettingsPresented) {
+            NavigationStack { scrolling { SettingsView() } }
+        }
+        .sheet(isPresented: $model.isInterviewPresented, onDismiss: {
+            Task { await model.refreshDrafts() }
+        }) {
             TripPlannerInterviewView(
-                model: TripPlannerInterviewViewModel(
-                    catalogue: model.catalogue,
-                    preselectedDestination: model.interviewTargetDestination,
-                    initialCity: model.interviewTargetCity
-                )
+                model: TripPlannerInterviewViewModel(catalogue: model.catalogue,
+                                                     drafts: model.draftStore,
+                                                     seed: model.interviewSeed,
+                                                     resumingAt: model.resumeAtStep)
             )
         }
     }
 
-    // MARK: - Header
+    /// The other tabs are lists and settings — those scroll, as lists do.
+    private func scrolling<Content: View>(@ViewBuilder _ content: () -> Content) -> some View {
+        ScrollView {
+            content()
+                .padding(.bottom, Theme.S.s8 + Theme.S.navBottom + Theme.S.tapTarget)
+        }
+        .scrollDismissesKeyboard(.interactively)
+    }
 
-    private var header: some View {
-        HStack(alignment: .bottom) {
-            VStack(alignment: .leading, spacing: Theme.S.s1) {
-                Text("Guten Morgen, Sanya")
-                    .viharaText(Theme.F.small)
-                    .foregroundStyle(Theme.C.textMuted)
-                Text("Entdecken")
-                    .viharaText(Theme.F.h2)
-                    .foregroundStyle(Theme.C.text)
-            }
+    // MARK: - The plan surface
 
-            Spacer(minLength: Theme.S.s3)
+    /// Does not scroll when it fits, scrolls when it cannot.
+    ///
+    /// This was a `ViewThatFits`, which built and measured *two* copies of the whole
+    /// surface on every keystroke — the search field, the calendar strip, the chips,
+    /// all of it, twice, per character. That is what made typing lag.
+    ///
+    /// `scrollBounceBehavior(.basedOnSize)` gets the same behaviour from one copy:
+    /// the content is laid out once, and the scroll view only actually scrolls when
+    /// it overflows — which at default text sizes it does not.
+    private var planSurface: some View {
+        ScrollView {
+            surface
+        }
+        .scrollBounceBehavior(.basedOnSize)
+        .scrollDismissesKeyboard(.interactively)
+    }
 
-            HStack(spacing: Theme.S.s1) {
-                circleButton("Su", label: "Reise planen", showsDot: false) {
-                    model.launchInterview()
-                }
-                circleButton("Ne", label: "Neuigkeiten", showsDot: true, action: nil)
-            }
+    private var surface: some View {
+        VStack(alignment: .leading, spacing: Theme.S.s5) {
+            wordmarkRow
+            greeting
+            sharedPosts
+            routeSection
+            dateSection
+            preferenceSection
+            waysOn
+            Spacer(minLength: 0)
         }
         .padding(.horizontal, Theme.S.screen)
         .padding(.top, Theme.S.s2)
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    private func circleButton(_ glyph: String,
-                              label: String,
-                              showsDot: Bool,
-                              action: (() -> Void)?) -> some View {
-        Button {
-            action?()
-        } label: {
-            Text(glyph)
-                .viharaText(Theme.F.glyph)
-                .foregroundStyle(Theme.C.text)
-                .frame(width: Theme.Size.headerButton, height: Theme.Size.headerButton)
-                .overlay {
-                    Circle().strokeBorder(Theme.C.border, lineWidth: Theme.Size.hairline)
-                }
-                .overlay(alignment: .topTrailing) {
-                    Circle()
-                        .fill(Theme.C.price)
-                        .frame(width: Theme.Size.headerDot, height: Theme.Size.headerDot)
-                        .opacity(showsDot ? 1 : 0)
-                }
-                .viharaHitTarget()
-        }
-        .buttonStyle(.plain)
-        .disabled(action == nil)
-        .accessibilityLabel(label)
-    }
-
-    // MARK: - Category tabs
-
-    private var categoryTabs: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: Theme.S.s6) {
-                ForEach(DestinationCategory.allCases) { category in
-                    let isActive = category == model.selectedCategory
-                    Button {
-                        Task {
-                            withAnimation(Theme.Motion.tab) {}
-                            await model.select(category)
-                        }
-                    } label: {
-                        VStack(spacing: Theme.S.s2) {
-                            Text(category.label)
-                                .viharaText(isActive ? Theme.F.tabActive : Theme.F.tabInactive)
-                                .foregroundStyle(isActive ? Theme.C.text : Theme.C.textFaint)
-
-                            RoundedRectangle(cornerRadius: Theme.R.pill, style: .continuous)
-                                .fill(Theme.C.text)
-                                .frame(width: Theme.Size.tabUnderline.width,
-                                       height: Theme.Size.tabUnderline.height)
-                                .opacity(isActive ? 1 : 0)
-                        }
-                        .viharaHitTarget()
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityAddTraits(isActive ? [.isSelected] : [])
-                }
-            }
-            .padding(.horizontal, Theme.S.screen)
-        }
-        .padding(.top, Theme.S.s5)
-        .animation(Theme.Motion.tab, value: model.selectedCategory)
-    }
-
-    // MARK: - Rails
-
+    /// Only drawn when something was shared in.
+    ///
+    /// A permanent "0 geteilte Beiträge" row would be exactly the inert chrome the
+    /// design rules refuse — the bottom nav shows two items for the same reason.
     @ViewBuilder
-    private var destinationRail: some View {
-        if model.featuredIsEmpty {
-            Text("Für \(model.selectedCategory.label) haben wir noch keine geprüfte Region. Wir kuratieren gerade.")
-                .viharaText(Theme.F.small)
-                .foregroundStyle(Theme.C.textMuted)
-                .fixedSize(horizontal: false, vertical: true)
-                .frame(height: Theme.Size.destCard.height, alignment: .top)
-                .padding(.horizontal, Theme.S.screen)
-                .padding(.top, Theme.S.s5)
-        } else {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: Theme.S.rail) {
-                    ForEach(model.featured) { destination in
-                        Button {
-                            model.launchInterview(destination: destination)
-                        } label: {
-                            DestinationCard(image: destination.imageSlug,
-                                            title: destination.name,
-                                            subtitle: destination.region,
-                                            rating: destination.formattedRating)
-                        }
-                        .buttonStyle(.plain)
-                        .accessibilityHint("Reise nach \(destination.name) planen")
-                    }
+    private var sharedPosts: some View {
+        if inbox.hasCaptures {
+            Button {
+                isInboxPresented = true
+            } label: {
+                HStack(spacing: Theme.S.s2) {
+                    Text(localized("inbox.waiting", inbox.count, locale: locale))
+                        .viharaText(Theme.F.body)
+                        .foregroundStyle(Theme.C.accentDeep)
+                    Spacer(minLength: 0)
                 }
-                .padding(.horizontal, Theme.S.screen)
+                .viharaInlineHitTarget()
             }
-            .padding(.top, Theme.S.s5)
+            .buttonStyle(.plain)
         }
     }
 
-    private var sectionHead: some View {
-        HStack(alignment: .firstTextBaseline) {
-            Text("Beliebt gerade")
-                .viharaText(Theme.F.h3)
+    // MARK: - 1 · Wordmark
+
+    private var wordmarkRow: some View {
+        HStack(spacing: Theme.S.s2) {
+            Image("vihara_logo")
+                .resizable()
+                .scaledToFit()
+                .frame(height: Theme.Size.tabIcon)
+
+            Text(verbatim: "Vihara")
+                .viharaText(Theme.F.brand)
                 .foregroundStyle(Theme.C.text)
 
             Spacer(minLength: Theme.S.s3)
 
             Button {
-                model.launchInterview()
+                model.isSettingsPresented = true
             } label: {
-                Text("Alle ansehen")
-                    .viharaText(Theme.F.small)
-                    .foregroundStyle(Theme.C.accentDeep)
-                    .viharaInlineHitTarget()
+                Image(systemName: "gearshape")
+                    .viharaText(Theme.F.glyph)
+                    .foregroundStyle(Theme.C.text)
+                    .frame(width: Theme.Size.headerButton, height: Theme.Size.headerButton)
+                    .overlay { Circle().strokeBorder(Theme.C.border, lineWidth: Theme.Size.hairline) }
+                    .viharaHitTarget()
             }
             .buttonStyle(.plain)
+            .accessibilityLabel(Text("home.settings.open"))
         }
-        .padding(.horizontal, Theme.S.screen)
-        .padding(.top, Theme.S.sectionTop)
     }
 
-    private var compactRail: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(alignment: .top, spacing: Theme.S.rail) {
-                ForEach(model.popular) { destination in
+    // MARK: - 2 · Greeting
+
+    /// The name comes from the signed-in account, and is overridden by anything the
+    /// traveller typed into Settings — somebody who corrected their name meant it.
+    private var greeting: some View {
+        HStack(alignment: .firstTextBaseline, spacing: Theme.S.s2) {
+            Image(systemName: "sparkles")
+                .viharaText(Theme.F.glyph)
+                .foregroundStyle(Theme.C.accent)
+
+            Text(HomeDisplay.greeting(name: session.greetingName(overriddenBy: travellerName),
+                                      at: .now,
+                                      calendar: calendar,
+                                      locale: locale))
+                .viharaText(Theme.F.greeting)
+                .foregroundStyle(Theme.C.text)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    // MARK: - 3 · Deine Route
+
+    private var routeSection: some View {
+        VStack(alignment: .leading, spacing: Theme.S.s2) {
+            Text("home.stops.title")
+                .viharaText(Theme.Plan.F.blockLabel)
+                .foregroundStyle(Theme.C.textFaint)
+
+            CitySearchField(text: $searchText,
+                            placeholder: localized("home.search.placeholder", locale: locale),
+                            isFocused: $isSearchFocused) {
+            } onClear: {
+                searchText = ""
+                model.search(for: "")
+            }
+            .onChange(of: searchText) { _, text in
+                model.search(for: text)
+            }
+
+            // Results replace the chips while searching rather than pushing them
+            // down: the screen does not scroll, so nothing may grow without
+            // something else giving way.
+            if isSearchFocused, !searchText.isEmpty {
+                searchResults
+            } else {
+                routeChips
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var searchResults: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            if model.isSearching {
+                Text("home.search.searching")
+                    .viharaText(Theme.Plan.F.meta)
+                    .foregroundStyle(Theme.C.textFaint)
+                    .padding(.vertical, Theme.S.s2)
+            } else if model.searchFailed {
+                Text("home.search.failed")
+                    .viharaText(Theme.Plan.F.meta)
+                    .foregroundStyle(Theme.C.price)
+                    .padding(.vertical, Theme.S.s2)
+            } else if model.suggestions.isEmpty {
+                Text("home.search.none")
+                    .viharaText(Theme.Plan.F.meta)
+                    .foregroundStyle(Theme.C.textFaint)
+                    .padding(.vertical, Theme.S.s2)
+            } else {
+                ForEach(model.suggestions.prefix(Self.maxSuggestions)) { suggestion in
                     Button {
-                        model.launchInterview(destination: destination)
+                        withAnimation(Theme.Plan.Motion.standard) { model.add(suggestion) }
+                        searchText = ""
+                        isSearchFocused = false
+                        Haptics.commit()
                     } label: {
-                        CompactCard(image: destination.imageSlug,
-                                    title: destination.name,
-                                    subtitle: destination.suggestedLengthLabel)
+                        suggestionRow(suggestion)
                     }
                     .buttonStyle(.plain)
                 }
             }
-            .padding(.horizontal, Theme.S.screen)
-            .padding(.vertical, Theme.S.s1)
         }
-        .padding(.top, Theme.S.s4)
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    // MARK: - Center City Search & Trip Planner Interview Section
+    /// Four is what fits without the screen needing to scroll, and more than four
+    /// autocomplete rows is a list nobody reads to the bottom of anyway.
+    private static let maxSuggestions = 4
 
-    private var plannerSearchSection: some View {
-        VStack(alignment: .leading, spacing: Theme.S.s3) {
-            HStack(alignment: .firstTextBaseline) {
-                Text("Reiseziel suchen & planen")
-                    .viharaText(Theme.F.h3)
+    private func suggestionRow(_ suggestion: PlaceSuggestion) -> some View {
+        HStack(spacing: Theme.S.s3) {
+            Image(systemName: suggestion.isPlannable ? "checkmark.seal" : "mappin.and.ellipse")
+                .viharaText(Theme.Plan.F.meta)
+                .foregroundStyle(suggestion.isPlannable ? Theme.C.accent : Theme.C.textFaint)
+                .frame(width: Theme.Size.inlineIcon)
+
+            VStack(alignment: .leading, spacing: 0) {
+                Text(suggestion.name)
+                    .viharaText(Theme.F.chip)
                     .foregroundStyle(Theme.C.text)
-
-                Spacer()
-
-                Text("Wanderlog-Modus")
-                    .viharaText(Theme.Plan.F.blockLabel)
-                    .foregroundStyle(Theme.C.accentDeep)
+                if !suggestion.region.isEmpty {
+                    Text(suggestion.region)
+                        .viharaText(Theme.Plan.F.blockLabel)
+                        .foregroundStyle(Theme.C.textFaint)
+                        .lineLimit(1)
+                }
             }
-            .padding(.horizontal, Theme.S.screen)
-            .padding(.top, Theme.S.sectionTop)
 
-            // Centered Search Field
-            VStack(spacing: Theme.S.s2) {
-                CitySearchField(text: $model.searchQuery,
-                                placeholder: "Stadt oder Region suchen (z.B. Bologna)",
-                                isFocused: $isSearchFocused) {
-                    Task { await model.updateSearch(query: model.searchQuery) }
-                } onClear: {
-                    model.clearSearch()
-                }
-                .onChange(of: model.searchQuery) { _, newValue in
-                    Task { await model.updateSearch(query: newValue) }
-                }
+            Spacer(minLength: Theme.S.s2)
 
-                // Autocomplete Dropdown List if searching
-                if model.isSearching && !model.searchResults.isEmpty {
-                    VStack(alignment: .leading, spacing: 0) {
-                        ForEach(model.searchResults) { dest in
-                            Button {
-                                isSearchFocused = false
-                                model.launchInterview(destination: dest)
-                            } label: {
-                                HStack(spacing: Theme.S.s3) {
-                                    Image(systemName: "mappin.and.ellipse")
-                                        .foregroundStyle(Theme.C.accent)
-                                        .frame(width: 20)
+            // Says which suggestions we can actually plan, rather than letting a
+            // traveller find out three taps later.
+            if !suggestion.isPlannable {
+                Text("home.search.notYet")
+                    .viharaText(Theme.Plan.F.blockLabel)
+                    .foregroundStyle(Theme.C.textFaint)
+            }
+        }
+        .padding(.vertical, Theme.S.s2)
+        .frame(minHeight: Theme.S.tapTarget, alignment: .leading)
+        .contentShape(Rectangle())
+    }
 
-                                    VStack(alignment: .leading, spacing: 2) {
-                                        Text(dest.name)
-                                            .viharaText(Theme.F.compactTitle)
-                                            .foregroundStyle(Theme.C.text)
-
-                                        Text(dest.region)
-                                            .viharaText(Theme.Plan.F.meta)
-                                            .foregroundStyle(Theme.C.textMuted)
-                                    }
-
-                                    Spacer()
-
-                                    Text("Planen")
-                                        .viharaText(Theme.Plan.F.meta)
-                                        .foregroundStyle(Theme.C.accentDeep)
-                                }
-                                .padding(.horizontal, Theme.S.s3)
-                                .padding(.vertical, Theme.S.s2 + 2)
-                                .contentShape(Rectangle())
-                            }
-                            .buttonStyle(.plain)
-
-                            if dest.id != model.searchResults.last?.id {
-                                Divider()
-                                    .padding(.leading, Theme.S.s7)
-                            }
-                        }
+    private var routeChips: some View {
+        VStack(alignment: .leading, spacing: Theme.S.s2) {
+            FlowLayout(spacing: Theme.S.s2, lineSpacing: Theme.S.s2) {
+                ForEach(model.stops) { stop in
+                    TokenChip(title: stop.name,
+                              detail: HomeDisplay.stopNights(stop.nights, locale: locale),
+                              removeLabel: localized("home.stops.remove", stop.name, locale: locale)) {
+                        withAnimation(Theme.Plan.Motion.standard) { model.remove(stop) }
                     }
-                    .background {
-                        RoundedRectangle(cornerRadius: Theme.R.card, style: .continuous)
-                            .fill(Theme.C.surface)
-                            .overlay {
-                                RoundedRectangle(cornerRadius: Theme.R.card, style: .continuous)
-                                    .strokeBorder(Theme.C.border, lineWidth: Theme.Size.hairline)
-                            }
-                            .viharaShadow(Theme.Shadow.card)
+                    .draggable(stop.id) {
+                        TokenChip(title: stop.name, detail: "", removeLabel: "") {}
                     }
-                    .transition(.opacity.combined(with: .move(edge: .top)))
-                }
-
-                // Quick City Suggestion Chips
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: Theme.S.s2) {
-                        ForEach(model.popular) { dest in
-                            Button {
-                                model.launchInterview(destination: dest)
-                            } label: {
-                                HStack(spacing: Theme.S.s1) {
-                                    Image(systemName: "sparkles")
-                                        .viharaText(Theme.Plan.F.meta)
-                                        .foregroundStyle(Theme.C.accentDeep)
-
-                                    Text(dest.name)
-                                        .viharaText(Theme.Plan.F.meta)
-                                        .foregroundStyle(Theme.C.text)
-                                }
-                                .padding(.horizontal, Theme.S.s3)
-                                .padding(.vertical, Theme.S.s2)
-                                .background {
-                                    RoundedRectangle(cornerRadius: Theme.R.pill, style: .continuous)
-                                        .fill(Theme.C.surface)
-                                        .overlay {
-                                            RoundedRectangle(cornerRadius: Theme.R.pill, style: .continuous)
-                                                .strokeBorder(Theme.C.border, lineWidth: Theme.Size.hairline)
-                                        }
-                                }
-                            }
-                            .buttonStyle(.plain)
-                        }
+                    .dropDestination(for: String.self) { items, _ in
+                        move(items.first, before: stop)
                     }
                 }
-                .padding(.top, Theme.S.s1)
+            }
 
-                // Interview Launch CTA Card
+            Text(model.hasUnplannableStop ? "home.stops.unplannable" : "home.stops.caption")
+                .viharaText(Theme.Plan.F.meta)
+                .foregroundStyle(model.hasUnplannableStop ? Theme.C.price : Theme.C.textFaint)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    /// Drag reorder. The payload is the stop's id, unique within a route.
+    private func move(_ draggedID: String?, before target: HomeViewModel.Stop) -> Bool {
+        guard let draggedID,
+              let from = model.stops.firstIndex(where: { $0.id == draggedID }),
+              let to = model.stops.firstIndex(where: { $0.id == target.id }),
+              from != to
+        else { return false }
+
+        withAnimation(Theme.Plan.Motion.standard) {
+            model.move(from: IndexSet(integer: from), to: to > from ? to + 1 : to)
+        }
+        Haptics.commit()
+        return true
+    }
+
+    // MARK: - 4 · Dates
+
+    private var dateSection: some View {
+        VStack(alignment: .leading, spacing: Theme.S.s2) {
+            HStack(alignment: .firstTextBaseline) {
                 Button {
-                    model.launchInterview()
+                    model.isCalendarPresented = true
                 } label: {
-                    HStack(spacing: Theme.S.s3) {
-                        VStack(alignment: .leading, spacing: Theme.S.s05) {
-                            Text("✨ Geführten Trip-Planer starten")
-                                .viharaText(Theme.F.compactTitle)
-                                .foregroundStyle(Theme.C.text)
-
-                            Text("In 4 schnellen Schritten Ziel, Dauer, Budget und Stil wählen.")
-                                .viharaText(Theme.Plan.F.meta)
-                                .foregroundStyle(Theme.C.textMuted)
-                        }
-
-                        Spacer()
-
-                        Image(systemName: "chevron.right")
-                            .viharaText(Theme.F.glyph)
-                            .foregroundStyle(Theme.C.accentDeep)
+                    HStack(spacing: Theme.S.s1) {
+                        Text(monthLabel)
+                            .viharaText(Theme.F.h3)
+                            .foregroundStyle(Theme.C.text)
+                        Image(systemName: "chevron.down")
+                            .viharaText(Theme.F.chevron)
+                            .foregroundStyle(Theme.C.textMuted)
                     }
-                    .padding(Theme.S.s4)
-                    .background {
-                        RoundedRectangle(cornerRadius: Theme.R.card, style: .continuous)
-                            .fill(Theme.C.surface)
-                            .overlay {
-                                RoundedRectangle(cornerRadius: Theme.R.card, style: .continuous)
-                                    .strokeBorder(Theme.C.accent.opacity(0.35), lineWidth: 1)
-                            }
-                            .viharaShadow(Theme.Shadow.card)
-                    }
+                    .viharaInlineHitTarget()
                 }
                 .buttonStyle(.plain)
-                .padding(.top, Theme.S.s2)
+                .accessibilityLabel(Text("home.calendar.open"))
+
+                Spacer(minLength: Theme.S.s3)
+
+                Button {
+                    model.isCalendarPresented = true
+                } label: {
+                    Text("home.calendar.whole")
+                        .viharaText(Theme.F.small)
+                        .foregroundStyle(Theme.C.accentDeep)
+                        .viharaInlineHitTarget()
+                }
+                .buttonStyle(.plain)
             }
-            .padding(.horizontal, Theme.S.screen)
+
+            // The strip is the one thing here that scrolls, and it scrolls sideways:
+            // a week is a line, and breaking it across rows loses the run of days.
+            CalendarStrip(days: model.stripDays, selection: model.selection) { day in
+                withAnimation(Theme.Motion.tab) { model.tapDay(day) }
+            }
+            .padding(.horizontal, -Theme.S.screen)
+
+            Text(dateCaption)
+                .viharaText(Theme.Plan.F.meta)
+                .foregroundStyle(Theme.C.textFaint)
+        }
+    }
+
+    private var monthLabel: String {
+        (model.selection.start ?? .now).formatted(.dateTime.month(.wide).year().locale(locale))
+    }
+
+    private var dateCaption: String {
+        guard let range = HomeDisplay.range(model.selection, locale: locale, calendar: calendar) else {
+            return localized("home.calendar.caption.empty", locale: locale)
+        }
+        let nights = model.selection.nights(in: calendar) ?? model.totalNights
+        return localized("home.calendar.caption", range,
+                         HomeDisplay.nights(nights, locale: locale), locale: locale)
+    }
+
+    // MARK: - 5 · Preferences
+
+    /// Two counts you type and three choices you pick.
+    ///
+    /// Nothing cycles here any more. A count is not an enumeration — reaching "3
+    /// children" by tapping a chip three times is wrong in a way that gets worse the
+    /// larger the number — and even for the three enumerations, a menu costs one tap
+    /// to open and one to answer whatever the answer is.
+    private var preferenceSection: some View {
+        VStack(alignment: .leading, spacing: Theme.S.s2) {
+            Text("home.preferences.title")
+                .viharaText(Theme.Plan.F.blockLabel)
+                .foregroundStyle(Theme.C.textFaint)
+
+            HStack(spacing: Theme.S.s3) {
+                NumberField(caption: "party.adults",
+                            placeholder: localized("home.party.adults.placeholder", locale: locale),
+                            range: 1...9,
+                            text: $model.preferences.adultsText)
+
+                NumberField(caption: "party.children",
+                            placeholder: localized("home.party.children.placeholder", locale: locale),
+                            range: 0...6,
+                            text: $model.preferences.childrenText)
+            }
+
+            FlowLayout(spacing: Theme.S.s2, lineSpacing: Theme.S.s2) {
+                MenuChip(caption: "slot.pace",
+                         options: TripBrief.Pace.allCases.map {
+                             .init(id: $0.rawValue, value: $0, label: $0.label(locale: locale))
+                         },
+                         unsetLabel: unsetLabel,
+                         selection: $model.preferences.pace)
+
+                MenuChip(caption: "slot.diet",
+                         options: TripBrief.DietRequirement.allCases.map {
+                             .init(id: $0.rawValue, value: $0, label: $0.label(locale: locale))
+                         },
+                         unsetLabel: unsetLabel,
+                         selection: $model.preferences.diet)
+
+                MenuChip(caption: "slot.budget",
+                         options: TripBrief.BudgetBand.allCases.map {
+                             .init(id: $0.rawValue, value: $0, label: $0.label(locale: locale))
+                         },
+                         unsetLabel: unsetLabel,
+                         selection: $model.preferences.budget)
+            }
+            .animation(Theme.Motion.tab, value: model.preferences)
+        }
+    }
+
+    private var unsetLabel: String {
+        localized("home.preferences.unset", locale: locale)
+    }
+
+    // MARK: - 6 · The two ways on
+
+    private var waysOn: some View {
+        VStack(alignment: .leading, spacing: Theme.S.s2) {
+            PrimaryAction(title: model.outstandingQuestions == 0
+                            ? localized("home.cta.continue.done", locale: locale)
+                            : localized("home.cta.continue", model.outstandingQuestions, locale: locale)) {
+                model.startInterview()
+            }
+
+            Button {
+                router.push(.plan(brief: model.quickBrief))
+            } label: {
+                Text("home.cta.quick")
+                    .viharaText(Theme.Plan.F.action)
+                    .foregroundStyle(Theme.C.text)
+                    .frame(maxWidth: .infinity)
+                    .frame(minHeight: Theme.S.tapTarget + Theme.Plan.S.s1)
+                    .background {
+                        RoundedRectangle(cornerRadius: Theme.R.pill, style: .continuous)
+                            .strokeBorder(Theme.C.border, lineWidth: Theme.Size.hairline)
+                    }
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .disabled(!model.canGenerate)
+            .opacity(model.canGenerate ? 1 : 0.35)
         }
     }
 }
 
-#Preview {
+#Preview("Home · Deutsch") {
     let dependencies = AppDependencies.stubbed()
     return NavigationStack {
-        DiscoverView(model: DiscoverViewModel(catalogue: dependencies.destinations),
-                     savedTrips: SavedTripsViewModel(trips: dependencies.trips))
+        HomeView(model: HomeViewModel(catalogue: dependencies.destinations,
+                                      placeSearch: dependencies.placeSearch,
+                                      drafts: dependencies.interviewDrafts),
+                 inbox: CaptureInboxViewModel(inbox: dependencies.sharedInbox,
+                                              captions: dependencies.captions,
+                                              vocabulary: dependencies.vocabulary,
+                                              placeSearch: dependencies.placeSearch),
+                 savedTrips: SavedTripsViewModel(trips: dependencies.trips))
     }
     .environment(Router())
+    .environment(Session(service: dependencies.authentication))
+    .environment(\.locale, Locale(identifier: "de"))
+}
+
+#Preview("Home · English") {
+    let dependencies = AppDependencies.stubbed()
+    return NavigationStack {
+        HomeView(model: HomeViewModel(catalogue: dependencies.destinations,
+                                      placeSearch: dependencies.placeSearch,
+                                      drafts: dependencies.interviewDrafts),
+                 inbox: CaptureInboxViewModel(inbox: dependencies.sharedInbox,
+                                              captions: dependencies.captions,
+                                              vocabulary: dependencies.vocabulary,
+                                              placeSearch: dependencies.placeSearch),
+                 savedTrips: SavedTripsViewModel(trips: dependencies.trips))
+    }
+    .environment(Router())
+    .environment(Session(service: dependencies.authentication))
+    .environment(\.locale, Locale(identifier: "en"))
 }
