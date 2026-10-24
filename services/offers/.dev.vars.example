@@ -1,0 +1,18 @@
+# Copy to .dev.vars (git-ignored) and fill in.
+#
+# LINK_SIGNING_SECRET signs /go/ tokens. Anything long and random; rotating it
+# invalidates every outstanding link, which is a feature when a programme ends.
+LINK_SIGNING_SECRET=change-me-to-something-long-and-random
+
+# SUBID_SALT makes sub-ids unguessable and environment-specific. It must differ
+# between staging and production or their click data merges.
+SUBID_SALT=change-me-too
+
+# Affiliate markers. A partner with no marker here is simply not offered — the
+# service refuses to hand out a link that cannot earn.
+GYG_PARTNER_ID=
+BOOKING_AID=
+VIATOR_PID=
+TRAINLINE_AWC=
+WELCOME_REF=
+AIRALO_REF=

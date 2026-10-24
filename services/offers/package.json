@@ -1,0 +1,11 @@
+{
+  "name": "vihara-offers",
+  "private": true,
+  "type": "module",
+  "description": "The offer link service — see docs/MONETISATION.md step 2.",
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  }
+}

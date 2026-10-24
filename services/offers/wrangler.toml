@@ -1,0 +1,24 @@
+name = "vihara-offers"
+main = "src/worker.js"
+compatibility_date = "2026-10-01"
+
+# Markers and secrets are NOT here. `wrangler secret put <NAME>` for deployed
+# environments, `.dev.vars` locally — and `.dev.vars` is git-ignored, because a
+# committed affiliate marker is somebody else's commission.
+#
+#   wrangler secret put LINK_SIGNING_SECRET
+#   wrangler secret put SUBID_SALT
+#   wrangler secret put GYG_PARTNER_ID
+#   wrangler secret put BOOKING_AID
+
+[vars]
+# The origin the minted links point at. Set it per environment, or the service falls
+# back to the origin of the incoming request — which is wrong behind a proxy.
+PUBLIC_ORIGIN = "http://localhost:8787"
+
+# A table, when there is one. Until then clicks go to the log and EPC is counted off
+# that, which is enough to answer the only question step 5 asks.
+# [[d1_databases]]
+# binding = "CLICKS"
+# database_name = "vihara-clicks"
+# database_id = "..."
