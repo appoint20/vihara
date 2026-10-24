@@ -1,0 +1,4453 @@
+{
+ "version": 1,
+ "note": "Mock search corpus. Approximate city-centre coordinates; nothing here is validated.",
+ "cities": [
+  {
+   "id": "aarhus",
+   "name": "Aarhus",
+   "localName": "Aarhus",
+   "country": "Dänemark",
+   "countryCode": "DK",
+   "region": "Midtjylland, Dänemark",
+   "latitude": 56.1629,
+   "longitude": 10.2039,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "abu-dhabi",
+   "name": "Abu Dhabi",
+   "localName": "أبو ظبي",
+   "country": "Vereinigte Arabische Emirate",
+   "countryCode": "AE",
+   "region": "Vereinigte Arabische Emirate",
+   "latitude": 24.4539,
+   "longitude": 54.3773,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "أبو ظبي"
+   ]
+  },
+  {
+   "id": "accra",
+   "name": "Accra",
+   "localName": "Accra",
+   "country": "Ghana",
+   "countryCode": "GH",
+   "region": "Ghana",
+   "latitude": 5.6037,
+   "longitude": -0.187,
+   "categories": [
+    "cities",
+    "coast"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "addis-ababa",
+   "name": "Addis Abeba",
+   "localName": "አዲስ አበባ",
+   "country": "Äthiopien",
+   "countryCode": "ET",
+   "region": "Äthiopien",
+   "latitude": 9.032,
+   "longitude": 38.7469,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Addis Ababa",
+    "አዲስ አበባ"
+   ]
+  },
+  {
+   "id": "alicante",
+   "name": "Alicante",
+   "localName": "Alacant",
+   "country": "Spanien",
+   "countryCode": "ES",
+   "region": "Valencia, Spanien",
+   "latitude": 38.3452,
+   "longitude": -0.481,
+   "categories": [
+    "coast"
+   ],
+   "aliases": [
+    "Alacant"
+   ]
+  },
+  {
+   "id": "amalfi",
+   "name": "Amalfi",
+   "localName": "Amalfi",
+   "country": "Italien",
+   "countryCode": "IT",
+   "region": "Kampanien, Italien",
+   "latitude": 40.634,
+   "longitude": 14.6027,
+   "categories": [
+    "coast",
+    "nature"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "amman",
+   "name": "Amman",
+   "localName": "عمّان",
+   "country": "Jordanien",
+   "countryCode": "JO",
+   "region": "Jordanien",
+   "latitude": 31.9454,
+   "longitude": 35.9284,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "عمّان"
+   ]
+  },
+  {
+   "id": "amsterdam",
+   "name": "Amsterdam",
+   "localName": "Amsterdam",
+   "country": "Niederlande",
+   "countryCode": "NL",
+   "region": "Nordholland, Niederlande",
+   "latitude": 52.3676,
+   "longitude": 4.9041,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "ankara",
+   "name": "Ankara",
+   "localName": "Ankara",
+   "country": "Türkei",
+   "countryCode": "TR",
+   "region": "Türkei",
+   "latitude": 39.9334,
+   "longitude": 32.8597,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "annecy",
+   "name": "Annecy",
+   "localName": "Annecy",
+   "country": "Frankreich",
+   "countryCode": "FR",
+   "region": "Auvergne-Rhône-Alpes, Frankreich",
+   "latitude": 45.8992,
+   "longitude": 6.1294,
+   "categories": [
+    "mountains",
+    "nature"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "antalya",
+   "name": "Antalya",
+   "localName": "Antalya",
+   "country": "Türkei",
+   "countryCode": "TR",
+   "region": "Türkei",
+   "latitude": 36.8969,
+   "longitude": 30.7133,
+   "categories": [
+    "coast"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "antwerp",
+   "name": "Antwerpen",
+   "localName": "Antwerpen",
+   "country": "Belgien",
+   "countryCode": "BE",
+   "region": "Flandern, Belgien",
+   "latitude": 51.2194,
+   "longitude": 4.4025,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Antwerp"
+   ]
+  },
+  {
+   "id": "athens",
+   "name": "Athen",
+   "localName": "Αθήνα",
+   "country": "Griechenland",
+   "countryCode": "GR",
+   "region": "Attika, Griechenland",
+   "latitude": 37.9838,
+   "longitude": 23.7275,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Athens",
+    "Athina",
+    "Αθήνα"
+   ]
+  },
+  {
+   "id": "auckland",
+   "name": "Auckland",
+   "localName": "Auckland",
+   "country": "Neuseeland",
+   "countryCode": "NZ",
+   "region": "Neuseeland",
+   "latitude": -36.8485,
+   "longitude": 174.7633,
+   "categories": [
+    "cities",
+    "coast"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "austin",
+   "name": "Austin",
+   "localName": "Austin",
+   "country": "USA",
+   "countryCode": "US",
+   "region": "Texas, USA",
+   "latitude": 30.2672,
+   "longitude": -97.7431,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "avignon",
+   "name": "Avignon",
+   "localName": "Avignon",
+   "country": "Frankreich",
+   "countryCode": "FR",
+   "region": "Provence, Frankreich",
+   "latitude": 43.9493,
+   "longitude": 4.8055,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "bali",
+   "name": "Bali",
+   "localName": "Bali",
+   "country": "Indonesien",
+   "countryCode": "ID",
+   "region": "Indonesien",
+   "latitude": -8.4095,
+   "longitude": 115.1889,
+   "categories": [
+    "coast",
+    "nature"
+   ],
+   "aliases": [
+    "Denpasar"
+   ]
+  },
+  {
+   "id": "banff",
+   "name": "Banff",
+   "localName": "Banff",
+   "country": "Kanada",
+   "countryCode": "CA",
+   "region": "Alberta, Kanada",
+   "latitude": 51.1784,
+   "longitude": -115.5708,
+   "categories": [
+    "mountains",
+    "nature"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "bangkok",
+   "name": "Bangkok",
+   "localName": "กรุงเทพ",
+   "country": "Thailand",
+   "countryCode": "TH",
+   "region": "Thailand",
+   "latitude": 13.7563,
+   "longitude": 100.5018,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": [
+    "กรุงเทพ"
+   ]
+  },
+  {
+   "id": "barcelona",
+   "name": "Barcelona",
+   "localName": "Barcelona",
+   "country": "Spanien",
+   "countryCode": "ES",
+   "region": "Katalonien, Spanien",
+   "latitude": 41.3874,
+   "longitude": 2.1686,
+   "categories": [
+    "cities",
+    "coast",
+    "food"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "bari",
+   "name": "Bari",
+   "localName": "Bari",
+   "country": "Italien",
+   "countryCode": "IT",
+   "region": "Apulien, Italien",
+   "latitude": 41.1171,
+   "longitude": 16.8719,
+   "categories": [
+    "cities",
+    "coast"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "basel",
+   "name": "Basel",
+   "localName": "Basel",
+   "country": "Schweiz",
+   "countryCode": "CH",
+   "region": "Basel, Schweiz",
+   "latitude": 47.5596,
+   "longitude": 7.5886,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "bath",
+   "name": "Bath",
+   "localName": "Bath",
+   "country": "Vereinigtes Königreich",
+   "countryCode": "GB",
+   "region": "Vereinigtes Königreich",
+   "latitude": 51.3811,
+   "longitude": -2.359,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "belfast",
+   "name": "Belfast",
+   "localName": "Belfast",
+   "country": "Vereinigtes Königreich",
+   "countryCode": "GB",
+   "region": "Nordirland, Vereinigtes Königreich",
+   "latitude": 54.5973,
+   "longitude": -5.9301,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "belgrade",
+   "name": "Belgrad",
+   "localName": "Beograd",
+   "country": "Serbien",
+   "countryCode": "RS",
+   "region": "Serbien",
+   "latitude": 44.7866,
+   "longitude": 20.4489,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Belgrade",
+    "Beograd"
+   ]
+  },
+  {
+   "id": "bergamo",
+   "name": "Bergamo",
+   "localName": "Bergamo",
+   "country": "Italien",
+   "countryCode": "IT",
+   "region": "Lombardei, Italien",
+   "latitude": 45.6983,
+   "longitude": 9.6773,
+   "categories": [
+    "cities",
+    "mountains"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "bergen",
+   "name": "Bergen",
+   "localName": "Bergen",
+   "country": "Norwegen",
+   "countryCode": "NO",
+   "region": "Vestland, Norwegen",
+   "latitude": 60.3913,
+   "longitude": 5.3221,
+   "categories": [
+    "coast",
+    "nature"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "berlin",
+   "name": "Berlin",
+   "localName": "Berlin",
+   "country": "Deutschland",
+   "countryCode": "DE",
+   "region": "Berlin, Deutschland",
+   "latitude": 52.52,
+   "longitude": 13.405,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "bern",
+   "name": "Bern",
+   "localName": "Bern",
+   "country": "Schweiz",
+   "countryCode": "CH",
+   "region": "Bern, Schweiz",
+   "latitude": 46.948,
+   "longitude": 7.4474,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Berne"
+   ]
+  },
+  {
+   "id": "bilbao",
+   "name": "Bilbao",
+   "localName": "Bilbao",
+   "country": "Spanien",
+   "countryCode": "ES",
+   "region": "Baskenland, Spanien",
+   "latitude": 43.263,
+   "longitude": -2.935,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "birmingham",
+   "name": "Birmingham",
+   "localName": "Birmingham",
+   "country": "Vereinigtes Königreich",
+   "countryCode": "GB",
+   "region": "Vereinigtes Königreich",
+   "latitude": 52.4862,
+   "longitude": -1.8904,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "bled",
+   "name": "Bled",
+   "localName": "Bled",
+   "country": "Slowenien",
+   "countryCode": "SI",
+   "region": "Slowenien",
+   "latitude": 46.3683,
+   "longitude": 14.1146,
+   "categories": [
+    "mountains",
+    "nature"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "bogota",
+   "name": "Bogotá",
+   "localName": "Bogotá",
+   "country": "Kolumbien",
+   "countryCode": "CO",
+   "region": "Kolumbien",
+   "latitude": 4.711,
+   "longitude": -74.0721,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "bologna",
+   "name": "Bologna",
+   "localName": "Bologna",
+   "country": "Italien",
+   "countryCode": "IT",
+   "region": "Emilia-Romagna, Italien",
+   "latitude": 44.4949,
+   "longitude": 11.3426,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "bonn",
+   "name": "Bonn",
+   "localName": "Bonn",
+   "country": "Deutschland",
+   "countryCode": "DE",
+   "region": "Nordrhein-Westfalen, Deutschland",
+   "latitude": 50.7374,
+   "longitude": 7.0982,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "bordeaux",
+   "name": "Bordeaux",
+   "localName": "Bordeaux",
+   "country": "Frankreich",
+   "countryCode": "FR",
+   "region": "Nouvelle-Aquitaine, Frankreich",
+   "latitude": 44.8378,
+   "longitude": -0.5792,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "boston",
+   "name": "Boston",
+   "localName": "Boston",
+   "country": "USA",
+   "countryCode": "US",
+   "region": "Massachusetts, USA",
+   "latitude": 42.3601,
+   "longitude": -71.0589,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "bolzano",
+   "name": "Bozen",
+   "localName": "Bolzano",
+   "country": "Italien",
+   "countryCode": "IT",
+   "region": "Südtirol, Italien",
+   "latitude": 46.4983,
+   "longitude": 11.3548,
+   "categories": [
+    "mountains"
+   ],
+   "aliases": [
+    "Bolzano"
+   ]
+  },
+  {
+   "id": "braga",
+   "name": "Braga",
+   "localName": "Braga",
+   "country": "Portugal",
+   "countryCode": "PT",
+   "region": "Norte, Portugal",
+   "latitude": 41.5454,
+   "longitude": -8.4265,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "brasov",
+   "name": "Brașov",
+   "localName": "Brașov",
+   "country": "Rumänien",
+   "countryCode": "RO",
+   "region": "Siebenbürgen, Rumänien",
+   "latitude": 45.6427,
+   "longitude": 25.5887,
+   "categories": [
+    "mountains"
+   ],
+   "aliases": [
+    "Kronstadt"
+   ]
+  },
+  {
+   "id": "bratislava",
+   "name": "Bratislava",
+   "localName": "Bratislava",
+   "country": "Slowakei",
+   "countryCode": "SK",
+   "region": "Slowakei",
+   "latitude": 48.1486,
+   "longitude": 17.1077,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Pressburg"
+   ]
+  },
+  {
+   "id": "bremen",
+   "name": "Bremen",
+   "localName": "Bremen",
+   "country": "Deutschland",
+   "countryCode": "DE",
+   "region": "Bremen, Deutschland",
+   "latitude": 53.0793,
+   "longitude": 8.8017,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "wroclaw",
+   "name": "Breslau",
+   "localName": "Wrocław",
+   "country": "Polen",
+   "countryCode": "PL",
+   "region": "Niederschlesien, Polen",
+   "latitude": 51.1079,
+   "longitude": 17.0385,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Wroclaw",
+    "Wrocław"
+   ]
+  },
+  {
+   "id": "brighton",
+   "name": "Brighton",
+   "localName": "Brighton",
+   "country": "Vereinigtes Königreich",
+   "countryCode": "GB",
+   "region": "Vereinigtes Königreich",
+   "latitude": 50.8225,
+   "longitude": -0.1372,
+   "categories": [
+    "coast"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "brisbane",
+   "name": "Brisbane",
+   "localName": "Brisbane",
+   "country": "Australien",
+   "countryCode": "AU",
+   "region": "Queensland, Australien",
+   "latitude": -27.4698,
+   "longitude": 153.0251,
+   "categories": [
+    "cities",
+    "coast"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "bristol",
+   "name": "Bristol",
+   "localName": "Bristol",
+   "country": "Vereinigtes Königreich",
+   "countryCode": "GB",
+   "region": "Vereinigtes Königreich",
+   "latitude": 51.4545,
+   "longitude": -2.5879,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "brno",
+   "name": "Brno",
+   "localName": "Brno",
+   "country": "Tschechien",
+   "countryCode": "CZ",
+   "region": "Mähren, Tschechien",
+   "latitude": 49.1951,
+   "longitude": 16.6068,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Bruenn"
+   ]
+  },
+  {
+   "id": "bruges",
+   "name": "Brügge",
+   "localName": "Brugge",
+   "country": "Belgien",
+   "countryCode": "BE",
+   "region": "Flandern, Belgien",
+   "latitude": 51.2093,
+   "longitude": 3.2247,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Bruegge",
+    "Bruges"
+   ]
+  },
+  {
+   "id": "brussels",
+   "name": "Brüssel",
+   "localName": "Bruxelles",
+   "country": "Belgien",
+   "countryCode": "BE",
+   "region": "Belgien",
+   "latitude": 50.8503,
+   "longitude": 4.3517,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": [
+    "Bruessel",
+    "Brussels",
+    "Bruxelles"
+   ]
+  },
+  {
+   "id": "budapest",
+   "name": "Budapest",
+   "localName": "Budapest",
+   "country": "Ungarn",
+   "countryCode": "HU",
+   "region": "Ungarn",
+   "latitude": 47.4979,
+   "longitude": 19.0402,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "buenos-aires",
+   "name": "Buenos Aires",
+   "localName": "Buenos Aires",
+   "country": "Argentinien",
+   "countryCode": "AR",
+   "region": "Argentinien",
+   "latitude": -34.6037,
+   "longitude": -58.3816,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "bucharest",
+   "name": "Bukarest",
+   "localName": "București",
+   "country": "Rumänien",
+   "countryCode": "RO",
+   "region": "Rumänien",
+   "latitude": 44.4268,
+   "longitude": 26.1025,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Bucharest",
+    "Bucuresti",
+    "București"
+   ]
+  },
+  {
+   "id": "busan",
+   "name": "Busan",
+   "localName": "부산",
+   "country": "Südkorea",
+   "countryCode": "KR",
+   "region": "Südkorea",
+   "latitude": 35.1796,
+   "longitude": 129.0756,
+   "categories": [
+    "cities",
+    "coast"
+   ],
+   "aliases": [
+    "Pusan",
+    "부산"
+   ]
+  },
+  {
+   "id": "cairns",
+   "name": "Cairns",
+   "localName": "Cairns",
+   "country": "Australien",
+   "countryCode": "AU",
+   "region": "Queensland, Australien",
+   "latitude": -16.9186,
+   "longitude": 145.7781,
+   "categories": [
+    "coast",
+    "nature"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "cambridge",
+   "name": "Cambridge",
+   "localName": "Cambridge",
+   "country": "Vereinigtes Königreich",
+   "countryCode": "GB",
+   "region": "Vereinigtes Königreich",
+   "latitude": 52.2053,
+   "longitude": 0.1218,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "cancun",
+   "name": "Cancún",
+   "localName": "Cancún",
+   "country": "Mexiko",
+   "countryCode": "MX",
+   "region": "Quintana Roo, Mexiko",
+   "latitude": 21.1619,
+   "longitude": -86.8515,
+   "categories": [
+    "coast"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "cannes",
+   "name": "Cannes",
+   "localName": "Cannes",
+   "country": "Frankreich",
+   "countryCode": "FR",
+   "region": "Côte d'Azur, Frankreich",
+   "latitude": 43.5528,
+   "longitude": 7.0174,
+   "categories": [
+    "coast"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "cartagena",
+   "name": "Cartagena",
+   "localName": "Cartagena",
+   "country": "Kolumbien",
+   "countryCode": "CO",
+   "region": "Kolumbien",
+   "latitude": 10.391,
+   "longitude": -75.4794,
+   "categories": [
+    "cities",
+    "coast"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "casablanca",
+   "name": "Casablanca",
+   "localName": "الدار البيضاء",
+   "country": "Marokko",
+   "countryCode": "MA",
+   "region": "Marokko",
+   "latitude": 33.5731,
+   "longitude": -7.5898,
+   "categories": [
+    "cities",
+    "coast"
+   ],
+   "aliases": [
+    "الدار البيضاء"
+   ]
+  },
+  {
+   "id": "catania",
+   "name": "Catania",
+   "localName": "Catania",
+   "country": "Italien",
+   "countryCode": "IT",
+   "region": "Sizilien, Italien",
+   "latitude": 37.5079,
+   "longitude": 15.083,
+   "categories": [
+    "cities",
+    "coast"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "chamonix",
+   "name": "Chamonix",
+   "localName": "Chamonix",
+   "country": "Frankreich",
+   "countryCode": "FR",
+   "region": "Auvergne-Rhône-Alpes, Frankreich",
+   "latitude": 45.9237,
+   "longitude": 6.8694,
+   "categories": [
+    "mountains"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "chania",
+   "name": "Chania",
+   "localName": "Χανιά",
+   "country": "Griechenland",
+   "countryCode": "GR",
+   "region": "Kreta, Griechenland",
+   "latitude": 35.5138,
+   "longitude": 24.018,
+   "categories": [
+    "coast"
+   ],
+   "aliases": [
+    "Χανιά"
+   ]
+  },
+  {
+   "id": "chiang-mai",
+   "name": "Chiang Mai",
+   "localName": "เชียงใหม่",
+   "country": "Thailand",
+   "countryCode": "TH",
+   "region": "Thailand",
+   "latitude": 18.7883,
+   "longitude": 98.9853,
+   "categories": [
+    "mountains",
+    "nature"
+   ],
+   "aliases": [
+    "เชียงใหม่"
+   ]
+  },
+  {
+   "id": "chicago",
+   "name": "Chicago",
+   "localName": "Chicago",
+   "country": "USA",
+   "countryCode": "US",
+   "region": "Illinois, USA",
+   "latitude": 41.8781,
+   "longitude": -87.6298,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "cinque-terre",
+   "name": "Cinque Terre",
+   "localName": "Cinque Terre",
+   "country": "Italien",
+   "countryCode": "IT",
+   "region": "Ligurien, Italien",
+   "latitude": 44.1461,
+   "longitude": 9.6439,
+   "categories": [
+    "coast",
+    "nature"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "cluj",
+   "name": "Cluj-Napoca",
+   "localName": "Cluj-Napoca",
+   "country": "Rumänien",
+   "countryCode": "RO",
+   "region": "Siebenbürgen, Rumänien",
+   "latitude": 46.7712,
+   "longitude": 23.6236,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Klausenburg"
+   ]
+  },
+  {
+   "id": "coimbra",
+   "name": "Coimbra",
+   "localName": "Coimbra",
+   "country": "Portugal",
+   "countryCode": "PT",
+   "region": "Centro, Portugal",
+   "latitude": 40.2033,
+   "longitude": -8.4103,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "colombo",
+   "name": "Colombo",
+   "localName": "කොළඹ",
+   "country": "Sri Lanka",
+   "countryCode": "LK",
+   "region": "Sri Lanka",
+   "latitude": 6.9271,
+   "longitude": 79.8612,
+   "categories": [
+    "cities",
+    "coast"
+   ],
+   "aliases": [
+    "කොළඹ"
+   ]
+  },
+  {
+   "id": "como",
+   "name": "Como",
+   "localName": "Como",
+   "country": "Italien",
+   "countryCode": "IT",
+   "region": "Lombardei, Italien",
+   "latitude": 45.8081,
+   "longitude": 9.0852,
+   "categories": [
+    "mountains",
+    "nature"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "cordoba",
+   "name": "Córdoba",
+   "localName": "Córdoba",
+   "country": "Spanien",
+   "countryCode": "ES",
+   "region": "Andalusien, Spanien",
+   "latitude": 37.8882,
+   "longitude": -4.7794,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "cork",
+   "name": "Cork",
+   "localName": "Cork",
+   "country": "Irland",
+   "countryCode": "IE",
+   "region": "Irland",
+   "latitude": 51.8985,
+   "longitude": -8.4756,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "cusco",
+   "name": "Cusco",
+   "localName": "Cusco",
+   "country": "Peru",
+   "countryCode": "PE",
+   "region": "Peru",
+   "latitude": -13.5319,
+   "longitude": -71.9675,
+   "categories": [
+    "cities",
+    "mountains"
+   ],
+   "aliases": [
+    "Cuzco"
+   ]
+  },
+  {
+   "id": "gdansk",
+   "name": "Danzig",
+   "localName": "Gdańsk",
+   "country": "Polen",
+   "countryCode": "PL",
+   "region": "Pommern, Polen",
+   "latitude": 54.352,
+   "longitude": 18.6466,
+   "categories": [
+    "cities",
+    "coast"
+   ],
+   "aliases": [
+    "Gdansk",
+    "Gdańsk"
+   ]
+  },
+  {
+   "id": "delhi",
+   "name": "Delhi",
+   "localName": "दिल्ली",
+   "country": "Indien",
+   "countryCode": "IN",
+   "region": "Indien",
+   "latitude": 28.6139,
+   "longitude": 77.209,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": [
+    "New Delhi",
+    "दिल्ली"
+   ]
+  },
+  {
+   "id": "the-hague",
+   "name": "Den Haag",
+   "localName": "Den Haag",
+   "country": "Niederlande",
+   "countryCode": "NL",
+   "region": "Südholland, Niederlande",
+   "latitude": 52.0705,
+   "longitude": 4.3007,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "The Hague"
+   ]
+  },
+  {
+   "id": "denver",
+   "name": "Denver",
+   "localName": "Denver",
+   "country": "USA",
+   "countryCode": "US",
+   "region": "Colorado, USA",
+   "latitude": 39.7392,
+   "longitude": -104.9903,
+   "categories": [
+    "cities",
+    "mountains"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "doha",
+   "name": "Doha",
+   "localName": "الدوحة",
+   "country": "Katar",
+   "countryCode": "QA",
+   "region": "Katar",
+   "latitude": 25.2854,
+   "longitude": 51.531,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "الدوحة"
+   ]
+  },
+  {
+   "id": "dresden",
+   "name": "Dresden",
+   "localName": "Dresden",
+   "country": "Deutschland",
+   "countryCode": "DE",
+   "region": "Sachsen, Deutschland",
+   "latitude": 51.0504,
+   "longitude": 13.7373,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "dubai",
+   "name": "Dubai",
+   "localName": "دبي",
+   "country": "Vereinigte Arabische Emirate",
+   "countryCode": "AE",
+   "region": "Vereinigte Arabische Emirate",
+   "latitude": 25.2048,
+   "longitude": 55.2708,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "دبي"
+   ]
+  },
+  {
+   "id": "dublin",
+   "name": "Dublin",
+   "localName": "Dublin",
+   "country": "Irland",
+   "countryCode": "IE",
+   "region": "Irland",
+   "latitude": 53.3498,
+   "longitude": -6.2603,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "dubrovnik",
+   "name": "Dubrovnik",
+   "localName": "Dubrovnik",
+   "country": "Kroatien",
+   "countryCode": "HR",
+   "region": "Dalmatien, Kroatien",
+   "latitude": 42.6507,
+   "longitude": 18.0944,
+   "categories": [
+    "cities",
+    "coast"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "dusseldorf",
+   "name": "Düsseldorf",
+   "localName": "Düsseldorf",
+   "country": "Deutschland",
+   "countryCode": "DE",
+   "region": "Nordrhein-Westfalen, Deutschland",
+   "latitude": 51.2277,
+   "longitude": 6.7735,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "edinburgh",
+   "name": "Edinburgh",
+   "localName": "Edinburgh",
+   "country": "Vereinigtes Königreich",
+   "countryCode": "GB",
+   "region": "Schottland, Vereinigtes Königreich",
+   "latitude": 55.9533,
+   "longitude": -3.1883,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "eindhoven",
+   "name": "Eindhoven",
+   "localName": "Eindhoven",
+   "country": "Niederlande",
+   "countryCode": "NL",
+   "region": "Nordbrabant, Niederlande",
+   "latitude": 51.4416,
+   "longitude": 5.4697,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "faro",
+   "name": "Faro",
+   "localName": "Faro",
+   "country": "Portugal",
+   "countryCode": "PT",
+   "region": "Algarve, Portugal",
+   "latitude": 37.0194,
+   "longitude": -7.9304,
+   "categories": [
+    "coast"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "fes",
+   "name": "Fès",
+   "localName": "فاس",
+   "country": "Marokko",
+   "countryCode": "MA",
+   "region": "Marokko",
+   "latitude": 34.0181,
+   "longitude": -5.0078,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Fez",
+    "فاس"
+   ]
+  },
+  {
+   "id": "florence",
+   "name": "Florenz",
+   "localName": "Firenze",
+   "country": "Italien",
+   "countryCode": "IT",
+   "region": "Toskana, Italien",
+   "latitude": 43.7696,
+   "longitude": 11.2558,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": [
+    "Firenze",
+    "Florence"
+   ]
+  },
+  {
+   "id": "formentera",
+   "name": "Formentera",
+   "localName": "Formentera",
+   "country": "Spanien",
+   "countryCode": "ES",
+   "region": "Balearen, Spanien",
+   "latitude": 38.7,
+   "longitude": 1.45,
+   "categories": [
+    "coast",
+    "nature"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "frankfurt",
+   "name": "Frankfurt am Main",
+   "localName": "Frankfurt",
+   "country": "Deutschland",
+   "countryCode": "DE",
+   "region": "Hessen, Deutschland",
+   "latitude": 50.1109,
+   "longitude": 8.6821,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Frankfurt"
+   ]
+  },
+  {
+   "id": "freiburg",
+   "name": "Freiburg im Breisgau",
+   "localName": "Freiburg",
+   "country": "Deutschland",
+   "countryCode": "DE",
+   "region": "Baden-Württemberg, Deutschland",
+   "latitude": 47.999,
+   "longitude": 7.8421,
+   "categories": [
+    "cities",
+    "mountains"
+   ],
+   "aliases": [
+    "Freiburg"
+   ]
+  },
+  {
+   "id": "funchal",
+   "name": "Funchal",
+   "localName": "Funchal",
+   "country": "Portugal",
+   "countryCode": "PT",
+   "region": "Madeira, Portugal",
+   "latitude": 32.6669,
+   "longitude": -16.9241,
+   "categories": [
+    "coast",
+    "nature"
+   ],
+   "aliases": [
+    "Madeira"
+   ]
+  },
+  {
+   "id": "galway",
+   "name": "Galway",
+   "localName": "Galway",
+   "country": "Irland",
+   "countryCode": "IE",
+   "region": "Irland",
+   "latitude": 53.2707,
+   "longitude": -9.0568,
+   "categories": [
+    "coast",
+    "nature"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "geneva",
+   "name": "Genf",
+   "localName": "Genève",
+   "country": "Schweiz",
+   "countryCode": "CH",
+   "region": "Genf, Schweiz",
+   "latitude": 46.2044,
+   "longitude": 6.1432,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Geneva",
+    "Geneve",
+    "Genève"
+   ]
+  },
+  {
+   "id": "ghent",
+   "name": "Gent",
+   "localName": "Gent",
+   "country": "Belgien",
+   "countryCode": "BE",
+   "region": "Flandern, Belgien",
+   "latitude": 51.0543,
+   "longitude": 3.7174,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Ghent"
+   ]
+  },
+  {
+   "id": "genoa",
+   "name": "Genua",
+   "localName": "Genova",
+   "country": "Italien",
+   "countryCode": "IT",
+   "region": "Ligurien, Italien",
+   "latitude": 44.4056,
+   "longitude": 8.9463,
+   "categories": [
+    "cities",
+    "coast"
+   ],
+   "aliases": [
+    "Genoa",
+    "Genova"
+   ]
+  },
+  {
+   "id": "glasgow",
+   "name": "Glasgow",
+   "localName": "Glasgow",
+   "country": "Vereinigtes Königreich",
+   "countryCode": "GB",
+   "region": "Schottland, Vereinigtes Königreich",
+   "latitude": 55.8642,
+   "longitude": -4.2518,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "goa",
+   "name": "Goa",
+   "localName": "Goa",
+   "country": "Indien",
+   "countryCode": "IN",
+   "region": "Indien",
+   "latitude": 15.2993,
+   "longitude": 74.124,
+   "categories": [
+    "coast"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "gothenburg",
+   "name": "Göteborg",
+   "localName": "Göteborg",
+   "country": "Schweden",
+   "countryCode": "SE",
+   "region": "Västra Götaland, Schweden",
+   "latitude": 57.7089,
+   "longitude": 11.9746,
+   "categories": [
+    "cities",
+    "coast"
+   ],
+   "aliases": [
+    "Gothenburg"
+   ]
+  },
+  {
+   "id": "granada",
+   "name": "Granada",
+   "localName": "Granada",
+   "country": "Spanien",
+   "countryCode": "ES",
+   "region": "Andalusien, Spanien",
+   "latitude": 37.1773,
+   "longitude": -3.5986,
+   "categories": [
+    "cities",
+    "mountains"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "graz",
+   "name": "Graz",
+   "localName": "Graz",
+   "country": "Österreich",
+   "countryCode": "AT",
+   "region": "Steiermark, Österreich",
+   "latitude": 47.0707,
+   "longitude": 15.4395,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "hallstatt",
+   "name": "Hallstatt",
+   "localName": "Hallstatt",
+   "country": "Österreich",
+   "countryCode": "AT",
+   "region": "Oberösterreich, Österreich",
+   "latitude": 47.5622,
+   "longitude": 13.6493,
+   "categories": [
+    "mountains",
+    "nature"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "hamburg",
+   "name": "Hamburg",
+   "localName": "Hamburg",
+   "country": "Deutschland",
+   "countryCode": "DE",
+   "region": "Hamburg, Deutschland",
+   "latitude": 53.5511,
+   "longitude": 9.9937,
+   "categories": [
+    "cities",
+    "coast"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "hanover",
+   "name": "Hannover",
+   "localName": "Hannover",
+   "country": "Deutschland",
+   "countryCode": "DE",
+   "region": "Niedersachsen, Deutschland",
+   "latitude": 52.3759,
+   "longitude": 9.732,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Hanover"
+   ]
+  },
+  {
+   "id": "hanoi",
+   "name": "Hanoi",
+   "localName": "Hà Nội",
+   "country": "Vietnam",
+   "countryCode": "VN",
+   "region": "Vietnam",
+   "latitude": 21.0285,
+   "longitude": 105.8542,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": [
+    "Hà Nội"
+   ]
+  },
+  {
+   "id": "havana",
+   "name": "Havanna",
+   "localName": "La Habana",
+   "country": "Kuba",
+   "countryCode": "CU",
+   "region": "Kuba",
+   "latitude": 23.1136,
+   "longitude": -82.3666,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Havana",
+    "La Habana"
+   ]
+  },
+  {
+   "id": "heidelberg",
+   "name": "Heidelberg",
+   "localName": "Heidelberg",
+   "country": "Deutschland",
+   "countryCode": "DE",
+   "region": "Baden-Württemberg, Deutschland",
+   "latitude": 49.3988,
+   "longitude": 8.6724,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "helsinki",
+   "name": "Helsinki",
+   "localName": "Helsinki",
+   "country": "Finnland",
+   "countryCode": "FI",
+   "region": "Uusimaa, Finnland",
+   "latitude": 60.1699,
+   "longitude": 24.9384,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "heraklion",
+   "name": "Heraklion",
+   "localName": "Ηράκλειο",
+   "country": "Griechenland",
+   "countryCode": "GR",
+   "region": "Kreta, Griechenland",
+   "latitude": 35.3387,
+   "longitude": 25.1442,
+   "categories": [
+    "cities",
+    "coast"
+   ],
+   "aliases": [
+    "Iraklion",
+    "Ηράκλειο"
+   ]
+  },
+  {
+   "id": "hiroshima",
+   "name": "Hiroshima",
+   "localName": "広島",
+   "country": "Japan",
+   "countryCode": "JP",
+   "region": "Japan",
+   "latitude": 34.3853,
+   "longitude": 132.4553,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "広島"
+   ]
+  },
+  {
+   "id": "ho-chi-minh",
+   "name": "Ho-Chi-Minh-Stadt",
+   "localName": "Thành phố Hồ Chí Minh",
+   "country": "Vietnam",
+   "countryCode": "VN",
+   "region": "Vietnam",
+   "latitude": 10.8231,
+   "longitude": 106.6297,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": [
+    "Ho Chi Minh City",
+    "Saigon",
+    "Thành phố Hồ Chí Minh"
+   ]
+  },
+  {
+   "id": "hong-kong",
+   "name": "Hongkong",
+   "localName": "香港",
+   "country": "Hongkong",
+   "countryCode": "HK",
+   "region": "Hongkong",
+   "latitude": 22.3193,
+   "longitude": 114.1694,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": [
+    "Hong Kong",
+    "香港"
+   ]
+  },
+  {
+   "id": "honolulu",
+   "name": "Honolulu",
+   "localName": "Honolulu",
+   "country": "USA",
+   "countryCode": "US",
+   "region": "Hawaii, USA",
+   "latitude": 21.3069,
+   "longitude": -157.8583,
+   "categories": [
+    "coast"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "hurghada",
+   "name": "Hurghada",
+   "localName": "الغردقة",
+   "country": "Ägypten",
+   "countryCode": "EG",
+   "region": "Ägypten",
+   "latitude": 27.2579,
+   "longitude": 33.8116,
+   "categories": [
+    "coast"
+   ],
+   "aliases": [
+    "الغردقة"
+   ]
+  },
+  {
+   "id": "ibiza",
+   "name": "Ibiza",
+   "localName": "Eivissa",
+   "country": "Spanien",
+   "countryCode": "ES",
+   "region": "Balearen, Spanien",
+   "latitude": 38.9067,
+   "longitude": 1.4206,
+   "categories": [
+    "coast"
+   ],
+   "aliases": [
+    "Eivissa"
+   ]
+  },
+  {
+   "id": "innsbruck",
+   "name": "Innsbruck",
+   "localName": "Innsbruck",
+   "country": "Österreich",
+   "countryCode": "AT",
+   "region": "Tirol, Österreich",
+   "latitude": 47.2692,
+   "longitude": 11.4041,
+   "categories": [
+    "mountains"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "interlaken",
+   "name": "Interlaken",
+   "localName": "Interlaken",
+   "country": "Schweiz",
+   "countryCode": "CH",
+   "region": "Bern, Schweiz",
+   "latitude": 46.6863,
+   "longitude": 7.8632,
+   "categories": [
+    "mountains",
+    "nature"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "istanbul",
+   "name": "Istanbul",
+   "localName": "İstanbul",
+   "country": "Türkei",
+   "countryCode": "TR",
+   "region": "Türkei",
+   "latitude": 41.0082,
+   "longitude": 28.9784,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": [
+    "Constantinople"
+   ]
+  },
+  {
+   "id": "izmir",
+   "name": "Izmir",
+   "localName": "İzmir",
+   "country": "Türkei",
+   "countryCode": "TR",
+   "region": "Türkei",
+   "latitude": 38.4237,
+   "longitude": 27.1428,
+   "categories": [
+    "cities",
+    "coast"
+   ],
+   "aliases": [
+    "Smyrna"
+   ]
+  },
+  {
+   "id": "jaipur",
+   "name": "Jaipur",
+   "localName": "जयपुर",
+   "country": "Indien",
+   "countryCode": "IN",
+   "region": "Rajasthan, Indien",
+   "latitude": 26.9124,
+   "longitude": 75.7873,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "जयपुर"
+   ]
+  },
+  {
+   "id": "jakarta",
+   "name": "Jakarta",
+   "localName": "Jakarta",
+   "country": "Indonesien",
+   "countryCode": "ID",
+   "region": "Indonesien",
+   "latitude": -6.2088,
+   "longitude": 106.8456,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "jerusalem",
+   "name": "Jerusalem",
+   "localName": "ירושלים",
+   "country": "Israel",
+   "countryCode": "IL",
+   "region": "Israel",
+   "latitude": 31.7683,
+   "longitude": 35.2137,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "ירושלים"
+   ]
+  },
+  {
+   "id": "johannesburg",
+   "name": "Johannesburg",
+   "localName": "Johannesburg",
+   "country": "Südafrika",
+   "countryCode": "ZA",
+   "region": "Gauteng, Südafrika",
+   "latitude": -26.2041,
+   "longitude": 28.0473,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "cairo",
+   "name": "Kairo",
+   "localName": "القاهرة",
+   "country": "Ägypten",
+   "countryCode": "EG",
+   "region": "Ägypten",
+   "latitude": 30.0444,
+   "longitude": 31.2357,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Cairo",
+    "القاهرة"
+   ]
+  },
+  {
+   "id": "cappadocia",
+   "name": "Kappadokien",
+   "localName": "Kapadokya",
+   "country": "Türkei",
+   "countryCode": "TR",
+   "region": "Türkei",
+   "latitude": 38.6431,
+   "longitude": 34.8289,
+   "categories": [
+    "nature"
+   ],
+   "aliases": [
+    "Cappadocia",
+    "Kapadokya"
+   ]
+  },
+  {
+   "id": "cape-town",
+   "name": "Kapstadt",
+   "localName": "Cape Town",
+   "country": "Südafrika",
+   "countryCode": "ZA",
+   "region": "Westkap, Südafrika",
+   "latitude": -33.9249,
+   "longitude": 18.4241,
+   "categories": [
+    "cities",
+    "coast",
+    "nature"
+   ],
+   "aliases": [
+    "Cape Town"
+   ]
+  },
+  {
+   "id": "kathmandu",
+   "name": "Kathmandu",
+   "localName": "काठमाडौँ",
+   "country": "Nepal",
+   "countryCode": "NP",
+   "region": "Nepal",
+   "latitude": 27.7172,
+   "longitude": 85.324,
+   "categories": [
+    "cities",
+    "mountains"
+   ],
+   "aliases": [
+    "काठमाडौँ"
+   ]
+  },
+  {
+   "id": "kyiv",
+   "name": "Kiew",
+   "localName": "Київ",
+   "country": "Ukraine",
+   "countryCode": "UA",
+   "region": "Ukraine",
+   "latitude": 50.4501,
+   "longitude": 30.5234,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Kiev",
+    "Kyiv",
+    "Київ"
+   ]
+  },
+  {
+   "id": "kiruna",
+   "name": "Kiruna",
+   "localName": "Kiruna",
+   "country": "Schweden",
+   "countryCode": "SE",
+   "region": "Lappland, Schweden",
+   "latitude": 67.8558,
+   "longitude": 20.2253,
+   "categories": [
+    "nature"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "kochi",
+   "name": "Kochi",
+   "localName": "കൊച്ചി",
+   "country": "Indien",
+   "countryCode": "IN",
+   "region": "Kerala, Indien",
+   "latitude": 9.9312,
+   "longitude": 76.2673,
+   "categories": [
+    "coast"
+   ],
+   "aliases": [
+    "Cochin",
+    "കൊച്ചി"
+   ]
+  },
+  {
+   "id": "cologne",
+   "name": "Köln",
+   "localName": "Köln",
+   "country": "Deutschland",
+   "countryCode": "DE",
+   "region": "Nordrhein-Westfalen, Deutschland",
+   "latitude": 50.9375,
+   "longitude": 6.9603,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Cologne",
+    "Koeln"
+   ]
+  },
+  {
+   "id": "copenhagen",
+   "name": "Kopenhagen",
+   "localName": "København",
+   "country": "Dänemark",
+   "countryCode": "DK",
+   "region": "Hovedstaden, Dänemark",
+   "latitude": 55.6761,
+   "longitude": 12.5683,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": [
+    "Copenhagen",
+    "København"
+   ]
+  },
+  {
+   "id": "corfu",
+   "name": "Korfu",
+   "localName": "Κέρκυρα",
+   "country": "Griechenland",
+   "countryCode": "GR",
+   "region": "Ionische Inseln, Griechenland",
+   "latitude": 39.6243,
+   "longitude": 19.9217,
+   "categories": [
+    "coast"
+   ],
+   "aliases": [
+    "Corfu",
+    "Kerkyra",
+    "Κέρκυρα"
+   ]
+  },
+  {
+   "id": "kotor",
+   "name": "Kotor",
+   "localName": "Kotor",
+   "country": "Montenegro",
+   "countryCode": "ME",
+   "region": "Montenegro",
+   "latitude": 42.4247,
+   "longitude": 18.7712,
+   "categories": [
+    "coast",
+    "nature"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "krakow",
+   "name": "Krakau",
+   "localName": "Kraków",
+   "country": "Polen",
+   "countryCode": "PL",
+   "region": "Kleinpolen, Polen",
+   "latitude": 50.0647,
+   "longitude": 19.945,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Cracow",
+    "Krakow",
+    "Kraków"
+   ]
+  },
+  {
+   "id": "kuala-lumpur",
+   "name": "Kuala Lumpur",
+   "localName": "Kuala Lumpur",
+   "country": "Malaysia",
+   "countryCode": "MY",
+   "region": "Malaysia",
+   "latitude": 3.139,
+   "longitude": 101.6869,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "kyoto",
+   "name": "Kyoto",
+   "localName": "京都",
+   "country": "Japan",
+   "countryCode": "JP",
+   "region": "Japan",
+   "latitude": 35.0116,
+   "longitude": 135.7681,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Kioto",
+    "京都"
+   ]
+  },
+  {
+   "id": "lagos",
+   "name": "Lagos",
+   "localName": "Lagos",
+   "country": "Portugal",
+   "countryCode": "PT",
+   "region": "Algarve, Portugal",
+   "latitude": 37.1028,
+   "longitude": -8.6742,
+   "categories": [
+    "coast"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "las-palmas",
+   "name": "Las Palmas",
+   "localName": "Las Palmas",
+   "country": "Spanien",
+   "countryCode": "ES",
+   "region": "Kanaren, Spanien",
+   "latitude": 28.1235,
+   "longitude": -15.4363,
+   "categories": [
+    "coast"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "las-vegas",
+   "name": "Las Vegas",
+   "localName": "Las Vegas",
+   "country": "USA",
+   "countryCode": "US",
+   "region": "Nevada, USA",
+   "latitude": 36.1699,
+   "longitude": -115.1398,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "lausanne",
+   "name": "Lausanne",
+   "localName": "Lausanne",
+   "country": "Schweiz",
+   "countryCode": "CH",
+   "region": "Waadt, Schweiz",
+   "latitude": 46.5197,
+   "longitude": 6.6323,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "leeds",
+   "name": "Leeds",
+   "localName": "Leeds",
+   "country": "Vereinigtes Königreich",
+   "countryCode": "GB",
+   "region": "Vereinigtes Königreich",
+   "latitude": 53.8008,
+   "longitude": -1.5491,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "leipzig",
+   "name": "Leipzig",
+   "localName": "Leipzig",
+   "country": "Deutschland",
+   "countryCode": "DE",
+   "region": "Sachsen, Deutschland",
+   "latitude": 51.3397,
+   "longitude": 12.3731,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "lviv",
+   "name": "Lemberg",
+   "localName": "Львів",
+   "country": "Ukraine",
+   "countryCode": "UA",
+   "region": "Ukraine",
+   "latitude": 49.8397,
+   "longitude": 24.0297,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Lviv",
+    "Львів"
+   ]
+  },
+  {
+   "id": "lille",
+   "name": "Lille",
+   "localName": "Lille",
+   "country": "Frankreich",
+   "countryCode": "FR",
+   "region": "Hauts-de-France, Frankreich",
+   "latitude": 50.6292,
+   "longitude": 3.0573,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "lima",
+   "name": "Lima",
+   "localName": "Lima",
+   "country": "Peru",
+   "countryCode": "PE",
+   "region": "Peru",
+   "latitude": -12.0464,
+   "longitude": -77.0428,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "linz",
+   "name": "Linz",
+   "localName": "Linz",
+   "country": "Österreich",
+   "countryCode": "AT",
+   "region": "Oberösterreich, Österreich",
+   "latitude": 48.3069,
+   "longitude": 14.2858,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "lisbon",
+   "name": "Lissabon",
+   "localName": "Lisboa",
+   "country": "Portugal",
+   "countryCode": "PT",
+   "region": "Lissabon, Portugal",
+   "latitude": 38.7223,
+   "longitude": -9.1393,
+   "categories": [
+    "cities",
+    "coast",
+    "food"
+   ],
+   "aliases": [
+    "Lisboa",
+    "Lisbon"
+   ]
+  },
+  {
+   "id": "liverpool",
+   "name": "Liverpool",
+   "localName": "Liverpool",
+   "country": "Vereinigtes Königreich",
+   "countryCode": "GB",
+   "region": "Vereinigtes Königreich",
+   "latitude": 53.4084,
+   "longitude": -2.9916,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "ljubljana",
+   "name": "Ljubljana",
+   "localName": "Ljubljana",
+   "country": "Slowenien",
+   "countryCode": "SI",
+   "region": "Slowenien",
+   "latitude": 46.0569,
+   "longitude": 14.5058,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Laibach"
+   ]
+  },
+  {
+   "id": "lofoten",
+   "name": "Lofoten",
+   "localName": "Lofoten",
+   "country": "Norwegen",
+   "countryCode": "NO",
+   "region": "Nordland, Norwegen",
+   "latitude": 68.2,
+   "longitude": 13.6,
+   "categories": [
+    "coast",
+    "nature"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "london",
+   "name": "London",
+   "localName": "London",
+   "country": "Vereinigtes Königreich",
+   "countryCode": "GB",
+   "region": "Vereinigtes Königreich",
+   "latitude": 51.5074,
+   "longitude": -0.1278,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "los-angeles",
+   "name": "Los Angeles",
+   "localName": "Los Angeles",
+   "country": "USA",
+   "countryCode": "US",
+   "region": "Kalifornien, USA",
+   "latitude": 34.0522,
+   "longitude": -118.2437,
+   "categories": [
+    "cities",
+    "coast"
+   ],
+   "aliases": [
+    "LA"
+   ]
+  },
+  {
+   "id": "lucca",
+   "name": "Lucca",
+   "localName": "Lucca",
+   "country": "Italien",
+   "countryCode": "IT",
+   "region": "Toskana, Italien",
+   "latitude": 43.843,
+   "longitude": 10.5077,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "lugano",
+   "name": "Lugano",
+   "localName": "Lugano",
+   "country": "Schweiz",
+   "countryCode": "CH",
+   "region": "Tessin, Schweiz",
+   "latitude": 46.0037,
+   "longitude": 8.9511,
+   "categories": [
+    "nature"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "luxembourg",
+   "name": "Luxemburg",
+   "localName": "Luxembourg",
+   "country": "Luxemburg",
+   "countryCode": "LU",
+   "region": "Luxemburg",
+   "latitude": 49.6116,
+   "longitude": 6.1319,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Luxembourg"
+   ]
+  },
+  {
+   "id": "luxor",
+   "name": "Luxor",
+   "localName": "الأقصر",
+   "country": "Ägypten",
+   "countryCode": "EG",
+   "region": "Ägypten",
+   "latitude": 25.6872,
+   "longitude": 32.6396,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "الأقصر"
+   ]
+  },
+  {
+   "id": "lucerne",
+   "name": "Luzern",
+   "localName": "Luzern",
+   "country": "Schweiz",
+   "countryCode": "CH",
+   "region": "Luzern, Schweiz",
+   "latitude": 47.0502,
+   "longitude": 8.3093,
+   "categories": [
+    "mountains",
+    "nature"
+   ],
+   "aliases": [
+    "Lucerne"
+   ]
+  },
+  {
+   "id": "lyon",
+   "name": "Lyon",
+   "localName": "Lyon",
+   "country": "Frankreich",
+   "countryCode": "FR",
+   "region": "Auvergne-Rhône-Alpes, Frankreich",
+   "latitude": 45.764,
+   "longitude": 4.8357,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "maastricht",
+   "name": "Maastricht",
+   "localName": "Maastricht",
+   "country": "Niederlande",
+   "countryCode": "NL",
+   "region": "Limburg, Niederlande",
+   "latitude": 50.8514,
+   "longitude": 5.691,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "madrid",
+   "name": "Madrid",
+   "localName": "Madrid",
+   "country": "Spanien",
+   "countryCode": "ES",
+   "region": "Madrid, Spanien",
+   "latitude": 40.4168,
+   "longitude": -3.7038,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "milan",
+   "name": "Mailand",
+   "localName": "Milano",
+   "country": "Italien",
+   "countryCode": "IT",
+   "region": "Lombardei, Italien",
+   "latitude": 45.4642,
+   "longitude": 9.19,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Milan",
+    "Milano"
+   ]
+  },
+  {
+   "id": "malaga",
+   "name": "Málaga",
+   "localName": "Málaga",
+   "country": "Spanien",
+   "countryCode": "ES",
+   "region": "Andalusien, Spanien",
+   "latitude": 36.7213,
+   "longitude": -4.4214,
+   "categories": [
+    "cities",
+    "coast"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "male",
+   "name": "Malé",
+   "localName": "މާލެ",
+   "country": "Malediven",
+   "countryCode": "MV",
+   "region": "Malediven",
+   "latitude": 4.1755,
+   "longitude": 73.5093,
+   "categories": [
+    "coast"
+   ],
+   "aliases": [
+    "Maldives",
+    "މާލެ"
+   ]
+  },
+  {
+   "id": "malmo",
+   "name": "Malmö",
+   "localName": "Malmö",
+   "country": "Schweden",
+   "countryCode": "SE",
+   "region": "Skåne, Schweden",
+   "latitude": 55.605,
+   "longitude": 13.0038,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "manchester",
+   "name": "Manchester",
+   "localName": "Manchester",
+   "country": "Vereinigtes Königreich",
+   "countryCode": "GB",
+   "region": "Vereinigtes Königreich",
+   "latitude": 53.4808,
+   "longitude": -2.2426,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "manila",
+   "name": "Manila",
+   "localName": "Manila",
+   "country": "Philippinen",
+   "countryCode": "PH",
+   "region": "Philippinen",
+   "latitude": 14.5995,
+   "longitude": 120.9842,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "marrakesh",
+   "name": "Marrakesch",
+   "localName": "مراكش",
+   "country": "Marokko",
+   "countryCode": "MA",
+   "region": "Marokko",
+   "latitude": 31.6295,
+   "longitude": -7.9811,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Marrakech",
+    "Marrakesh",
+    "مراكش"
+   ]
+  },
+  {
+   "id": "marseille",
+   "name": "Marseille",
+   "localName": "Marseille",
+   "country": "Frankreich",
+   "countryCode": "FR",
+   "region": "Provence, Frankreich",
+   "latitude": 43.2965,
+   "longitude": 5.3698,
+   "categories": [
+    "cities",
+    "coast"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "muscat",
+   "name": "Maskat",
+   "localName": "مسقط",
+   "country": "Oman",
+   "countryCode": "OM",
+   "region": "Oman",
+   "latitude": 23.588,
+   "longitude": 58.3829,
+   "categories": [
+    "cities",
+    "coast"
+   ],
+   "aliases": [
+    "Muscat",
+    "مسقط"
+   ]
+  },
+  {
+   "id": "melbourne",
+   "name": "Melbourne",
+   "localName": "Melbourne",
+   "country": "Australien",
+   "countryCode": "AU",
+   "region": "Victoria, Australien",
+   "latitude": -37.8136,
+   "longitude": 144.9631,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "mexico-city",
+   "name": "Mexiko-Stadt",
+   "localName": "Ciudad de México",
+   "country": "Mexiko",
+   "countryCode": "MX",
+   "region": "Mexiko",
+   "latitude": 19.4326,
+   "longitude": -99.1332,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": [
+    "CDMX",
+    "Ciudad de México",
+    "Mexico City"
+   ]
+  },
+  {
+   "id": "miami",
+   "name": "Miami",
+   "localName": "Miami",
+   "country": "USA",
+   "countryCode": "US",
+   "region": "Florida, USA",
+   "latitude": 25.7617,
+   "longitude": -80.1918,
+   "categories": [
+    "cities",
+    "coast"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "modena",
+   "name": "Modena",
+   "localName": "Modena",
+   "country": "Italien",
+   "countryCode": "IT",
+   "region": "Emilia-Romagna, Italien",
+   "latitude": 44.6471,
+   "longitude": 10.9252,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "montevideo",
+   "name": "Montevideo",
+   "localName": "Montevideo",
+   "country": "Uruguay",
+   "countryCode": "UY",
+   "region": "Uruguay",
+   "latitude": -34.9011,
+   "longitude": -56.1645,
+   "categories": [
+    "cities",
+    "coast"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "montpellier",
+   "name": "Montpellier",
+   "localName": "Montpellier",
+   "country": "Frankreich",
+   "countryCode": "FR",
+   "region": "Okzitanien, Frankreich",
+   "latitude": 43.6108,
+   "longitude": 3.8767,
+   "categories": [
+    "cities",
+    "coast"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "montreal",
+   "name": "Montreal",
+   "localName": "Montréal",
+   "country": "Kanada",
+   "countryCode": "CA",
+   "region": "Québec, Kanada",
+   "latitude": 45.5017,
+   "longitude": -73.5673,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "mumbai",
+   "name": "Mumbai",
+   "localName": "मुंबई",
+   "country": "Indien",
+   "countryCode": "IN",
+   "region": "Indien",
+   "latitude": 19.076,
+   "longitude": 72.8777,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": [
+    "Bombay",
+    "मुंबई"
+   ]
+  },
+  {
+   "id": "munich",
+   "name": "München",
+   "localName": "München",
+   "country": "Deutschland",
+   "countryCode": "DE",
+   "region": "Bayern, Deutschland",
+   "latitude": 48.1351,
+   "longitude": 11.582,
+   "categories": [
+    "cities",
+    "mountains"
+   ],
+   "aliases": [
+    "Muenchen",
+    "Munich"
+   ]
+  },
+  {
+   "id": "munster",
+   "name": "Münster",
+   "localName": "Münster",
+   "country": "Deutschland",
+   "countryCode": "DE",
+   "region": "Nordrhein-Westfalen, Deutschland",
+   "latitude": 51.9607,
+   "longitude": 7.6261,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "murcia",
+   "name": "Murcia",
+   "localName": "Murcia",
+   "country": "Spanien",
+   "countryCode": "ES",
+   "region": "Murcia, Spanien",
+   "latitude": 37.9922,
+   "longitude": -1.1307,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "mykonos",
+   "name": "Mykonos",
+   "localName": "Μύκονος",
+   "country": "Griechenland",
+   "countryCode": "GR",
+   "region": "Südliche Ägäis, Griechenland",
+   "latitude": 37.4467,
+   "longitude": 25.3289,
+   "categories": [
+    "coast"
+   ],
+   "aliases": [
+    "Μύκονος"
+   ]
+  },
+  {
+   "id": "nadi",
+   "name": "Nadi",
+   "localName": "Nadi",
+   "country": "Fidschi",
+   "countryCode": "FJ",
+   "region": "Fidschi",
+   "latitude": -17.7765,
+   "longitude": 177.4356,
+   "categories": [
+    "coast"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "nairobi",
+   "name": "Nairobi",
+   "localName": "Nairobi",
+   "country": "Kenia",
+   "countryCode": "KE",
+   "region": "Kenia",
+   "latitude": -1.2921,
+   "longitude": 36.8219,
+   "categories": [
+    "cities",
+    "nature"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "nantes",
+   "name": "Nantes",
+   "localName": "Nantes",
+   "country": "Frankreich",
+   "countryCode": "FR",
+   "region": "Pays de la Loire, Frankreich",
+   "latitude": 47.2184,
+   "longitude": -1.5536,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "naples",
+   "name": "Neapel",
+   "localName": "Napoli",
+   "country": "Italien",
+   "countryCode": "IT",
+   "region": "Kampanien, Italien",
+   "latitude": 40.8518,
+   "longitude": 14.2681,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": [
+    "Naples",
+    "Napoli"
+   ]
+  },
+  {
+   "id": "new-orleans",
+   "name": "New Orleans",
+   "localName": "New Orleans",
+   "country": "USA",
+   "countryCode": "US",
+   "region": "Louisiana, USA",
+   "latitude": 29.9511,
+   "longitude": -90.0715,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "new-york",
+   "name": "New York",
+   "localName": "New York",
+   "country": "USA",
+   "countryCode": "US",
+   "region": "New York, USA",
+   "latitude": 40.7128,
+   "longitude": -74.006,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": [
+    "NYC",
+    "New York City"
+   ]
+  },
+  {
+   "id": "nice",
+   "name": "Nizza",
+   "localName": "Nice",
+   "country": "Frankreich",
+   "countryCode": "FR",
+   "region": "Côte d'Azur, Frankreich",
+   "latitude": 43.7102,
+   "longitude": 7.262,
+   "categories": [
+    "cities",
+    "coast"
+   ],
+   "aliases": [
+    "Nice"
+   ]
+  },
+  {
+   "id": "nuremberg",
+   "name": "Nürnberg",
+   "localName": "Nürnberg",
+   "country": "Deutschland",
+   "countryCode": "DE",
+   "region": "Bayern, Deutschland",
+   "latitude": 49.4521,
+   "longitude": 11.0767,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Nuernberg",
+    "Nuremberg"
+   ]
+  },
+  {
+   "id": "oaxaca",
+   "name": "Oaxaca",
+   "localName": "Oaxaca",
+   "country": "Mexiko",
+   "countryCode": "MX",
+   "region": "Oaxaca, Mexiko",
+   "latitude": 17.0732,
+   "longitude": -96.7266,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "osaka",
+   "name": "Osaka",
+   "localName": "大阪",
+   "country": "Japan",
+   "countryCode": "JP",
+   "region": "Japan",
+   "latitude": 34.6937,
+   "longitude": 135.5023,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": [
+    "大阪"
+   ]
+  },
+  {
+   "id": "oslo",
+   "name": "Oslo",
+   "localName": "Oslo",
+   "country": "Norwegen",
+   "countryCode": "NO",
+   "region": "Oslo, Norwegen",
+   "latitude": 59.9139,
+   "longitude": 10.7522,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "oxford",
+   "name": "Oxford",
+   "localName": "Oxford",
+   "country": "Vereinigtes Königreich",
+   "countryCode": "GB",
+   "region": "Vereinigtes Königreich",
+   "latitude": 51.752,
+   "longitude": -1.2577,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "padua",
+   "name": "Padua",
+   "localName": "Padova",
+   "country": "Italien",
+   "countryCode": "IT",
+   "region": "Veneto, Italien",
+   "latitude": 45.4064,
+   "longitude": 11.8768,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Padova"
+   ]
+  },
+  {
+   "id": "palermo",
+   "name": "Palermo",
+   "localName": "Palermo",
+   "country": "Italien",
+   "countryCode": "IT",
+   "region": "Sizilien, Italien",
+   "latitude": 38.1157,
+   "longitude": 13.3615,
+   "categories": [
+    "cities",
+    "coast",
+    "food"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "palma",
+   "name": "Palma de Mallorca",
+   "localName": "Palma",
+   "country": "Spanien",
+   "countryCode": "ES",
+   "region": "Balearen, Spanien",
+   "latitude": 39.5696,
+   "longitude": 2.6502,
+   "categories": [
+    "cities",
+    "coast"
+   ],
+   "aliases": [
+    "Mallorca",
+    "Palma"
+   ]
+  },
+  {
+   "id": "panama-city",
+   "name": "Panama-Stadt",
+   "localName": "Ciudad de Panamá",
+   "country": "Panama",
+   "countryCode": "PA",
+   "region": "Panama",
+   "latitude": 8.9824,
+   "longitude": -79.5199,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Ciudad de Panamá",
+    "Panama City"
+   ]
+  },
+  {
+   "id": "paris",
+   "name": "Paris",
+   "localName": "Paris",
+   "country": "Frankreich",
+   "countryCode": "FR",
+   "region": "Île-de-France, Frankreich",
+   "latitude": 48.8566,
+   "longitude": 2.3522,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "parma",
+   "name": "Parma",
+   "localName": "Parma",
+   "country": "Italien",
+   "countryCode": "IT",
+   "region": "Emilia-Romagna, Italien",
+   "latitude": 44.8015,
+   "longitude": 10.3279,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "beijing",
+   "name": "Peking",
+   "localName": "北京",
+   "country": "China",
+   "countryCode": "CN",
+   "region": "China",
+   "latitude": 39.9042,
+   "longitude": 116.4074,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Beijing",
+    "北京"
+   ]
+  },
+  {
+   "id": "perth",
+   "name": "Perth",
+   "localName": "Perth",
+   "country": "Australien",
+   "countryCode": "AU",
+   "region": "Western Australia, Australien",
+   "latitude": -31.9505,
+   "longitude": 115.8605,
+   "categories": [
+    "cities",
+    "coast"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "perugia",
+   "name": "Perugia",
+   "localName": "Perugia",
+   "country": "Italien",
+   "countryCode": "IT",
+   "region": "Umbrien, Italien",
+   "latitude": 43.1107,
+   "longitude": 12.3908,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "petra",
+   "name": "Petra",
+   "localName": "البتراء",
+   "country": "Jordanien",
+   "countryCode": "JO",
+   "region": "Jordanien",
+   "latitude": 30.3285,
+   "longitude": 35.4444,
+   "categories": [
+    "nature"
+   ],
+   "aliases": [
+    "البتراء"
+   ]
+  },
+  {
+   "id": "phuket",
+   "name": "Phuket",
+   "localName": "ภูเก็ต",
+   "country": "Thailand",
+   "countryCode": "TH",
+   "region": "Thailand",
+   "latitude": 7.8804,
+   "longitude": 98.3923,
+   "categories": [
+    "coast"
+   ],
+   "aliases": [
+    "ภูเก็ต"
+   ]
+  },
+  {
+   "id": "pisa",
+   "name": "Pisa",
+   "localName": "Pisa",
+   "country": "Italien",
+   "countryCode": "IT",
+   "region": "Toskana, Italien",
+   "latitude": 43.7228,
+   "longitude": 10.4017,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "plovdiv",
+   "name": "Plowdiw",
+   "localName": "Пловдив",
+   "country": "Bulgarien",
+   "countryCode": "BG",
+   "region": "Bulgarien",
+   "latitude": 42.1354,
+   "longitude": 24.7453,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Plovdiv",
+    "Пловдив"
+   ]
+  },
+  {
+   "id": "pokhara",
+   "name": "Pokhara",
+   "localName": "पोखरा",
+   "country": "Nepal",
+   "countryCode": "NP",
+   "region": "Nepal",
+   "latitude": 28.2096,
+   "longitude": 83.9856,
+   "categories": [
+    "mountains",
+    "nature"
+   ],
+   "aliases": [
+    "पोखरा"
+   ]
+  },
+  {
+   "id": "porto",
+   "name": "Porto",
+   "localName": "Porto",
+   "country": "Portugal",
+   "countryCode": "PT",
+   "region": "Porto, Portugal",
+   "latitude": 41.1579,
+   "longitude": -8.6291,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": [
+    "Oporto"
+   ]
+  },
+  {
+   "id": "poznan",
+   "name": "Posen",
+   "localName": "Poznań",
+   "country": "Polen",
+   "countryCode": "PL",
+   "region": "Großpolen, Polen",
+   "latitude": 52.4064,
+   "longitude": 16.9252,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Poznan",
+    "Poznań"
+   ]
+  },
+  {
+   "id": "potsdam",
+   "name": "Potsdam",
+   "localName": "Potsdam",
+   "country": "Deutschland",
+   "countryCode": "DE",
+   "region": "Brandenburg, Deutschland",
+   "latitude": 52.3906,
+   "longitude": 13.0645,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "prague",
+   "name": "Prag",
+   "localName": "Praha",
+   "country": "Tschechien",
+   "countryCode": "CZ",
+   "region": "Tschechien",
+   "latitude": 50.0755,
+   "longitude": 14.4378,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": [
+    "Prague",
+    "Praha"
+   ]
+  },
+  {
+   "id": "quebec-city",
+   "name": "Québec",
+   "localName": "Québec",
+   "country": "Kanada",
+   "countryCode": "CA",
+   "region": "Québec, Kanada",
+   "latitude": 46.8139,
+   "longitude": -71.208,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Quebec City"
+   ]
+  },
+  {
+   "id": "queenstown",
+   "name": "Queenstown",
+   "localName": "Queenstown",
+   "country": "Neuseeland",
+   "countryCode": "NZ",
+   "region": "Otago, Neuseeland",
+   "latitude": -45.0312,
+   "longitude": 168.6626,
+   "categories": [
+    "mountains",
+    "nature"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "quito",
+   "name": "Quito",
+   "localName": "Quito",
+   "country": "Ecuador",
+   "countryCode": "EC",
+   "region": "Ecuador",
+   "latitude": -0.1807,
+   "longitude": -78.4678,
+   "categories": [
+    "cities",
+    "mountains"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "ravenna",
+   "name": "Ravenna",
+   "localName": "Ravenna",
+   "country": "Italien",
+   "countryCode": "IT",
+   "region": "Emilia-Romagna, Italien",
+   "latitude": 44.4184,
+   "longitude": 12.2035,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "reims",
+   "name": "Reims",
+   "localName": "Reims",
+   "country": "Frankreich",
+   "countryCode": "FR",
+   "region": "Grand Est, Frankreich",
+   "latitude": 49.2583,
+   "longitude": 4.0317,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "rennes",
+   "name": "Rennes",
+   "localName": "Rennes",
+   "country": "Frankreich",
+   "countryCode": "FR",
+   "region": "Bretagne, Frankreich",
+   "latitude": 48.1173,
+   "longitude": -1.6778,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "reykjavik",
+   "name": "Reykjavík",
+   "localName": "Reykjavík",
+   "country": "Island",
+   "countryCode": "IS",
+   "region": "Island",
+   "latitude": 64.1466,
+   "longitude": -21.9426,
+   "categories": [
+    "cities",
+    "nature"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "rhodes",
+   "name": "Rhodos",
+   "localName": "Ρόδος",
+   "country": "Griechenland",
+   "countryCode": "GR",
+   "region": "Südliche Ägäis, Griechenland",
+   "latitude": 36.4341,
+   "longitude": 28.2176,
+   "categories": [
+    "coast"
+   ],
+   "aliases": [
+    "Rhodes",
+    "Ρόδος"
+   ]
+  },
+  {
+   "id": "riga",
+   "name": "Riga",
+   "localName": "Rīga",
+   "country": "Lettland",
+   "countryCode": "LV",
+   "region": "Lettland",
+   "latitude": 56.9496,
+   "longitude": 24.1052,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "rimini",
+   "name": "Rimini",
+   "localName": "Rimini",
+   "country": "Italien",
+   "countryCode": "IT",
+   "region": "Emilia-Romagna, Italien",
+   "latitude": 44.0678,
+   "longitude": 12.5695,
+   "categories": [
+    "cities",
+    "coast"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "rio-de-janeiro",
+   "name": "Rio de Janeiro",
+   "localName": "Rio de Janeiro",
+   "country": "Brasilien",
+   "countryCode": "BR",
+   "region": "Rio de Janeiro, Brasilien",
+   "latitude": -22.9068,
+   "longitude": -43.1729,
+   "categories": [
+    "cities",
+    "coast"
+   ],
+   "aliases": [
+    "Rio"
+   ]
+  },
+  {
+   "id": "rome",
+   "name": "Rom",
+   "localName": "Roma",
+   "country": "Italien",
+   "countryCode": "IT",
+   "region": "Latium, Italien",
+   "latitude": 41.9028,
+   "longitude": 12.4964,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": [
+    "Roma",
+    "Rome"
+   ]
+  },
+  {
+   "id": "rostock",
+   "name": "Rostock",
+   "localName": "Rostock",
+   "country": "Deutschland",
+   "countryCode": "DE",
+   "region": "Mecklenburg-Vorpommern, Deutschland",
+   "latitude": 54.0924,
+   "longitude": 12.0991,
+   "categories": [
+    "coast"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "rotterdam",
+   "name": "Rotterdam",
+   "localName": "Rotterdam",
+   "country": "Niederlande",
+   "countryCode": "NL",
+   "region": "Südholland, Niederlande",
+   "latitude": 51.9244,
+   "longitude": 4.4777,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "rovaniemi",
+   "name": "Rovaniemi",
+   "localName": "Rovaniemi",
+   "country": "Finnland",
+   "countryCode": "FI",
+   "region": "Lappland, Finnland",
+   "latitude": 66.5039,
+   "longitude": 25.7294,
+   "categories": [
+    "nature"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "salamanca",
+   "name": "Salamanca",
+   "localName": "Salamanca",
+   "country": "Spanien",
+   "countryCode": "ES",
+   "region": "Kastilien und León, Spanien",
+   "latitude": 40.9701,
+   "longitude": -5.6635,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "salvador",
+   "name": "Salvador",
+   "localName": "Salvador",
+   "country": "Brasilien",
+   "countryCode": "BR",
+   "region": "Bahia, Brasilien",
+   "latitude": -12.9777,
+   "longitude": -38.5016,
+   "categories": [
+    "cities",
+    "coast"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "salzburg",
+   "name": "Salzburg",
+   "localName": "Salzburg",
+   "country": "Österreich",
+   "countryCode": "AT",
+   "region": "Salzburg, Österreich",
+   "latitude": 47.8095,
+   "longitude": 13.055,
+   "categories": [
+    "cities",
+    "mountains"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "san-francisco",
+   "name": "San Francisco",
+   "localName": "San Francisco",
+   "country": "USA",
+   "countryCode": "US",
+   "region": "Kalifornien, USA",
+   "latitude": 37.7749,
+   "longitude": -122.4194,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": [
+    "SF"
+   ]
+  },
+  {
+   "id": "san-jose-cr",
+   "name": "San José",
+   "localName": "San José",
+   "country": "Costa Rica",
+   "countryCode": "CR",
+   "region": "Costa Rica",
+   "latitude": 9.9281,
+   "longitude": -84.0907,
+   "categories": [
+    "cities",
+    "nature"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "san-sebastian",
+   "name": "San Sebastián",
+   "localName": "Donostia",
+   "country": "Spanien",
+   "countryCode": "ES",
+   "region": "Baskenland, Spanien",
+   "latitude": 43.3183,
+   "longitude": -1.9812,
+   "categories": [
+    "coast",
+    "food"
+   ],
+   "aliases": [
+    "Donostia"
+   ]
+  },
+  {
+   "id": "zanzibar",
+   "name": "Sansibar",
+   "localName": "Zanzibar",
+   "country": "Tansania",
+   "countryCode": "TZ",
+   "region": "Tansania",
+   "latitude": -6.1659,
+   "longitude": 39.2026,
+   "categories": [
+    "coast"
+   ],
+   "aliases": [
+    "Zanzibar"
+   ]
+  },
+  {
+   "id": "santiago-cl",
+   "name": "Santiago de Chile",
+   "localName": "Santiago",
+   "country": "Chile",
+   "countryCode": "CL",
+   "region": "Chile",
+   "latitude": -33.4489,
+   "longitude": -70.6693,
+   "categories": [
+    "cities",
+    "mountains"
+   ],
+   "aliases": [
+    "Santiago"
+   ]
+  },
+  {
+   "id": "santiago",
+   "name": "Santiago de Compostela",
+   "localName": "Santiago",
+   "country": "Spanien",
+   "countryCode": "ES",
+   "region": "Galicien, Spanien",
+   "latitude": 42.8782,
+   "longitude": -8.5448,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Santiago"
+   ]
+  },
+  {
+   "id": "santorini",
+   "name": "Santorini",
+   "localName": "Σαντορίνη",
+   "country": "Griechenland",
+   "countryCode": "GR",
+   "region": "Südliche Ägäis, Griechenland",
+   "latitude": 36.3932,
+   "longitude": 25.4615,
+   "categories": [
+    "coast",
+    "nature"
+   ],
+   "aliases": [
+    "Thira",
+    "Σαντορίνη"
+   ]
+  },
+  {
+   "id": "sao-paulo",
+   "name": "São Paulo",
+   "localName": "São Paulo",
+   "country": "Brasilien",
+   "countryCode": "BR",
+   "region": "São Paulo, Brasilien",
+   "latitude": -23.5505,
+   "longitude": -46.6333,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "sapporo",
+   "name": "Sapporo",
+   "localName": "札幌",
+   "country": "Japan",
+   "countryCode": "JP",
+   "region": "Japan",
+   "latitude": 43.0618,
+   "longitude": 141.3545,
+   "categories": [
+    "cities",
+    "mountains"
+   ],
+   "aliases": [
+    "札幌"
+   ]
+  },
+  {
+   "id": "zaragoza",
+   "name": "Saragossa",
+   "localName": "Zaragoza",
+   "country": "Spanien",
+   "countryCode": "ES",
+   "region": "Aragón, Spanien",
+   "latitude": 41.6488,
+   "longitude": -0.8891,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Zaragoza"
+   ]
+  },
+  {
+   "id": "sarajevo",
+   "name": "Sarajevo",
+   "localName": "Sarajevo",
+   "country": "Bosnien und Herzegowina",
+   "countryCode": "BA",
+   "region": "Bosnien und Herzegowina",
+   "latitude": 43.8563,
+   "longitude": 18.4131,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "seattle",
+   "name": "Seattle",
+   "localName": "Seattle",
+   "country": "USA",
+   "countryCode": "US",
+   "region": "Washington, USA",
+   "latitude": 47.6062,
+   "longitude": -122.3321,
+   "categories": [
+    "cities",
+    "nature"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "seoul",
+   "name": "Seoul",
+   "localName": "서울",
+   "country": "Südkorea",
+   "countryCode": "KR",
+   "region": "Südkorea",
+   "latitude": 37.5665,
+   "longitude": 126.978,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": [
+    "서울"
+   ]
+  },
+  {
+   "id": "seville",
+   "name": "Sevilla",
+   "localName": "Sevilla",
+   "country": "Spanien",
+   "countryCode": "ES",
+   "region": "Andalusien, Spanien",
+   "latitude": 37.3891,
+   "longitude": -5.9845,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": [
+    "Seville"
+   ]
+  },
+  {
+   "id": "shanghai",
+   "name": "Shanghai",
+   "localName": "上海",
+   "country": "China",
+   "countryCode": "CN",
+   "region": "China",
+   "latitude": 31.2304,
+   "longitude": 121.4737,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "上海"
+   ]
+  },
+  {
+   "id": "siena",
+   "name": "Siena",
+   "localName": "Siena",
+   "country": "Italien",
+   "countryCode": "IT",
+   "region": "Toskana, Italien",
+   "latitude": 43.3188,
+   "longitude": 11.3308,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "singapore",
+   "name": "Singapur",
+   "localName": "Singapore",
+   "country": "Singapur",
+   "countryCode": "SG",
+   "region": "Singapur",
+   "latitude": 1.3521,
+   "longitude": 103.8198,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": [
+    "Singapore"
+   ]
+  },
+  {
+   "id": "skopje",
+   "name": "Skopje",
+   "localName": "Скопје",
+   "country": "Nordmazedonien",
+   "countryCode": "MK",
+   "region": "Nordmazedonien",
+   "latitude": 41.9973,
+   "longitude": 21.428,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Скопје"
+   ]
+  },
+  {
+   "id": "sofia",
+   "name": "Sofia",
+   "localName": "София",
+   "country": "Bulgarien",
+   "countryCode": "BG",
+   "region": "Bulgarien",
+   "latitude": 42.6977,
+   "longitude": 23.3219,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "София"
+   ]
+  },
+  {
+   "id": "sorrento",
+   "name": "Sorrent",
+   "localName": "Sorrento",
+   "country": "Italien",
+   "countryCode": "IT",
+   "region": "Kampanien, Italien",
+   "latitude": 40.6263,
+   "longitude": 14.3757,
+   "categories": [
+    "coast"
+   ],
+   "aliases": [
+    "Sorrento"
+   ]
+  },
+  {
+   "id": "split",
+   "name": "Split",
+   "localName": "Split",
+   "country": "Kroatien",
+   "countryCode": "HR",
+   "region": "Dalmatien, Kroatien",
+   "latitude": 43.5081,
+   "longitude": 16.4402,
+   "categories": [
+    "coast"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "stockholm",
+   "name": "Stockholm",
+   "localName": "Stockholm",
+   "country": "Schweden",
+   "countryCode": "SE",
+   "region": "Stockholm, Schweden",
+   "latitude": 59.3293,
+   "longitude": 18.0686,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "strasbourg",
+   "name": "Straßburg",
+   "localName": "Strasbourg",
+   "country": "Frankreich",
+   "countryCode": "FR",
+   "region": "Grand Est, Frankreich",
+   "latitude": 48.5734,
+   "longitude": 7.7521,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Strasbourg",
+    "Strassburg"
+   ]
+  },
+  {
+   "id": "stuttgart",
+   "name": "Stuttgart",
+   "localName": "Stuttgart",
+   "country": "Deutschland",
+   "countryCode": "DE",
+   "region": "Baden-Württemberg, Deutschland",
+   "latitude": 48.7758,
+   "longitude": 9.1829,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "sydney",
+   "name": "Sydney",
+   "localName": "Sydney",
+   "country": "Australien",
+   "countryCode": "AU",
+   "region": "New South Wales, Australien",
+   "latitude": -33.8688,
+   "longitude": 151.2093,
+   "categories": [
+    "cities",
+    "coast"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "taipei",
+   "name": "Taipeh",
+   "localName": "臺北",
+   "country": "Taiwan",
+   "countryCode": "TW",
+   "region": "Taiwan",
+   "latitude": 25.033,
+   "longitude": 121.5654,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": [
+    "Taipei",
+    "臺北"
+   ]
+  },
+  {
+   "id": "tallinn",
+   "name": "Tallinn",
+   "localName": "Tallinn",
+   "country": "Estland",
+   "countryCode": "EE",
+   "region": "Estland",
+   "latitude": 59.437,
+   "longitude": 24.7536,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Reval"
+   ]
+  },
+  {
+   "id": "tangier",
+   "name": "Tanger",
+   "localName": "طنجة",
+   "country": "Marokko",
+   "countryCode": "MA",
+   "region": "Marokko",
+   "latitude": 35.7595,
+   "longitude": -5.834,
+   "categories": [
+    "cities",
+    "coast"
+   ],
+   "aliases": [
+    "Tangier",
+    "طنجة"
+   ]
+  },
+  {
+   "id": "tel-aviv",
+   "name": "Tel Aviv",
+   "localName": "תל אביב",
+   "country": "Israel",
+   "countryCode": "IL",
+   "region": "Israel",
+   "latitude": 32.0853,
+   "longitude": 34.7818,
+   "categories": [
+    "cities",
+    "coast",
+    "food"
+   ],
+   "aliases": [
+    "תל אביב"
+   ]
+  },
+  {
+   "id": "tenerife",
+   "name": "Teneriffa",
+   "localName": "Tenerife",
+   "country": "Spanien",
+   "countryCode": "ES",
+   "region": "Kanaren, Spanien",
+   "latitude": 28.2916,
+   "longitude": -16.6291,
+   "categories": [
+    "coast",
+    "mountains"
+   ],
+   "aliases": [
+    "Tenerife"
+   ]
+  },
+  {
+   "id": "thessaloniki",
+   "name": "Thessaloniki",
+   "localName": "Θεσσαλονίκη",
+   "country": "Griechenland",
+   "countryCode": "GR",
+   "region": "Zentralmakedonien, Griechenland",
+   "latitude": 40.6401,
+   "longitude": 22.9444,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": [
+    "Θεσσαλονίκη"
+   ]
+  },
+  {
+   "id": "tirana",
+   "name": "Tirana",
+   "localName": "Tiranë",
+   "country": "Albanien",
+   "countryCode": "AL",
+   "region": "Albanien",
+   "latitude": 41.3275,
+   "longitude": 19.8187,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Tiranë"
+   ]
+  },
+  {
+   "id": "tokyo",
+   "name": "Tokio",
+   "localName": "東京",
+   "country": "Japan",
+   "countryCode": "JP",
+   "region": "Japan",
+   "latitude": 35.6762,
+   "longitude": 139.6503,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": [
+    "Tokyo",
+    "東京"
+   ]
+  },
+  {
+   "id": "toledo",
+   "name": "Toledo",
+   "localName": "Toledo",
+   "country": "Spanien",
+   "countryCode": "ES",
+   "region": "Kastilien-La Mancha, Spanien",
+   "latitude": 39.8628,
+   "longitude": -4.0273,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "toronto",
+   "name": "Toronto",
+   "localName": "Toronto",
+   "country": "Kanada",
+   "countryCode": "CA",
+   "region": "Ontario, Kanada",
+   "latitude": 43.6532,
+   "longitude": -79.3832,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "toulouse",
+   "name": "Toulouse",
+   "localName": "Toulouse",
+   "country": "Frankreich",
+   "countryCode": "FR",
+   "region": "Okzitanien, Frankreich",
+   "latitude": 43.6047,
+   "longitude": 1.4442,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "trieste",
+   "name": "Triest",
+   "localName": "Trieste",
+   "country": "Italien",
+   "countryCode": "IT",
+   "region": "Friaul-Julisch Venetien, Italien",
+   "latitude": 45.6495,
+   "longitude": 13.7768,
+   "categories": [
+    "cities",
+    "coast"
+   ],
+   "aliases": [
+    "Trieste"
+   ]
+  },
+  {
+   "id": "tromso",
+   "name": "Tromsø",
+   "localName": "Tromsø",
+   "country": "Norwegen",
+   "countryCode": "NO",
+   "region": "Troms, Norwegen",
+   "latitude": 69.6492,
+   "longitude": 18.9553,
+   "categories": [
+    "nature"
+   ],
+   "aliases": [
+    "Tromso"
+   ]
+  },
+  {
+   "id": "trondheim",
+   "name": "Trondheim",
+   "localName": "Trondheim",
+   "country": "Norwegen",
+   "countryCode": "NO",
+   "region": "Trøndelag, Norwegen",
+   "latitude": 63.4305,
+   "longitude": 10.3951,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "tunis",
+   "name": "Tunis",
+   "localName": "تونس",
+   "country": "Tunesien",
+   "countryCode": "TN",
+   "region": "Tunesien",
+   "latitude": 36.8065,
+   "longitude": 10.1815,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "تونس"
+   ]
+  },
+  {
+   "id": "turin",
+   "name": "Turin",
+   "localName": "Torino",
+   "country": "Italien",
+   "countryCode": "IT",
+   "region": "Piemont, Italien",
+   "latitude": 45.0703,
+   "longitude": 7.6869,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": [
+    "Torino"
+   ]
+  },
+  {
+   "id": "turku",
+   "name": "Turku",
+   "localName": "Turku",
+   "country": "Finnland",
+   "countryCode": "FI",
+   "region": "Varsinais-Suomi, Finnland",
+   "latitude": 60.4518,
+   "longitude": 22.2666,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "utrecht",
+   "name": "Utrecht",
+   "localName": "Utrecht",
+   "country": "Niederlande",
+   "countryCode": "NL",
+   "region": "Utrecht, Niederlande",
+   "latitude": 52.0907,
+   "longitude": 5.1214,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "valencia",
+   "name": "Valencia",
+   "localName": "València",
+   "country": "Spanien",
+   "countryCode": "ES",
+   "region": "Valencia, Spanien",
+   "latitude": 39.4699,
+   "longitude": -0.3763,
+   "categories": [
+    "cities",
+    "coast",
+    "food"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "vancouver",
+   "name": "Vancouver",
+   "localName": "Vancouver",
+   "country": "Kanada",
+   "countryCode": "CA",
+   "region": "British Columbia, Kanada",
+   "latitude": 49.2827,
+   "longitude": -123.1207,
+   "categories": [
+    "cities",
+    "nature"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "venice",
+   "name": "Venedig",
+   "localName": "Venezia",
+   "country": "Italien",
+   "countryCode": "IT",
+   "region": "Veneto, Italien",
+   "latitude": 45.4408,
+   "longitude": 12.3155,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Venezia",
+    "Venice"
+   ]
+  },
+  {
+   "id": "verona",
+   "name": "Verona",
+   "localName": "Verona",
+   "country": "Italien",
+   "countryCode": "IT",
+   "region": "Veneto, Italien",
+   "latitude": 45.4384,
+   "longitude": 10.9916,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "vilnius",
+   "name": "Vilnius",
+   "localName": "Vilnius",
+   "country": "Litauen",
+   "countryCode": "LT",
+   "region": "Litauen",
+   "latitude": 54.6872,
+   "longitude": 25.2797,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Wilna"
+   ]
+  },
+  {
+   "id": "warsaw",
+   "name": "Warschau",
+   "localName": "Warszawa",
+   "country": "Polen",
+   "countryCode": "PL",
+   "region": "Masowien, Polen",
+   "latitude": 52.2297,
+   "longitude": 21.0122,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Warsaw",
+    "Warszawa"
+   ]
+  },
+  {
+   "id": "washington",
+   "name": "Washington",
+   "localName": "Washington",
+   "country": "USA",
+   "countryCode": "US",
+   "region": "District of Columbia, USA",
+   "latitude": 38.9072,
+   "longitude": -77.0369,
+   "categories": [
+    "cities"
+   ],
+   "aliases": [
+    "Washington DC"
+   ]
+  },
+  {
+   "id": "wellington",
+   "name": "Wellington",
+   "localName": "Wellington",
+   "country": "Neuseeland",
+   "countryCode": "NZ",
+   "region": "Neuseeland",
+   "latitude": -41.2866,
+   "longitude": 174.7756,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "vienna",
+   "name": "Wien",
+   "localName": "Wien",
+   "country": "Österreich",
+   "countryCode": "AT",
+   "region": "Wien, Österreich",
+   "latitude": 48.2082,
+   "longitude": 16.3738,
+   "categories": [
+    "cities",
+    "food"
+   ],
+   "aliases": [
+    "Vienna"
+   ]
+  },
+  {
+   "id": "york",
+   "name": "York",
+   "localName": "York",
+   "country": "Vereinigtes Königreich",
+   "countryCode": "GB",
+   "region": "Vereinigtes Königreich",
+   "latitude": 53.96,
+   "longitude": -1.0873,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "zagreb",
+   "name": "Zagreb",
+   "localName": "Zagreb",
+   "country": "Kroatien",
+   "countryCode": "HR",
+   "region": "Kroatien",
+   "latitude": 45.815,
+   "longitude": 15.9819,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "zermatt",
+   "name": "Zermatt",
+   "localName": "Zermatt",
+   "country": "Schweiz",
+   "countryCode": "CH",
+   "region": "Wallis, Schweiz",
+   "latitude": 46.0207,
+   "longitude": 7.7491,
+   "categories": [
+    "mountains"
+   ],
+   "aliases": []
+  },
+  {
+   "id": "zurich",
+   "name": "Zürich",
+   "localName": "Zürich",
+   "country": "Schweiz",
+   "countryCode": "CH",
+   "region": "Zürich, Schweiz",
+   "latitude": 47.3769,
+   "longitude": 8.5417,
+   "categories": [
+    "cities"
+   ],
+   "aliases": []
+  }
+ ]
+}
