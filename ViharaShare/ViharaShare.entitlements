@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!--
+	  The App Group the share extension and the app hand captures through.
+
+	  Separate from Vihara.entitlements on purpose. A target has exactly one
+	  entitlements file, and Vihara.entitlements carries Sign in with Apple, which
+	  is deliberately NOT wired because referencing it fails every device build
+	  until the capability is enabled on the App ID. Merging the two here would
+	  break device builds for two reasons instead of one.
+
+	  This one has the same provisioning dependency, and it is worth knowing
+	  before the first bug report:
+
+	      the simulator works immediately;
+	      a device build needs `group.com.vihara.app` registered on BOTH App IDs
+	      (com.vihara.app and com.vihara.app.share) and enabled for both targets.
+
+	  Without it, containerURL(forSecurityApplicationGroupIdentifier:) returns nil
+	  and every capture is lost. SharedInbox.isAvailable exists so the extension
+	  says so rather than appearing to succeed — see ShareViewController.
+
+	  When Sign in with Apple is finally switched on (Xcode → Signing &
+	  Capabilities → + Capability), Xcode writes into whichever file
+	  CODE_SIGN_ENTITLEMENTS already names — this one. At that point the two files
+	  should be merged and Vihara.entitlements deleted.
+	-->
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>group.com.vihara.app</string>
+	</array>
+</dict>
+</plist>
